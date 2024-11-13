@@ -1,0 +1,14 @@
+pluginManagement {
+    plugins {
+        id 'org.springframework.boot' version "${springBootVersion}"
+        id 'io.spring.dependency-management' version "${springDependencyManagementVersion}"
+    }
+}
+
+rootProject.name = 'ustory'
+
+include 'member-service'
+include 'diary-service'
+include 'paper-service'
+include 'comment-service'
+include 'notification-service'
