@@ -1,4 +1,9 @@
+bootJar.enabled = true
+jar.enabled = false
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    implementation project(":ustory-common")
 }
