@@ -1,27 +1,19 @@
 package me.ustory.api.common.controller.response;
 
-import lombok.Getter;
 import me.ustory.api.common.exception.CustomException;
 
-@Getter
-public class ErrorResponse extends ApiResponse {
+public record ErrorResponse(
+    String errorCode,
+    String message,
+    String detailMessage
+) implements ApiResponse<Void> {
 
-    private final String errorCode;
-
-    private final String message;
-
-    private final String detailMessage;
-
-    public ErrorResponse(CustomException ex) {
-        this.errorCode = ex.getErrorCode().getCode();
-        this.message = ex.getErrorCode().getMessage();
-        this.detailMessage = ex.getMessage();
+    public static ErrorResponse of(CustomException ex) {
+        return new ErrorResponse(ex.getErrorCode().getCode(), ex.getErrorCode().getMessage(), ex.getMessage());
     }
 
-    public ErrorResponse(CustomException ex, String message) {
-        this.errorCode = ex.getErrorCode().getCode();
-        this.message = ex.getErrorCode().getMessage();
-        this.detailMessage = message;
+    public static ErrorResponse of(CustomException ex, String customMessage) {
+        return new ErrorResponse(ex.getErrorCode().getCode(), ex.getErrorCode().getMessage(), customMessage);
     }
 
 }
