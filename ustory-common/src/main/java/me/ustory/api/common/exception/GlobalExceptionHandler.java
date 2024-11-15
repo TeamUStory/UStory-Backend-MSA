@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
         MethodArgumentNotValidException.class,
         InvalidTokenException.class
     })
-    public ResponseEntity<ApiResponse> handleValidationException(Exception ex) {
+    public ResponseEntity<ApiResponse<?>> handleValidationException(Exception ex) {
 
         printWarnLog(VALIDATION_LOG_MESSAGE, ex);
 
@@ -74,9 +74,7 @@ public class GlobalExceptionHandler {
             customException = (ValidationException) ex;
         }
 
-        ApiResponse response = new ErrorResponse(customException);
-
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ErrorResponse.of(customException), HttpStatus.BAD_REQUEST);
     }
 
     /**
@@ -87,22 +85,22 @@ public class GlobalExceptionHandler {
         AccessTokenExpiredException.class,
         RefreshTokenExpiredException.class
     })
-    public ResponseEntity<ApiResponse> handleValidationException(CustomException ex) {
+    public ResponseEntity<ApiResponse<?>> handleValidationException(CustomException ex) {
 
         printWarnLog(UNAUTHORIZED_LOG_MESSAGE, ex);
 
-        return new ResponseEntity<>(new ErrorResponse(ex), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(ErrorResponse.of(ex), HttpStatus.UNAUTHORIZED);
     }
 
     /**
      * Forbidden Exception
      */
     @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ApiResponse> handleForbiddenException(ForbiddenException ex) {
+    public ResponseEntity<ApiResponse<?>> handleForbiddenException(ForbiddenException ex) {
 
         printWarnLog(FORBIDDEN_LOG_MESSAGE, ex);
 
-        return new ResponseEntity<>(new ErrorResponse(ex), HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(ErrorResponse.of(ex), HttpStatus.FORBIDDEN);
     }
 
     /**
@@ -110,7 +108,7 @@ public class GlobalExceptionHandler {
      * API URL 을 찾을수 없는 경우는 NoHandlerFoundException 을 통해 핸들링
      */
     @ExceptionHandler({NotFoundException.class, NoHandlerFoundException.class})
-    public ResponseEntity<ApiResponse> handleNotFoundExceptions(Exception ex) {
+    public ResponseEntity<ApiResponse<?>> handleNotFoundExceptions(Exception ex) {
 
         printWarnLog(NOT_FOUND_LOG_MESSAGE, ex);
 
@@ -121,40 +119,38 @@ public class GlobalExceptionHandler {
             customException = (NotFoundException) ex;
         }
 
-        ApiResponse response = new ErrorResponse(customException);
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(ErrorResponse.of(customException), HttpStatus.NOT_FOUND);
     }
 
     /**
      * Conflict Exception
      */
     @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ApiResponse> handleConflictException(ConflictException ex) {
+    public ResponseEntity<ApiResponse<?>> handleConflictException(ConflictException ex) {
 
         printWarnLog(CONFLICT_LOG_MESSAGE, ex);
 
-        return new ResponseEntity<>(new ErrorResponse(ex), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ErrorResponse.of(ex), HttpStatus.CONFLICT);
     }
 
     /**
      * Unsupported Media Type Exception
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public ResponseEntity<ApiResponse> handleMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
+    public ResponseEntity<ApiResponse<?>> handleMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex) {
 
         printWarnLog(UNSUPPORTED_MEDIA_TYPE_LOG_MESSAGE, ex);
 
         CustomException ex2 = new UnsupportedMediaTypeException(ex.getMessage());
 
-        return new ResponseEntity<>(new ErrorResponse(ex2), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        return new ResponseEntity<>(ErrorResponse.of(ex2), HttpStatus.UNSUPPORTED_MEDIA_TYPE);
     }
 
     /**
      * 잘못된 메서드로 요청
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<ApiResponse> handleMethodNotAllowedException(HttpRequestMethodNotSupportedException ex) {
+    public ResponseEntity<ApiResponse<?>> handleMethodNotAllowedException(HttpRequestMethodNotSupportedException ex) {
 
         printWarnLog(METHOD_NOT_ALLOWED_LOG_MESSAGE, ex);
 
@@ -167,28 +163,27 @@ public class GlobalExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.METHOD_NOT_ALLOWED)
             .header("Allow", ex.getSupportedHttpMethods().toString())
-            .body(new ErrorResponse(ex2, message));
+            .body(ErrorResponse.of(ex2, message));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
+    public ResponseEntity<ApiResponse<?>> handleIllegalArgumentException(IllegalArgumentException ex) {
 
         CustomException customException = new ValidationException(ex.getMessage(), ErrorCode.PARAMETER_INCORRECT_FORMAT);
 
-        ApiResponse errorResponse = new ErrorResponse(customException);
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ErrorResponse.of(customException), HttpStatus.BAD_REQUEST);
     }
 
     /**
      * 예외 처리를 벗어난 서버 에러
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse> handleServerException(Exception ex) {
+    public ResponseEntity<ApiResponse<?>> handleServerException(Exception ex) {
 
         printErrorLog(INTERNAL_SERVER_LOG_MESSAGE, ex);
 
         CustomException ex2 = new InternalServerException(ex.getMessage());
-        return new ResponseEntity<>(new ErrorResponse(ex2), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ErrorResponse.of(ex2), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     private void printWarnLog(String message, Exception ex) {
