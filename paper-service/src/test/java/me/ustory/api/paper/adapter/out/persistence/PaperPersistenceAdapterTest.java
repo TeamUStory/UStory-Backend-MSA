@@ -53,7 +53,13 @@ class PaperPersistenceAdapterTest {
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
             .writer(MemberInfo.of(1L))
-            .diary(DiaryInfo.of(1L)).build();
+            .diary(DiaryInfo.of(
+                1L,
+                "다이어리이름",
+                "https://www.다이어리이미지.gif",
+                "#000000",
+                "https://www.마크업이미지.png"))
+            .build();
 
         // when
         PaperId savedPaperId = paperPersistenceAdapter.createPaper(paper);
