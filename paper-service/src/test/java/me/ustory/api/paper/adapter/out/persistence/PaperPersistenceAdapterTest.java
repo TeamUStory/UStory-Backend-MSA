@@ -2,9 +2,11 @@ package me.ustory.api.paper.adapter.out.persistence;
 
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryInfo;
+import me.ustory.api.paper.domain.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberInfo;
 import me.ustory.api.paper.domain.Paper;
+import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
 import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +21,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@Import({PaperPersistenceAdapter.class, PaperMapper.class, PaperDetailMapper.class})
+@Import({PaperPersistenceAdapter.class, JpaConfig.class, PaperMapper.class, PaperDetailMapper.class})
 class PaperPersistenceAdapterTest {
 
     @Autowired
@@ -35,39 +37,39 @@ class PaperPersistenceAdapterTest {
     @Test
     void createPaper() {
         // given
+        PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
+            "제목",
+            Image.of("https://www.대표이미지.png"),
+            "가게명",
+            LocalDate.of(2024, 10, 1)
+        );
+
+        PaperDetail paperDetail = PaperDetail.of(
+            Images.of(List.of("https://www.이미지1.gif", "https://www.이미지2.gif")),
+            Address.of("도로주소", 37.5494, 126.9169)
+        );
+
         Paper paper = Paper.builder()
-            .title("제목")
-            .thumbnailImageUrl("https://www.대표이미지.gif")
-            .store("가게명")
-            .visitedAt(LocalDate.of(2020, 1, 1))
+            .paperBasicInfo(paperBasicInfo)
+            .paperDetail(paperDetail)
             .writer(MemberInfo.of(1L))
             .diary(DiaryInfo.of(1L)).build();
 
-        PaperDetail paperDetail = PaperDetail.builder()
-            .address(Address.builder()
-                .city("도로주소")
-                .coordinateX(37.5494)
-                .coordinateY(126.9169).build())
-            .images(Images.of(
-                List.of("https://www.이미지1.gif", "https://www.이미지2.gif")
-            ))
-            .build();
-
         // when
-        PaperId savedPaperId = paperPersistenceAdapter.createPaper(paper, paperDetail);
+        PaperId savedPaperId = paperPersistenceAdapter.createPaper(paper);
 
         // then
         PaperEntity savedPaper = paperJpaRepository.findById(savedPaperId.getId()).orElseThrow();
         assertThat(savedPaper.getTitle()).isEqualTo(paper.getTitle());
-        assertThat(savedPaper.getThumbnailImageUrl()).isEqualTo(paper.getThumbnailImageUrl());
+        assertThat(savedPaper.getThumbnailImageUrl()).isEqualTo(paper.getThumbnailUrl());
         assertThat(savedPaper.getStore()).isEqualTo(paper.getStore());
-        assertThat(savedPaper.getVisitedAt()).isEqualTo(paper.getVisitedAt());
+        assertThat(savedPaper.getVisitedAt()).isEqualTo(paper.getVisitedDate());
 
         PaperDetailEntity savedPaperDetail = paperDetailJpaRepository.findById(savedPaperId.getId()).orElseThrow();
         assertThat(savedPaperDetail.getAddress().getCity()).isEqualTo(paperDetail.getAddress().getCity());
-        assertThat(savedPaperDetail.getAddress().getCoordinateX()).isEqualTo(paperDetail.getAddress().getCoordinateX());
-        assertThat(savedPaperDetail.getAddress().getCoordinateY()).isEqualTo(paperDetail.getAddress().getCoordinateY());
-        assertThat(savedPaperDetail.getImages().getImageUrls()).isEqualTo(paperDetail.getImages().getImageUrls());
+        assertThat(savedPaperDetail.getAddress().getCoordinateX()).isEqualTo(paperDetail.getAddress().getCoordinateXValue());
+        assertThat(savedPaperDetail.getAddress().getCoordinateY()).isEqualTo(paperDetail.getAddress().getCoordinateYValue());
+        assertThat(savedPaperDetail.getImages().getImageUrls()).isEqualTo(paperDetail.getImages().getImagesUrl());
 
     }
 }

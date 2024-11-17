@@ -12,9 +12,9 @@ class PaperMapper {
             .title(paper.getTitle())
             .writerId(paper.getWriter().getId())
             .diaryId(paper.getDiary().getId())
-            .thumbnailImageUrl(paper.getThumbnailImageUrl())
+            .thumbnailImageUrl(paper.getThumbnailUrl())
             .store(paper.getStore())
-            .visitedAt(paper.getVisitedAt())
+            .visitedAt(paper.getVisitedDate())
             .unLocked(paper.isLocked())
             .build();
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
+import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -73,6 +75,8 @@ class PaperControllerTest {
             coordinateX,
             coordinateY
         );
+
+        given(createPaperUseCase.createPaper(eq(command))).willReturn(PaperId.of(1L));
 
         // when & then
         mockMvc.perform(post("/api/papers")

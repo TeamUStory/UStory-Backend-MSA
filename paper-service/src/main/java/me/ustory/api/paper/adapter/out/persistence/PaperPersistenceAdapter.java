@@ -15,11 +15,11 @@ class PaperPersistenceAdapter implements CreatePaperPort {
     private final PaperDetailJpaRepository paperDetailJpaRepository;
 
     @Override
-    public PaperId createPaper(Paper paper, PaperDetail paperDetail) {
+    public PaperId createPaper(Paper paper) {
         PaperEntity savedPaper = paperJpaRepository.save(PaperMapper.mapToJpaEntity(paper));
         Long paperId = savedPaper.getId();
 
-        paperDetailJpaRepository.save(PaperDetailMapper.mapToJpaEntity(paperId, paperDetail));
+        paperDetailJpaRepository.save(PaperDetailMapper.mapToJpaEntity(paperId, paper.getDetail()));
 
         return PaperId.of(paperId);
     }

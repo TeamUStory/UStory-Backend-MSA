@@ -1,18 +1,18 @@
 package me.ustory.api.paper.domain;
 
-import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 public class PaperDetail {
 
-    private PaperId id;
-
     private Images images;
 
     private Address address;
 
-    @Builder
+    public static PaperDetail of(Images images, Address address) {
+        return new PaperDetail(images, address);
+    }
+
     private PaperDetail(Images images, Address address) {
         this.images = images;
         this.address = address;

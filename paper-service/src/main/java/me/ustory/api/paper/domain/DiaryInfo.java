@@ -7,7 +7,13 @@ public class DiaryInfo {
 
     private Long id;
 
-    // TODO: Paper 애그리게이트에는 다이어리의 종류가 필요하다.
+    private String name;
+
+    private Image image;
+
+    private String color;
+
+    private Image marker;
 
     public static DiaryInfo of(Long id) {
         return new DiaryInfo(id);

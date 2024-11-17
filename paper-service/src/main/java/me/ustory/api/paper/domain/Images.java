@@ -7,13 +7,22 @@ import java.util.List;
 @Getter
 public class Images {
 
-    private List<String> imageUrls;
+    private final List<Image> images;
 
-    public static Images of(List<String> imageUrls) {
-        return new Images(imageUrls);
+    public static Images of(List<String> images) {
+        return new Images(images.stream()
+            .map(Image::of)
+            .toList());
     }
 
-    private Images(List<String> imageUrls) {
-        this.imageUrls = imageUrls;
+    public List<String> getImagesUrl() {
+        return images.stream()
+            .map(Image::getUrl)
+            .toList();
     }
+
+    private Images(List<Image> images) {
+        this.images = images;
+    }
+
 }

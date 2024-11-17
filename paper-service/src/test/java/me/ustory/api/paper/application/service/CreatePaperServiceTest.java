@@ -62,7 +62,7 @@ class CreatePaperServiceTest {
         // MemberInfo 불러오기 로직이 호출되었는지 검증
         // DiaryInfo 불러오기 로직이 호출되었는지 검증
 
-        verify(createPaperPort).createPaper(any(Paper.class), any(PaperDetail.class));
+        verify(createPaperPort).createPaper(any(Paper.class));
     }
 
 }
