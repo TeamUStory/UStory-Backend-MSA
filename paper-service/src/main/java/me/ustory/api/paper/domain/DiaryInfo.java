@@ -15,12 +15,16 @@ public class DiaryInfo {
 
     private Image marker;
 
-    public static DiaryInfo of(Long id) {
-        return new DiaryInfo(id);
+    public static DiaryInfo of(Long id, String name, String imageUrl, String color, String markerUrl) {
+        return new DiaryInfo(id, name, Image.of(imageUrl), color, Image.of(markerUrl));
     }
 
-    private DiaryInfo(Long id) {
+    private DiaryInfo(Long id, String name, Image image, String color, Image marker) {
         this.id = id;
+        this.name = name;
+        this.image = image;
+        this.color = color;
+        this.marker = marker;
     }
 
 }
