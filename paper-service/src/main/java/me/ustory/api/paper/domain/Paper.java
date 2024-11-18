@@ -27,7 +27,11 @@ public class Paper {
         this.detail = paperDetail;
         this.writer = writer;
         this.diary = diary;
-        this.locked = true;
+        this.locked = !diary.isIndividual();
+    }
+
+    public void unLock() {
+        this.locked = false;
     }
 
     public String getTitle() {
@@ -45,4 +49,5 @@ public class Paper {
     public LocalDate getVisitedDate() {
         return basicInfo.getVisitedAt();
     }
+
 }

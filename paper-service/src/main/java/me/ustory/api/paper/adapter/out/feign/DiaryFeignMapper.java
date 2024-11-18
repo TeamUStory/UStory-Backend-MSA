@@ -13,7 +13,8 @@ public class DiaryFeignMapper {
             diaryFeignResponse.name(),
             diaryFeignResponse.imageUrl(),
             diaryFeignResponse.color(),
-            diaryFeignResponse.markerUrl()
+            diaryFeignResponse.markerUrl(),
+            diaryFeignResponse.category()
         );
     }
 

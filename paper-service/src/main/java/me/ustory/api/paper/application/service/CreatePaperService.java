@@ -48,7 +48,7 @@ class CreatePaperService implements CreatePaperUseCase {
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
             // MemberInfo 넣기
-            // DiaryInfo 넣기
+            .diary(diaryInfo)
             .build();
 
         return createPaperPort.createPaper(paper);

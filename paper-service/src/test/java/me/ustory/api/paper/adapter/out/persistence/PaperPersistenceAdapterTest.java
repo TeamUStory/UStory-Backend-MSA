@@ -58,7 +58,8 @@ class PaperPersistenceAdapterTest {
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",
                 "#000000",
-                "https://www.마크업이미지.png"))
+                "https://www.마크업이미지.png",
+                "개인"))
             .build();
 
         // when

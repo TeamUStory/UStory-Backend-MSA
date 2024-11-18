@@ -7,6 +7,7 @@ import me.ustory.api.paper.application.port.out.CreatePaperPort;
 import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Paper;
+import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,18 +41,36 @@ class CreatePaperServiceTest {
     @Test
     void createPaper() {
         // given
+        Long diaryId = 1L;
+        String category = "개인";
+
+        CreatePaperCommand expectedCommand = createPaperCommand(diaryId);
+
+        given(getDiaryFeignPort.getDiaryById(1L)).willReturn(createDiaryInfo(diaryId, category));
+
+        // when
+        createPaperService.createPaper(expectedCommand);
+
+        // then
+        // MemberInfo 불러오기 로직이 호출되었는지 검증
+        verify(getDiaryFeignPort).getDiaryById(diaryId);
+
+        verify(createPaperPort).createPaper(any(Paper.class));
+        verify(createDiaryPort).createDiary(any(DiaryInfo.class));
+    }
+
+    private CreatePaperCommand createPaperCommand(Long diaryId) {
         String title = "제목";
         String thumbnailImage = "https://www.대표이미지.gif";
         List<String> images = List.of("https://www.이미지1.gif", "https://www.이미지2.gif");
         LocalDate visitedDate = LocalDate.of(2020, 1, 1);
         Long writerId = 1L;
-        Long diaryId = 1L;
         String city = "도로주소";
         String store = "가게명";
         Double coordinateX = 37.5494;
         Double coordinateY = 126.9169;
 
-        CreatePaperCommand expectedCommand = new CreatePaperCommand(
+        return new CreatePaperCommand(
             title,
             thumbnailImage,
             visitedDate,
@@ -63,24 +82,17 @@ class CreatePaperServiceTest {
             coordinateX,
             coordinateY
         );
+    }
 
-        given(getDiaryFeignPort.getDiaryById(1L)).willReturn(DiaryInfo.of(
-            1L,
+    private DiaryInfo createDiaryInfo(Long diaryId, String category) {
+        return DiaryInfo.of(
+            diaryId,
             "다이어리이름",
             "https://www.다이어리이미지.gif",
             "#000000",
-            "https://www.마크업이미지.png")
+            "https://www.마크업이미지.png",
+            category
         );
-
-        // when
-        createPaperService.createPaper(expectedCommand);
-
-        // then
-        // MemberInfo 불러오기 로직이 호출되었는지 검증
-        verify(getDiaryFeignPort).getDiaryById(diaryId);
-
-        verify(createPaperPort).createPaper(any(Paper.class));
-        verify(createDiaryPort).createDiary(any(DiaryInfo.class));
     }
 
 }

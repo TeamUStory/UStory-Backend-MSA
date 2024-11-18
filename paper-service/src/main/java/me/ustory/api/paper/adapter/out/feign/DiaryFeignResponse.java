@@ -5,6 +5,7 @@ public record DiaryFeignResponse(
     String name,
     String imageUrl,
     String color,
-    String markerUrl
+    String markerUrl,
+    String category
 ) {
 }
