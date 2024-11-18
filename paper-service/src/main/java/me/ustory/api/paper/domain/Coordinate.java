@@ -23,13 +23,13 @@ public class Coordinate {
 
     private static void validateLatitude(Double value) {
         if (value == null || value < -90 || value > 90) {
-            throw new IllegalArgumentException("위도는 -90 이상 90 이하여야 합니다: " + value);
+            throw new IllegalArgumentException("위도는 -90 이상 90 이하여야 합니다.");
         }
     }
 
     private static void validateLongitude(Double value) {
         if (value == null || value < -180 || value > 180) {
-            throw new IllegalArgumentException("경도는 -180 이상 180 이하여야 합니다: " + value);
+            throw new IllegalArgumentException("경도는 -180 이상 180 이하여야 합니다.");
         }
     }
 
