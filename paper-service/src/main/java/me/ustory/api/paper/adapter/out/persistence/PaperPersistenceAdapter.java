@@ -3,7 +3,6 @@ package me.ustory.api.paper.adapter.out.persistence;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.paper.application.port.out.CreatePaperPort;
 import me.ustory.api.paper.domain.Paper;
-import me.ustory.api.paper.domain.PaperDetail;
 import me.ustory.api.paper.domain.PaperId;
 import org.springframework.stereotype.Component;
 

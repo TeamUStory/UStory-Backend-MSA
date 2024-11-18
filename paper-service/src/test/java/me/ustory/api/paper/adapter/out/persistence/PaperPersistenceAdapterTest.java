@@ -33,7 +33,7 @@ class PaperPersistenceAdapterTest {
     @Autowired
     private PaperDetailJpaRepository paperDetailJpaRepository;
 
-    @DisplayName("Paper를 생성한다.")
+    @DisplayName("Paper를 저장한다.")
     @Test
     void createPaper() {
         // given
