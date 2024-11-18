@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.out.persistence.diaryinfo;
+package me.ustory.api.paper.adapter.out.persistence;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

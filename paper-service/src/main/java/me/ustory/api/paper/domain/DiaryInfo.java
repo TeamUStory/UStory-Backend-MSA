@@ -21,6 +21,10 @@ public class DiaryInfo {
         return new DiaryInfo(id, name, Image.of(imageUrl), color, Image.of(markerUrl), category);
     }
 
+    public static DiaryInfo of(Long id, String name, String imageUrl, String color, String markerUrl) {
+        return new DiaryInfo(id, name, Image.of(imageUrl), color, Image.of(markerUrl), null);
+    }
+
     private DiaryInfo(Long id, String name, Image image, String color, Image marker, String category) {
         this.id = id;
         this.name = name;
@@ -31,10 +35,10 @@ public class DiaryInfo {
     }
 
     public boolean isIndividual() {
-        if ("개인".equals(category)) {
-            return true;
+        if (category == null) {
+            return false;
         }
 
-        return false;
+        return "개인".equals(category);
     }
 }

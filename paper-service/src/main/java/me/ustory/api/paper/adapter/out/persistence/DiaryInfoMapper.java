@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.out.persistence.diaryinfo;
+package me.ustory.api.paper.adapter.out.persistence;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,16 @@ class DiaryInfoMapper {
             diaryInfo.getImage().getUrl(),
             diaryInfo.getColor(),
             diaryInfo.getMarker().getUrl()
+        );
+    }
+
+    public static DiaryInfo mapToDomain(DiaryInfoEntity diaryInfoEntity) {
+        return DiaryInfo.of(
+            diaryInfoEntity.getId(),
+            diaryInfoEntity.getName(),
+            diaryInfoEntity.getImageUrl(),
+            diaryInfoEntity.getColor(),
+            diaryInfoEntity.getMarkerUrl()
         );
     }
 

@@ -1,13 +1,11 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
-import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
 import me.ustory.api.paper.application.port.out.CreatePaperPort;
 import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Paper;
-import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,7 +44,10 @@ class CreatePaperServiceTest {
 
         CreatePaperCommand expectedCommand = createPaperCommand(diaryId);
 
-        given(getDiaryFeignPort.getDiaryById(1L)).willReturn(createDiaryInfo(diaryId, category));
+        DiaryInfo diaryInfo = createDiaryInfo(diaryId, category);
+
+        given(getDiaryFeignPort.getDiaryById(1L)).willReturn(diaryInfo);
+        given(createDiaryPort.createDiary(any(DiaryInfo.class))).willReturn(diaryInfo);
 
         // when
         createPaperService.createPaper(expectedCommand);
@@ -55,8 +56,8 @@ class CreatePaperServiceTest {
         // MemberInfo 불러오기 로직이 호출되었는지 검증
         verify(getDiaryFeignPort).getDiaryById(diaryId);
 
-        verify(createPaperPort).createPaper(any(Paper.class));
         verify(createDiaryPort).createDiary(any(DiaryInfo.class));
+        verify(createPaperPort).createPaper(any(Paper.class));
     }
 
     private CreatePaperCommand createPaperCommand(Long diaryId) {

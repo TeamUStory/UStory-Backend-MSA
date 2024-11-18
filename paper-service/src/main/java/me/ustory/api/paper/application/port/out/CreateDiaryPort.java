@@ -4,6 +4,6 @@ import me.ustory.api.paper.domain.DiaryInfo;
 
 public interface CreateDiaryPort {
 
-    void createDiary(DiaryInfo diaryInfo);
+    DiaryInfo createDiary(DiaryInfo diaryInfo);
 
 }

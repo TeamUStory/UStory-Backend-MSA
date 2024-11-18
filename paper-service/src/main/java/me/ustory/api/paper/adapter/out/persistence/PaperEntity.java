@@ -6,6 +6,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,7 +33,9 @@ class PaperEntity extends BaseEntity {
 
     private Long writerId;
 
-    private Long diaryId;
+    @ManyToOne
+    @JoinColumn
+    private DiaryInfoEntity diaryInfo;
 
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
     private String title;
@@ -48,6 +52,6 @@ class PaperEntity extends BaseEntity {
     @Column(name = "deleted_at", columnDefinition = "DATETIME")
     private LocalDateTime deletedAt;
 
-    private Boolean unLocked;
+    private Boolean isLocked;
 
 }

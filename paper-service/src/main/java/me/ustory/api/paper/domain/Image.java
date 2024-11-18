@@ -1,5 +1,7 @@
 package me.ustory.api.paper.domain;
 
+import java.util.Objects;
+
 public class Image {
 
     private final String url;
@@ -25,5 +27,25 @@ public class Image {
         if (!url.endsWith(".gif") && !url.endsWith(".png") && !url.endsWith(".jpg") && !url.endsWith(".jpeg")) {
             throw new IllegalArgumentException(".gif, .png, .jpg, .jpeg 이미지 확장자만 지원합니다.");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Image image = (Image) o;
+        return Objects.equals(url, image.url);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(url);
+    }
+
+    @Override
+    public String toString() {
+        return "Image{" +
+            "url='" + url + '\'' +
+            '}';
     }
 }

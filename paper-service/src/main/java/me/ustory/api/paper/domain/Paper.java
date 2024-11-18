@@ -21,13 +21,13 @@ public class Paper {
     private boolean locked;
 
     @Builder
-    private Paper(PaperId paperId, PaperBasicInfo paperBasicInfo, PaperDetail paperDetail, MemberInfo writer, DiaryInfo diary) {
+    private Paper(PaperId paperId, PaperBasicInfo paperBasicInfo, PaperDetail paperDetail, MemberInfo writer, DiaryInfo diary, Boolean locked) {
         this.paperId = paperId;
         this.basicInfo = paperBasicInfo;
         this.detail = paperDetail;
         this.writer = writer;
         this.diary = diary;
-        this.locked = !diary.isIndividual();
+        this.locked = (locked != null) ? locked : !diary.isIndividual();
     }
 
     public void unLock() {

@@ -18,16 +18,30 @@ class PaperDetailMapper {
             .build();
     }
 
-    private static AddressEntity mapToAddressEntity(Address address) {
-        return AddressEntity.of(address.getCity(), address.getCoordinateXValue(), address.getCoordinateYValue());
+    public static PaperDetail mapToDomain(PaperDetailEntity paperDetailEntity) {
+        return PaperDetail.of(
+            mapToImagesDomain(paperDetailEntity.getImages()),
+            mapToAddressDomain(paperDetailEntity.getAddress())
+        );
     }
 
     private static ImagesEntity mapToImagesEntity(Images images) {
         return ImagesEntity.of(
             images.getImages().stream()
-            .map(Image::getUrl)
-            .toList()
+                .map(Image::getUrl)
+                .toList()
         );
     }
 
+    private static Images mapToImagesDomain(ImagesEntity imagesEntity) {
+        return Images.of(imagesEntity.getImageUrls());
+    }
+
+    private static AddressEntity mapToAddressEntity(Address address) {
+        return AddressEntity.of(address.getCity(), address.getCoordinateXValue(), address.getCoordinateYValue());
+    }
+
+    private static Address mapToAddressDomain(AddressEntity addressEntity) {
+        return Address.of(addressEntity.getCity(), addressEntity.getCoordinateX(), addressEntity.getCoordinateY());
+    }
 }

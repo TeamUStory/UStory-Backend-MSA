@@ -1,7 +1,6 @@
-package me.ustory.api.paper.adapter.out.persistence.diaryinfo;
+package me.ustory.api.paper.adapter.out.persistence;
 
 import me.ustory.api.paper.adapter.out.feign.DiaryFeignMapper;
-import me.ustory.api.paper.adapter.out.persistence.JpaConfig;
 import me.ustory.api.paper.domain.DiaryInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @Import({DiaryInfoPersistenceAdapter.class, JpaConfig.class, DiaryFeignMapper.class})

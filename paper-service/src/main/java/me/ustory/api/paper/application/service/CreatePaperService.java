@@ -29,7 +29,7 @@ class CreatePaperService implements CreatePaperUseCase {
 //        MemberInfo 불러오기
         DiaryInfo diaryInfo = getDiaryFeignPort.getDiaryById(command.diaryId());
 
-        createDiaryPort.createDiary(diaryInfo);
+        DiaryInfo savedDiaryInfo = createDiaryPort.createDiary(diaryInfo);
 
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             command.title(),
@@ -48,7 +48,7 @@ class CreatePaperService implements CreatePaperUseCase {
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
             // MemberInfo 넣기
-            .diary(diaryInfo)
+            .diary(savedDiaryInfo)
             .build();
 
         return createPaperPort.createPaper(paper);

@@ -2,6 +2,8 @@ package me.ustory.api.paper.domain;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class PaperId {
 
@@ -15,4 +17,23 @@ public class PaperId {
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PaperId paperId = (PaperId) o;
+        return Objects.equals(id, paperId.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    @Override
+    public String toString() {
+        return "PaperId{" +
+            "id=" + id +
+            '}';
+    }
 }

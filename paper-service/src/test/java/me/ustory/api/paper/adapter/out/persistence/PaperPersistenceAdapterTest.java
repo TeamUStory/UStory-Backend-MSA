@@ -37,30 +37,9 @@ class PaperPersistenceAdapterTest {
     @Test
     void createPaper() {
         // given
-        PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
-            "제목",
-            Image.of("https://www.대표이미지.png"),
-            "가게명",
-            LocalDate.of(2024, 10, 1)
-        );
-
-        PaperDetail paperDetail = PaperDetail.of(
-            Images.of(List.of("https://www.이미지1.gif", "https://www.이미지2.gif")),
-            Address.of("도로주소", 37.5494, 126.9169)
-        );
-
-        Paper paper = Paper.builder()
-            .paperBasicInfo(paperBasicInfo)
-            .paperDetail(paperDetail)
-            .writer(MemberInfo.of(1L))
-            .diary(DiaryInfo.of(
-                1L,
-                "다이어리이름",
-                "https://www.다이어리이미지.gif",
-                "#000000",
-                "https://www.마크업이미지.png",
-                "개인"))
-            .build();
+        PaperBasicInfo paperBasicInfo = getPaperBasicInfo();
+        PaperDetail paperDetail = getPaperDetail();
+        Paper paper = getPaper(paperBasicInfo, paperDetail);
 
         // when
         PaperId savedPaperId = paperPersistenceAdapter.createPaper(paper);
@@ -77,6 +56,68 @@ class PaperPersistenceAdapterTest {
         assertThat(savedPaperDetail.getAddress().getCoordinateX()).isEqualTo(paperDetail.getAddress().getCoordinateXValue());
         assertThat(savedPaperDetail.getAddress().getCoordinateY()).isEqualTo(paperDetail.getAddress().getCoordinateYValue());
         assertThat(savedPaperDetail.getImages().getImageUrls()).isEqualTo(paperDetail.getImages().getImagesUrl());
+    }
 
+    @DisplayName("Paper를 불러온다.")
+    @Test
+    void getPaper() {
+        // given
+        PaperBasicInfo paperBasicInfo = getPaperBasicInfo();
+        PaperDetail paperDetail = getPaperDetail();
+        Paper paper = getPaper(paperBasicInfo, paperDetail);
+
+        PaperEntity savedPaper = paperJpaRepository.save(PaperMapper.mapToJpaEntity(paper));
+        paperDetailJpaRepository.save(PaperDetailMapper.mapToJpaEntity(savedPaper.getId(), paperDetail));
+
+
+        PaperId id = PaperId.of(savedPaper.getId());
+
+        // when
+        Paper foundPaper = paperPersistenceAdapter.findById(id);
+
+        // then
+        assertThat(foundPaper.getTitle()).isEqualTo(paper.getTitle());
+        assertThat(foundPaper.getStore()).isEqualTo(paper.getStore());
+        assertThat(foundPaper.getVisitedDate()).isEqualTo(paper.getVisitedDate());
+        assertThat(foundPaper.getThumbnailUrl()).isEqualTo(paper.getThumbnailUrl());
+
+        assertThat(foundPaper.getDetail().getAddress()).isEqualTo(paper.getDetail().getAddress());
+        assertThat(foundPaper.getDetail().getImages()).isEqualTo(paper.getDetail().getImages());
+
+        assertThat(foundPaper.getDiary().getName()).isEqualTo(paper.getDiary().getName());
+        assertThat(foundPaper.getDiary().getColor()).isEqualTo(paper.getDiary().getColor());
+        assertThat(foundPaper.getDiary().getImage()).isEqualTo(paper.getDiary().getImage());
+        assertThat(foundPaper.getDiary().getMarker()).isEqualTo(paper.getDiary().getMarker());
+    }
+
+    private static Paper getPaper(PaperBasicInfo paperBasicInfo, PaperDetail paperDetail) {
+        return Paper.builder()
+            .paperBasicInfo(paperBasicInfo)
+            .paperDetail(paperDetail)
+            .writer(MemberInfo.of(1L))
+            .diary(DiaryInfo.of(
+                1L,
+                "다이어리이름",
+                "https://www.다이어리이미지.gif",
+                "#000000",
+                "https://www.마크업이미지.png",
+                "개인"))
+            .build();
+    }
+
+    private static PaperDetail getPaperDetail() {
+        return PaperDetail.of(
+            Images.of(List.of("https://www.이미지1.gif", "https://www.이미지2.gif")),
+            Address.of("도로주소", 37.5494, 126.9169)
+        );
+    }
+
+    private static PaperBasicInfo getPaperBasicInfo() {
+        return PaperBasicInfo.of(
+            "제목",
+            Image.of("https://www.대표이미지.png"),
+            "가게명",
+            LocalDate.of(2024, 10, 1)
+        );
     }
 }
