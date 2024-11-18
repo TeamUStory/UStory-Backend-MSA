@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class DiaryFeignFeignAdapter implements GetDiaryFeignPort {
+public class DiaryFeignAdapter implements GetDiaryFeignPort {
 
     private final DiaryFeignClient diaryFeignClient;
 
