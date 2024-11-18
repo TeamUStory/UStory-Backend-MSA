@@ -23,7 +23,7 @@ public class Image {
         }
 
         if (!url.endsWith(".gif") && !url.endsWith(".png") && !url.endsWith(".jpg") && !url.endsWith(".jpeg")) {
-            throw new IllegalArgumentException("url is not an image");
+            throw new IllegalArgumentException(".gif, .png, .jpg, .jpeg 이미지 확장자만 지원합니다.");
         }
     }
 }
