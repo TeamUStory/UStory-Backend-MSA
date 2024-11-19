@@ -26,6 +26,11 @@ spring:
     username: root
     password: 1234
 
+  data:
+    redis:
+      host: localhost
+      port: 6380
+
   jpa:
     hibernate:
       ddl-auto: create
@@ -45,6 +50,11 @@ spring:
     url: jdbc:mysql://localhost:3307/ustory?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: 1234
+
+  data:
+    redis:
+      host: localhost
+      port: 6380
 
   jpa:
     hibernate:
