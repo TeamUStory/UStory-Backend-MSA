@@ -79,18 +79,7 @@ class PaperControllerTest {
             .coordinateY(coordinateY)
             .build();
 
-        CreatePaperCommand command = new CreatePaperCommand(
-            title,
-            thumbnailImage,
-            visitedDate,
-            writerId,
-            diaryId,
-            images,
-            city,
-            store,
-            coordinateX,
-            coordinateY
-        );
+        CreatePaperCommand command = CreatePaperCommand.of(request, writerId);
 
         given(createPaperUseCase.createPaper(eq(command))).willReturn(PaperId.of(1L));
 

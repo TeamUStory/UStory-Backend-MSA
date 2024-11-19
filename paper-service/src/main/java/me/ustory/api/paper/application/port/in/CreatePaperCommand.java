@@ -1,11 +1,10 @@
 package me.ustory.api.paper.application.port.in;
 
-import lombok.Builder;
+import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 
 import java.time.LocalDate;
 import java.util.List;
 
-@Builder
 public record CreatePaperCommand(
     String title,
     String thumbnailImageUrl,
@@ -20,5 +19,18 @@ public record CreatePaperCommand(
     Double coordinateX,
     Double coordinateY
 ) {
-
+    public static CreatePaperCommand of(CreatePaperRequest request, Long writerId) {
+        return new CreatePaperCommand(
+            request.title(),
+            request.thumbnailImageUrl(),
+            request.visitedAt(),
+            writerId,
+            request.diaryId(),
+            request.imageUrls(),
+            request.city(),
+            request.store(),
+            request.coordinateX(),
+            request.coordinateY()
+        );
+    }
 }

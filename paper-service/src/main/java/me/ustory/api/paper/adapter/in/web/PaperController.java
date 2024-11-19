@@ -36,18 +36,7 @@ public class PaperController {
         @RequestParam(name = "userId") Long userId,
         @Valid @RequestBody CreatePaperRequest request
     ) {
-        CreatePaperCommand command = CreatePaperCommand.builder()
-            .title(request.title())
-            .thumbnailImageUrl(request.thumbnailImageUrl())
-            .visitedAt(request.visitedAt())
-            .writerId(userId)
-            .diaryId(request.diaryId())
-            .imageUrls(request.imageUrls())
-            .city(request.city())
-            .store(request.store())
-            .coordinateX(request.coordinateX())
-            .coordinateY(request.coordinateY())
-            .build();
+        CreatePaperCommand command = CreatePaperCommand.of(request, userId);
 
         PaperId paperId = createPaperUseCase.createPaper(command);
 
