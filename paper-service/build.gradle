@@ -21,7 +21,6 @@ dependencies {
 
     runtimeOnly 'com.mysql:mysql-connector-j'
 
-    testImplementation 'com.h2database:h2'
 }
 
 def querydslSrcDir = 'src/main/generated'
