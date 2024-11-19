@@ -1,11 +1,13 @@
 package me.ustory.api.paper.adapter.in.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
+import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Image;
@@ -24,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -104,7 +107,7 @@ class PaperControllerTest {
         Long paperId = 1L;
 
         GetPaperCommand command = new GetPaperCommand(PaperId.of(paperId));
-        Paper paper = createPaperResponse();
+        Paper paper = getPaper(paperId);
 
         given(getPaperUseCase.getPaperById(command)).willReturn(paper);
 
@@ -129,13 +132,59 @@ class PaperControllerTest {
         verify(getPaperUseCase).getPaperById(command);
     }
 
-    // Paper 객체를 생성하는 테스트용 메서드
-    private Paper createPaperResponse() {
-        PaperBasicInfo basicInfo = getBasicInfo();
+    @DisplayName("작성한 Paper를 조회한다.")
+    @Test
+    void getWrittenPaperByMemberId() throws Exception {
+        // given
+        Long userId = 1L;
+        PaginationRequest paginationRequest = new PaginationRequest(1, 20, LocalDateTime.of(2024, 11, 10, 10, 0));
 
+        GetWrittenPapersCommand command = new GetWrittenPapersCommand(userId, paginationRequest);
+        List<Paper> papers = List.of(getPaper(1L), getPaper(2L));
+
+        given(getPaperUseCase.getPapersByWriterId(command)).willReturn(papers);
+
+        // when & then
+        mockMvc.perform(get("/api/papers/written")
+                .param("userId", String.valueOf(userId))
+                .param("page", String.valueOf(paginationRequest.page()))
+                .param("size", String.valueOf(paginationRequest.size()))
+                .param("requestTime", paginationRequest.requestTime().toString())
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data[0].paperId").value(papers.get(0).getPaperId().getId()))
+            .andExpect(jsonPath("$.data[0].title").value(papers.get(0).getTitle()))
+            .andExpect(jsonPath("$.data[0].thumbnailImageUrl").value(papers.get(0).getThumbnailUrl()))
+            .andExpect(jsonPath("$.data[0].store").value(papers.get(0).getStore()))
+            .andExpect(jsonPath("$.data[0].diaryName").value(papers.get(0).getDiary().getName()))
+            .andExpect(jsonPath("$.data[1].paperId").value(papers.get(1).getPaperId().getId()))
+            .andExpect(jsonPath("$.data[1].title").value(papers.get(1).getTitle()))
+            .andExpect(jsonPath("$.data[1].thumbnailImageUrl").value(papers.get(1).getThumbnailUrl()))
+            .andExpect(jsonPath("$.data[1].store").value(papers.get(1).getStore()))
+            .andExpect(jsonPath("$.data[1].diaryName").value(papers.get(1).getDiary().getName()));
+
+        // verify
+        verify(getPaperUseCase).getPapersByWriterId(command);
+    }
+
+    private Paper getPaper(Long paperId) {
         PaperDetail detail = getDetail();
-
-        return getPaper(basicInfo, detail);
+        PaperBasicInfo basicInfo = getBasicInfo();
+        return Paper.builder()
+            .paperId(PaperId.of(paperId))
+            .paperBasicInfo(basicInfo)
+            .paperDetail(detail)
+            .writer(MemberInfo.of(1L))
+            .diary(DiaryInfo.of(
+                1L,
+                "다이어리 이름",
+                "https://www.diary-image.gif",
+                "#FFFFFF",
+                "https://www.marker-image.png",
+                "개인"
+            ))
+            .locked(false)
+            .build();
     }
 
     private PaperBasicInfo getBasicInfo() {
@@ -152,23 +201,5 @@ class PaperControllerTest {
             Images.of(List.of("https://www.image1.gif", "https://www.image2.gif")),
             Address.of("서울시", 37.5494, 126.9169)
         );
-    }
-
-    private Paper getPaper(PaperBasicInfo basicInfo, PaperDetail detail) {
-        return Paper.builder()
-            .paperId(PaperId.of(1L))
-            .paperBasicInfo(basicInfo)
-            .paperDetail(detail)
-            .writer(MemberInfo.of(1L))
-            .diary(DiaryInfo.of(
-                1L,
-                "다이어리 이름",
-                "https://www.diary-image.gif",
-                "#FFFFFF",
-                "https://www.marker-image.png",
-                "개인"
-            ))
-            .locked(false)
-            .build();
     }
 }

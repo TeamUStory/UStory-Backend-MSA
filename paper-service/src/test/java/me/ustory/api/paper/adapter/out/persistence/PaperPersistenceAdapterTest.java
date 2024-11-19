@@ -1,5 +1,6 @@
 package me.ustory.api.paper.adapter.out.persistence;
 
+import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Image;
@@ -11,17 +12,25 @@ import me.ustory.api.paper.domain.PaperDetail;
 import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-@Import({PaperPersistenceAdapter.class, JpaConfig.class, PaperMapper.class, PaperDetailMapper.class})
+@Import({PaperPersistenceAdapter.class, JpaConfig.class, QueryDslConfig.class, PaperMapper.class, PaperDetailMapper.class})
+@ActiveProfiles("test")
 class PaperPersistenceAdapterTest {
 
     @Autowired
@@ -88,6 +97,49 @@ class PaperPersistenceAdapterTest {
         assertThat(foundPaper.getDiary().getColor()).isEqualTo(paper.getDiary().getColor());
         assertThat(foundPaper.getDiary().getImage()).isEqualTo(paper.getDiary().getImage());
         assertThat(foundPaper.getDiary().getMarker()).isEqualTo(paper.getDiary().getMarker());
+    }
+
+    @DisplayName("작성한 Paper를 불러온다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @Test
+    void getWrittenPapers() {
+        // given
+        Long writerId = 1L;
+        LocalDateTime requestTime = LocalDateTime.of(2024, 11, 19, 18, 0);
+
+        PaginationRequest paginationRequest = new PaginationRequest(1, 20, requestTime);
+
+        // when
+        List<Paper> papers = paperPersistenceAdapter.findByWriterId(writerId, paginationRequest);
+
+        // then
+        assertThat(papers).hasSize(3)
+            .extracting(Paper::getWriter)
+            .extracting(MemberInfo::getId)
+            .containsOnly(writerId);
+    }
+
+    @DisplayName("작성한 Paper를 불러올 때, 생성 시간이 요청 시간보다 늦는 Paper만 불러온다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @ParameterizedTest(name = "{index}: RequestTime에 따라 Paper를 불러오는 테스트 [{0}]")
+    @CsvSource({
+        "2024-11-18T12:00:00, 1",
+        "2024-11-18T18:00:00, 2",
+        "2024-11-19T18:00:00, 3"
+    })
+    void getWrittenPapersWhenRequestTime(LocalDateTime requestTime, int expectedSize) {
+        // given
+        Long writerId = 1L;
+        PaginationRequest paginationRequest = new PaginationRequest(1, 20, requestTime);
+
+        // when
+        List<Paper> papers = paperPersistenceAdapter.findByWriterId(writerId, paginationRequest);
+
+        // then
+        assertThat(papers).hasSize(expectedSize)
+            .extracting(Paper::getWriter)
+            .extracting(MemberInfo::getId)
+            .containsOnly(writerId);
     }
 
     private static Paper getPaper(PaperBasicInfo paperBasicInfo, PaperDetail paperDetail) {

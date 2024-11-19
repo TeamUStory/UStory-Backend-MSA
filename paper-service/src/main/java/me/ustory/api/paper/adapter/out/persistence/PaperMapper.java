@@ -3,6 +3,7 @@ package me.ustory.api.paper.adapter.out.persistence;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.ustory.api.paper.domain.Image;
+import me.ustory.api.paper.domain.MemberInfo;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -23,6 +24,23 @@ class PaperMapper {
             .build();
     }
 
+    public static Paper mapToDomain(PaperEntity paperEntity) {
+        PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
+            paperEntity.getTitle(),
+            Image.of(paperEntity.getThumbnailImageUrl()),
+            paperEntity.getStore(),
+            paperEntity.getVisitedAt()
+        );
+
+        return Paper.builder()
+            .paperId(PaperId.of(paperEntity.getId()))
+            .paperBasicInfo(paperBasicInfo)
+            .writer(MemberInfo.of(paperEntity.getWriterId()))
+            .diary(DiaryInfoMapper.mapToDomain(paperEntity.getDiaryInfo()))
+            .locked(paperEntity.getIsLocked())
+            .build();
+    }
+
     public static Paper mapToDomain(PaperEntity paperEntity, PaperDetail paperDetail) {
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             paperEntity.getTitle(),
@@ -35,6 +53,7 @@ class PaperMapper {
             .paperId(PaperId.of(paperEntity.getId()))
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
+            .writer(MemberInfo.of(paperEntity.getWriterId()))
             .diary(DiaryInfoMapper.mapToDomain(paperEntity.getDiaryInfo()))
             .locked(paperEntity.getIsLocked())
             .build();

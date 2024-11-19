@@ -1,6 +1,8 @@
 package me.ustory.api.paper.application.service;
 
+import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
+import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryInfo;
@@ -19,6 +21,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -43,9 +46,7 @@ class GetPaperServiceTest {
         PaperId paperId = PaperId.of(1L);
         GetPaperCommand command = new GetPaperCommand(paperId);
 
-        PaperBasicInfo paperBasicInfo = getPaperBasicInfo();
-        PaperDetail paperDetail = getPaperDetail();
-        Paper paper = getPaper(paperBasicInfo, paperDetail);
+        Paper paper = getPaper(1L);
 
         given(getPaperPort.findById(paperId)).willReturn(paper);
 
@@ -58,11 +59,35 @@ class GetPaperServiceTest {
         verify(getPaperPort).findById(any(PaperId.class));
     }
 
-    private Paper getPaper(PaperBasicInfo paperBasicInfo, PaperDetail paperDetail) {
+    @DisplayName("작성한 Paper를 불러온다.")
+    @Test
+    void getWrittenPapers() {
+        // given
+        Long writerId = 1L;
+        PaginationRequest paginationRequest = new PaginationRequest(1, 20, LocalDateTime.of(2024, 11, 11, 10, 0));
+        GetWrittenPapersCommand command = new GetWrittenPapersCommand(writerId, paginationRequest);
+        List<Paper> papers = List.of(getPaper(writerId), getPaper(writerId));
+
+        given(getPaperPort.findByWriterId(writerId, paginationRequest)).willReturn(papers);
+
+        // when
+        List<Paper> getPapers = getPaperService.getPapersByWriterId(command);
+
+        // then
+        assertThat(getPapers)
+            .hasSize(papers.size())
+            .allSatisfy(paper -> assertThat(paper.getWriter().getId()).isEqualTo(writerId));
+
+        verify(getPaperPort).findByWriterId(any(Long.class), any(PaginationRequest.class));
+    }
+
+    private Paper getPaper(Long writerId) {
+        PaperBasicInfo paperBasicInfo = getPaperBasicInfo();
+        PaperDetail paperDetail = getPaperDetail();
         return Paper.builder()
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
-            .writer(MemberInfo.of(1L))
+            .writer(MemberInfo.of(writerId))
             .diary(DiaryInfo.of(
                 1L,
                 "다이어리이름",
