@@ -24,6 +24,19 @@ class PaperMapper {
             .build();
     }
 
+    public static PaperEntity mapToJpaEntityWithId(Paper paper) {
+        return PaperEntity.builder()
+            .id(paper.getPaperId().getId())
+            .title(paper.getTitle())
+            .writerId(paper.getWriter().getId())
+            .diaryInfo(DiaryInfoMapper.mapToEntity(paper.getDiary()))
+            .thumbnailImageUrl(paper.getThumbnailUrl())
+            .store(paper.getStore())
+            .visitedAt(paper.getVisitedDate())
+            .isLocked(paper.isLocked())
+            .build();
+    }
+
     public static Paper mapToDomain(PaperEntity paperEntity) {
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             paperEntity.getTitle(),

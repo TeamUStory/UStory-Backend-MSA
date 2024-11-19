@@ -2,6 +2,8 @@ package me.ustory.api.paper.domain;
 
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class DiaryInfo {
 
@@ -40,5 +42,30 @@ public class DiaryInfo {
         }
 
         return "개인".equals(category);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DiaryInfo diaryInfo = (DiaryInfo) o;
+        return Objects.equals(id, diaryInfo.id) && Objects.equals(name, diaryInfo.name) && Objects.equals(image, diaryInfo.image) && Objects.equals(color, diaryInfo.color) && Objects.equals(marker, diaryInfo.marker) && Objects.equals(category, diaryInfo.category);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, image, color, marker, category);
+    }
+
+    @Override
+    public String toString() {
+        return "DiaryInfo{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", image=" + image +
+            ", color='" + color + '\'' +
+            ", marker=" + marker +
+            ", category='" + category + '\'' +
+            '}';
     }
 }

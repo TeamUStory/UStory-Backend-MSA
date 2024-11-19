@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 public class Paper {
@@ -30,6 +31,14 @@ public class Paper {
         this.locked = (locked != null) ? locked : !diary.isIndividual();
     }
 
+    public void changeBasicInfo(PaperBasicInfo paperBasicInfo) {
+        this.basicInfo = paperBasicInfo;
+    }
+
+    public void changeDetail(PaperDetail paperDetail) {
+        this.detail = paperDetail;
+    }
+
     public void unLock() {
         this.locked = false;
     }
@@ -50,4 +59,28 @@ public class Paper {
         return basicInfo.getVisitedAt();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Paper paper = (Paper) o;
+        return locked == paper.locked && Objects.equals(paperId, paper.paperId) && Objects.equals(basicInfo, paper.basicInfo) && Objects.equals(detail, paper.detail) && Objects.equals(writer, paper.writer) && Objects.equals(diary, paper.diary);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(paperId, basicInfo, detail, writer, diary, locked);
+    }
+
+    @Override
+    public String toString() {
+        return "Paper{" +
+            "paperId=" + paperId +
+            ", basicInfo=" + basicInfo +
+            ", detail=" + detail +
+            ", writer=" + writer +
+            ", diary=" + diary +
+            ", locked=" + locked +
+            '}';
+    }
 }

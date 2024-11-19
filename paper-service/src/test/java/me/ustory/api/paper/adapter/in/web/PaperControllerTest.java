@@ -3,11 +3,14 @@ package me.ustory.api.paper.adapter.in.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
+import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
+import me.ustory.api.paper.application.port.in.UpdatePaperUseCase;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Image;
@@ -36,6 +39,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -54,6 +58,9 @@ class PaperControllerTest {
 
     @MockBean
     private GetPaperUseCase getPaperUseCase;
+
+    @MockBean
+    private UpdatePaperUseCase updatePaperUseCase;
 
     @DisplayName("Paper를 생성한다.")
     @Test
@@ -128,8 +135,49 @@ class PaperControllerTest {
             .andExpect(jsonPath("$.data.isLocked").value(paper.isLocked()))
             .andExpect(jsonPath("$.data.diaryName").value(paper.getDiary().getName()));
 
-        // verify
         verify(getPaperUseCase).getPaperById(command);
+    }
+
+    @DisplayName("Paper를 수정한다.")
+    @Test
+    void updatePaper() throws Exception {
+        // given
+        Long paperId = 1L;
+        Long userId = 1L;
+
+        String title = "제목";
+        String thumbnailImage = "https://www.대표이미지.gif";
+        List<String> images = List.of("https://www.이미지1.gif", "https://www.이미지2.gif");
+        LocalDate visitedDate = LocalDate.of(2020, 1, 1);
+        String city = "도로주소";
+        String store = "가게명";
+        Double coordinateX = 37.5494;
+        Double coordinateY = 126.9169;
+
+        UpdatePaperRequest request = UpdatePaperRequest.builder()
+            .title(title)
+            .thumbnailImageUrl(thumbnailImage)
+            .imageUrls(images)
+            .visitedAt(visitedDate)
+            .city(city)
+            .store(store)
+            .coordinateX(coordinateX)
+            .coordinateY(coordinateY)
+            .build();
+
+        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), userId);
+
+        given(updatePaperUseCase.updatePaper(command)).willReturn(PaperId.of(paperId));
+
+        // when & then
+        mockMvc.perform(put("/api/papers/{paperId}", paperId)
+                .param("userId", String.valueOf(userId))
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.paperId").value(paperId));
+
+        verify(updatePaperUseCase).updatePaper(command);
     }
 
     @DisplayName("작성한 Paper를 조회한다.")

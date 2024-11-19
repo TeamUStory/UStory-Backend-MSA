@@ -99,6 +99,42 @@ class PaperPersistenceAdapterTest {
         assertThat(foundPaper.getDiary().getMarker()).isEqualTo(paper.getDiary().getMarker());
     }
 
+    @DisplayName("Paper를 업데이트한다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @Test
+    void updatePaper() {
+        // given
+        Paper paper = paperPersistenceAdapter.findById(PaperId.of(1L));
+
+        PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
+            "수정된 제목",
+            Image.of("https://www.example.com/수정된썸네일.png")
+            ,"수정된 상호명",
+            LocalDate.of(2024, 10, 1)
+        );
+        paper.changeBasicInfo(paperBasicInfo);
+
+        PaperDetail paperDetail = PaperDetail.of(
+            Images.of(List.of("https://www.example.com/수정된이미지.png")),
+            Address.of("주소", 32.123, 128.123)
+        );
+        paper.changeDetail(paperDetail);
+
+        // when
+        paperPersistenceAdapter.updatePaper(paper);
+
+        // then
+        Paper updatedPaper = paperPersistenceAdapter.findById(PaperId.of(1L));
+
+        assertThat(updatedPaper.getTitle()).isEqualTo(paper.getTitle());
+        assertThat(updatedPaper.getThumbnailUrl()).isEqualTo(paper.getThumbnailUrl());
+        assertThat(updatedPaper.getStore()).isEqualTo(paper.getStore());
+        assertThat(updatedPaper.getVisitedDate()).isEqualTo(paper.getVisitedDate());
+
+        assertThat(updatedPaper.getDetail().getImages()).isEqualTo(paper.getDetail().getImages());
+        assertThat(updatedPaper.getDetail().getAddress()).isEqualTo(paper.getDetail().getAddress());
+    }
+
     @DisplayName("작성한 Paper를 불러온다.")
     @Sql("PaperPersistenceAdapterTest.sql")
     @Test

@@ -3,17 +3,18 @@ package me.ustory.api.paper.domain;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Getter
 public class PaperBasicInfo {
 
-    private String title;
+    private final String title;
 
-    private Image thumbnailImage;
+    private final Image thumbnailImage;
 
-    private String store;
+    private final String store;
 
-    private LocalDate visitedAt;
+    private final LocalDate visitedAt;
 
     public static PaperBasicInfo of(String title, Image thumbnailImage, String store, LocalDate visitedAt) {
         return new PaperBasicInfo(title, thumbnailImage, store, visitedAt);
@@ -34,4 +35,26 @@ public class PaperBasicInfo {
         }
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PaperBasicInfo that = (PaperBasicInfo) o;
+        return Objects.equals(title, that.title) && Objects.equals(thumbnailImage, that.thumbnailImage) && Objects.equals(store, that.store) && Objects.equals(visitedAt, that.visitedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, thumbnailImage, store, visitedAt);
+    }
+
+    @Override
+    public String toString() {
+        return "PaperBasicInfo{" +
+            "title='" + title + '\'' +
+            ", thumbnailImage=" + thumbnailImage +
+            ", store='" + store + '\'' +
+            ", visitedAt=" + visitedAt +
+            '}';
+    }
 }
