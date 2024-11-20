@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -37,17 +39,17 @@ class DiaryFeignAdapterTest {
         verify(diaryFeignClient).findDiaryById(diaryId);
 
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(response.diaryId());
+        assertThat(result.getId().getValue()).isEqualTo(response.diaryId());
     }
 
     private DiaryFeignResponse createDiaryFeignResponse(Long diaryId) {
         return new DiaryFeignResponse(
             diaryId,
+            List.of(1L),
             "다이어리 이름",
             "https://example.com/image.png",
             "#FFFFFF",
-            "https://example.com/markup.png",
-            "개인"
+            "https://example.com/markup.png"
         );
     }
 }

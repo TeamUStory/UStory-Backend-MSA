@@ -12,9 +12,11 @@ import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperUseCase;
 import me.ustory.api.paper.domain.Address;
+import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Image;
 import me.ustory.api.paper.domain.Images;
+import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.MemberInfo;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
@@ -222,14 +224,14 @@ class PaperControllerTest {
             .paperId(PaperId.of(paperId))
             .paperBasicInfo(basicInfo)
             .paperDetail(detail)
-            .writer(MemberInfo.of(1L))
+            .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
-                1L,
+                DiaryId.of(1L),
+                MemberInfo.of(List.of(MemberId.of(1L))),
                 "다이어리 이름",
                 "https://www.diary-image.gif",
                 "#FFFFFF",
-                "https://www.marker-image.png",
-                "개인"
+                "https://www.marker-image.png"
             ))
             .locked(false)
             .build();

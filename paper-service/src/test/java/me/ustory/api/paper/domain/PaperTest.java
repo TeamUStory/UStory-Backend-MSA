@@ -14,7 +14,7 @@ class PaperTest {
     @Test
     void createPaperWhenIndividual() {
         // given
-        DiaryInfo diaryInfo = createDiaryInfo("개인");
+        DiaryInfo diaryInfo = createDiaryInfo(List.of(MemberId.of(1L)));
 
         // when
         Paper paper = createPaper(diaryInfo);
@@ -27,7 +27,7 @@ class PaperTest {
     @Test
     void createPaperWhenNotIndividual() {
         // given
-        DiaryInfo diaryInfo = createDiaryInfo("가족");
+        DiaryInfo diaryInfo = createDiaryInfo(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L)));
 
         // when
         Paper paper = createPaper(diaryInfo);
@@ -40,7 +40,7 @@ class PaperTest {
     @Test
     void unlock() {
         // given
-        DiaryInfo diaryInfo = createDiaryInfo("가족");
+        DiaryInfo diaryInfo = createDiaryInfo(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L)));
         Paper paper = createPaper(diaryInfo);
 
         // when
@@ -68,18 +68,18 @@ class PaperTest {
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
             .diary(diaryInfo)
-            .writer(MemberInfo.of(1L))
+            .writer(MemberId.of(1L))
             .build();
     }
 
-    private DiaryInfo createDiaryInfo(String category) {
+    private DiaryInfo createDiaryInfo(List<MemberId> memberIds) {
         return DiaryInfo.of(
-            1L,
-            "다이어리이름",
+            DiaryId.of(1L),
+            MemberInfo.of(memberIds),
+            "다이어리명",
             "https://www.다이어리이미지.gif",
             "#000000",
-            "https://www.마크업이미지.png",
-            category
+            "https://www.마크업이미지.png"
         );
     }
 

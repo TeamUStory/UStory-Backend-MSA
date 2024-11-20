@@ -1,14 +1,15 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
-import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
 import me.ustory.api.paper.application.port.out.UpdatePaperPort;
 import me.ustory.api.paper.domain.Address;
+import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Image;
 import me.ustory.api.paper.domain.Images;
+import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.MemberInfo;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
@@ -97,14 +98,15 @@ class UpdatePaperServiceTest {
             .paperId(paperId)
             .paperBasicInfo(getPaperBasicInfo())
             .paperDetail(getPaperDetail())
-            .writer(MemberInfo.of(1L))
+            .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
-                1L,
+                DiaryId.of(1L),
+                MemberInfo.of(List.of(MemberId.of(1L))),
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",
                 "#000000",
-                "https://www.마크업이미지.png",
-                "개인"))
+                "https://www.마크업이미지.png"
+            ))
             .build();
     }
 

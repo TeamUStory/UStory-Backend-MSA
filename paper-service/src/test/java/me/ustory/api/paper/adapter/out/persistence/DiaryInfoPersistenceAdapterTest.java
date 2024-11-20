@@ -1,7 +1,10 @@
 package me.ustory.api.paper.adapter.out.persistence;
 
 import me.ustory.api.paper.adapter.out.feign.DiaryFeignMapper;
+import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
+import me.ustory.api.paper.domain.MemberId;
+import me.ustory.api.paper.domain.MemberInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,12 +50,12 @@ class DiaryInfoPersistenceAdapterTest {
 
     private DiaryInfo createDiaryInfo(Long diaryId) {
         return DiaryInfo.of(
-            diaryId,
+            DiaryId.of(diaryId),
+            MemberInfo.of(List.of(MemberId.of(1L))),
             "다이어리이름",
             "https://www.다이어리이미지.gif",
             "#000000",
-            "https://www.마크업이미지.png",
-            "개인"
+            "https://www.마크업이미지.png"
         );
     }
 }

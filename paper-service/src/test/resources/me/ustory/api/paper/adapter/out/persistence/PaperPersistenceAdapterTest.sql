@@ -15,17 +15,17 @@ values (2, '주소2', 34.1321, 128.1324, '2024-11-18 18:00:00', '2024-11-18 18:0
 insert into paper_detail_entity (id, city, coordinate_x, coordinate_y, created_at, updated_at)
 values (3, '주소3', 34.1423, 128.1434, '2024-11-19 18:00:00', '2024-11-19 18:00:00');
 
-insert into images (paper_detail_id, image_url)
+insert into images_entity (paper_detail_id, image_url)
 values (1, 'https://www.example.com/이미지1.png');
-insert into images (paper_detail_id, image_url)
+insert into images_entity (paper_detail_id, image_url)
 values (1, 'https://www.example.com/이미지2.png');
-insert into images (paper_detail_id, image_url)
+insert into images_entity (paper_detail_id, image_url)
 values (2, 'https://www.example.com/이미지3.png');
-insert into images (paper_detail_id, image_url)
+insert into images_entity (paper_detail_id, image_url)
 values (2, 'https://www.example.com/이미지4.png');
-insert into images (paper_detail_id, image_url)
+insert into images_entity (paper_detail_id, image_url)
 values (3, 'https://www.example.com/이미지5.png');
-insert into images (paper_detail_id, image_url)
+insert into images_entity (paper_detail_id, image_url)
 values (3, 'https://www.example.com/이미지6.png');
-insert into images (paper_detail_id, image_url)
+insert into images_entity (paper_detail_id, image_url)
 values (3, 'https://www.example.com/이미지7.png');

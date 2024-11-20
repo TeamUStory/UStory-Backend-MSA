@@ -18,6 +18,8 @@ class DiaryInfoEntity extends BaseEntity {
     @Id
     private Long id;
 
+    private MembersInfoEntity members;
+
     private String name;
 
     private String imageUrl;
@@ -26,12 +28,13 @@ class DiaryInfoEntity extends BaseEntity {
 
     private String markerUrl;
 
-    public static DiaryInfoEntity of(Long id, String name, String imageUrl, String color, String markerUrl) {
-        return new DiaryInfoEntity(id, name, imageUrl, color, markerUrl);
+    public static DiaryInfoEntity of(Long id, MembersInfoEntity membersInfo, String name, String imageUrl, String color, String markerUrl) {
+        return new DiaryInfoEntity(id, membersInfo, name, imageUrl, color, markerUrl);
     }
 
-    private DiaryInfoEntity(Long id, String name, String imageUrl, String color, String markerUrl) {
+    private DiaryInfoEntity(Long id, MembersInfoEntity memberIds, String name, String imageUrl, String color, String markerUrl) {
         this.id = id;
+        this.members = memberIds;
         this.name = name;
         this.imageUrl = imageUrl;
         this.color = color;

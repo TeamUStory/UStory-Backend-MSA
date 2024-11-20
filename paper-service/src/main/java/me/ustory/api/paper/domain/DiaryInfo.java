@@ -7,7 +7,9 @@ import java.util.Objects;
 @Getter
 public class DiaryInfo {
 
-    private Long id;
+    private final DiaryId id;
+
+    private MemberInfo memberInfo;
 
     private String name;
 
@@ -17,31 +19,21 @@ public class DiaryInfo {
 
     private Image marker;
 
-    private String category;
-
-    public static DiaryInfo of(Long id, String name, String imageUrl, String color, String markerUrl, String category) {
-        return new DiaryInfo(id, name, Image.of(imageUrl), color, Image.of(markerUrl), category);
+    public static DiaryInfo of(DiaryId id, MemberInfo memberInfo, String name, String imageUrl, String color, String markerUrl) {
+        return new DiaryInfo(id, memberInfo, name, Image.of(imageUrl), color, Image.of(markerUrl));
     }
 
-    public static DiaryInfo of(Long id, String name, String imageUrl, String color, String markerUrl) {
-        return new DiaryInfo(id, name, Image.of(imageUrl), color, Image.of(markerUrl), null);
-    }
-
-    private DiaryInfo(Long id, String name, Image image, String color, Image marker, String category) {
+    private DiaryInfo(DiaryId id, MemberInfo memberInfo, String name, Image image, String color, Image marker) {
         this.id = id;
+        this.memberInfo = memberInfo;
         this.name = name;
         this.image = image;
         this.color = color;
         this.marker = marker;
-        this.category = category;
     }
 
     public boolean isIndividual() {
-        if (category == null) {
-            return false;
-        }
-
-        return "개인".equals(category);
+        return memberInfo.isIndividual();
     }
 
     @Override
@@ -49,23 +41,24 @@ public class DiaryInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DiaryInfo diaryInfo = (DiaryInfo) o;
-        return Objects.equals(id, diaryInfo.id) && Objects.equals(name, diaryInfo.name) && Objects.equals(image, diaryInfo.image) && Objects.equals(color, diaryInfo.color) && Objects.equals(marker, diaryInfo.marker) && Objects.equals(category, diaryInfo.category);
+        return Objects.equals(id, diaryInfo.id) && Objects.equals(memberInfo, diaryInfo.memberInfo) && Objects.equals(name, diaryInfo.name) && Objects.equals(image, diaryInfo.image) && Objects.equals(color, diaryInfo.color) && Objects.equals(marker, diaryInfo.marker);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, image, color, marker, category);
+        return Objects.hash(id, memberInfo, name, image, color, marker);
     }
 
     @Override
     public String toString() {
         return "DiaryInfo{" +
             "id=" + id +
+            ", memberInfo=" + memberInfo +
             ", name='" + name + '\'' +
             ", image=" + image +
             ", color='" + color + '\'' +
             ", marker=" + marker +
-            ", category='" + category + '\'' +
             '}';
     }
+
 }

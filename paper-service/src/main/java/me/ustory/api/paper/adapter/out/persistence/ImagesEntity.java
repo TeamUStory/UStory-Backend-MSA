@@ -17,7 +17,7 @@ import java.util.Objects;
 class ImagesEntity {
 
     @ElementCollection
-    @CollectionTable(name = "images", joinColumns = @JoinColumn(name = "paper_detail_id"))
+    @CollectionTable(name = "images_entity", joinColumns = @JoinColumn(name = "paper_detail_id"))
     @Column(name = "image_url")
     private List<String> imageUrls;
 

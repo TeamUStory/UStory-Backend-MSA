@@ -4,7 +4,10 @@ import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
 import me.ustory.api.paper.application.port.out.CreatePaperPort;
 import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
+import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
+import me.ustory.api.paper.domain.MemberId;
+import me.ustory.api.paper.domain.MemberInfo;
 import me.ustory.api.paper.domain.Paper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,11 +43,10 @@ class CreatePaperServiceTest {
     void createPaper() {
         // given
         Long diaryId = 1L;
-        String category = "개인";
 
         CreatePaperCommand expectedCommand = createPaperCommand(diaryId);
 
-        DiaryInfo diaryInfo = createDiaryInfo(diaryId, category);
+        DiaryInfo diaryInfo = createDiaryInfo(diaryId);
 
         given(getDiaryFeignPort.getDiaryById(1L)).willReturn(diaryInfo);
         given(createDiaryPort.createDiary(any(DiaryInfo.class))).willReturn(diaryInfo);
@@ -85,14 +87,14 @@ class CreatePaperServiceTest {
         );
     }
 
-    private DiaryInfo createDiaryInfo(Long diaryId, String category) {
+    private DiaryInfo createDiaryInfo(Long diaryId) {
         return DiaryInfo.of(
-            diaryId,
+            DiaryId.of(diaryId),
+            MemberInfo.of(List.of(MemberId.of(1L))),
             "다이어리이름",
             "https://www.다이어리이미지.gif",
             "#000000",
-            "https://www.마크업이미지.png",
-            category
+            "https://www.마크업이미지.png"
         );
     }
 

@@ -3,7 +3,7 @@ package me.ustory.api.paper.adapter.out.persistence;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import me.ustory.api.paper.domain.Image;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -15,7 +15,7 @@ class PaperMapper {
     public static PaperEntity mapToJpaEntity(Paper paper) {
         return PaperEntity.builder()
             .title(paper.getTitle())
-            .writerId(paper.getWriter().getId())
+            .writerId(paper.getWriter().getValue())
             .diaryInfo(DiaryInfoMapper.mapToEntity(paper.getDiary()))
             .thumbnailImageUrl(paper.getThumbnailUrl())
             .store(paper.getStore())
@@ -28,7 +28,7 @@ class PaperMapper {
         return PaperEntity.builder()
             .id(paper.getPaperId().getId())
             .title(paper.getTitle())
-            .writerId(paper.getWriter().getId())
+            .writerId(paper.getWriter().getValue())
             .diaryInfo(DiaryInfoMapper.mapToEntity(paper.getDiary()))
             .thumbnailImageUrl(paper.getThumbnailUrl())
             .store(paper.getStore())
@@ -48,7 +48,7 @@ class PaperMapper {
         return Paper.builder()
             .paperId(PaperId.of(paperEntity.getId()))
             .paperBasicInfo(paperBasicInfo)
-            .writer(MemberInfo.of(paperEntity.getWriterId()))
+            .writer(MemberId.of(paperEntity.getWriterId()))
             .diary(DiaryInfoMapper.mapToDomain(paperEntity.getDiaryInfo()))
             .locked(paperEntity.getIsLocked())
             .build();
@@ -66,7 +66,7 @@ class PaperMapper {
             .paperId(PaperId.of(paperEntity.getId()))
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
-            .writer(MemberInfo.of(paperEntity.getWriterId()))
+            .writer(MemberId.of(paperEntity.getWriterId()))
             .diary(DiaryInfoMapper.mapToDomain(paperEntity.getDiaryInfo()))
             .locked(paperEntity.getIsLocked())
             .build();

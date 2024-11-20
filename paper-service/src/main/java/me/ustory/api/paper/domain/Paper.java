@@ -9,24 +9,24 @@ import java.util.Objects;
 @Getter
 public class Paper {
 
-    private PaperId paperId;
+    private final PaperId paperId;
+
+    private final MemberId writer;
 
     private PaperBasicInfo basicInfo;
 
     private PaperDetail detail;
-
-    private MemberInfo writer;
 
     private DiaryInfo diary;
 
     private boolean locked;
 
     @Builder
-    private Paper(PaperId paperId, PaperBasicInfo paperBasicInfo, PaperDetail paperDetail, MemberInfo writer, DiaryInfo diary, Boolean locked) {
+    private Paper(PaperId paperId, PaperBasicInfo paperBasicInfo, PaperDetail paperDetail, MemberId writer, DiaryInfo diary, Boolean locked) {
         this.paperId = paperId;
+        this.writer = writer;
         this.basicInfo = paperBasicInfo;
         this.detail = paperDetail;
-        this.writer = writer;
         this.diary = diary;
         this.locked = (locked != null) ? locked : !diary.isIndividual();
     }

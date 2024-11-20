@@ -2,9 +2,11 @@ package me.ustory.api.paper.adapter.out.persistence;
 
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.domain.Address;
+import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Image;
 import me.ustory.api.paper.domain.Images;
+import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.MemberInfo;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
@@ -151,7 +153,7 @@ class PaperPersistenceAdapterTest {
         // then
         assertThat(papers).hasSize(3)
             .extracting(Paper::getWriter)
-            .extracting(MemberInfo::getId)
+            .extracting(MemberId::getValue)
             .containsOnly(writerId);
     }
 
@@ -174,7 +176,7 @@ class PaperPersistenceAdapterTest {
         // then
         assertThat(papers).hasSize(expectedSize)
             .extracting(Paper::getWriter)
-            .extracting(MemberInfo::getId)
+            .extracting(MemberId::getValue)
             .containsOnly(writerId);
     }
 
@@ -182,14 +184,15 @@ class PaperPersistenceAdapterTest {
         return Paper.builder()
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
-            .writer(MemberInfo.of(1L))
+            .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
-                1L,
+                DiaryId.of(1L),
+                MemberInfo.of(List.of(MemberId.of(1L))),
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",
                 "#000000",
-                "https://www.마크업이미지.png",
-                "개인"))
+                "https://www.마크업이미지.png"
+            ))
             .build();
     }
 
