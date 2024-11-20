@@ -1,6 +1,7 @@
 package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
+import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.out.PaperConcurrencyLockPort;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
@@ -8,6 +9,7 @@ import me.ustory.api.paper.application.port.out.UpdatePaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.Image;
 import me.ustory.api.paper.domain.Images;
+import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -23,6 +25,10 @@ class UpdatePaperService {
 
     public PaperId updatePaper(UpdatePaperCommand command) {
         Paper paper = getPaperPort.findById(command.paperId());
+
+        if (!paper.getDiary().getMemberInfo().isContains(MemberId.of(command.updateUserId()))) {
+            throw new ForbiddenException("해당 다이어리의 페이퍼 수정 권한이 없습니다.");
+        }
 
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             command.title(),

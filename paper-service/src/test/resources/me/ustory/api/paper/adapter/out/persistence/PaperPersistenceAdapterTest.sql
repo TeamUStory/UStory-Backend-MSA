@@ -29,3 +29,6 @@ insert into images_entity (paper_detail_id, image_url)
 values (3, 'https://www.example.com/이미지6.png');
 insert into images_entity (paper_detail_id, image_url)
 values (3, 'https://www.example.com/이미지7.png');
+
+insert into members_info_entity (diary_id, member_id)
+values (1, 1);

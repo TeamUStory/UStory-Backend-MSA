@@ -1,5 +1,6 @@
 package me.ustory.api.paper.application.service;
 
+import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
@@ -25,9 +26,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -71,7 +72,37 @@ class UpdatePaperServiceTest {
 
         // then
         verify(getPaperPort).findById(paperId);
-        verify(updatePaperPort).updatePaper(eq(expectedPaper));
+        verify(updatePaperPort).updatePaper(expectedPaper);
+    }
+
+    @DisplayName("다이어리에 속하지 않은 사용자는 Paper를 업데이트할 수 없다.")
+    @Test
+    void updatePaperWithNotContainingMember() {
+        // given
+        PaperId paperId = PaperId.of(1L);
+        Long userId = 2L;
+        UpdatePaperCommand command = createUpdatePaperCommand(paperId, userId);
+        Paper expectedPaper = getPaper(paperId);
+        expectedPaper.changeBasicInfo(PaperBasicInfo.of(
+            "제목1",
+            Image.of("https://www.대표이미지1.gif"),
+            "가게명",
+            LocalDate.of(2020, 1, 1)
+        ));
+
+        expectedPaper.changeDetail(PaperDetail.of(
+            Images.of(List.of("https://www.이미지3.gif", "https://www.이미지4.gif")),
+            Address.of("도로주소", 37.5494, 126.9169)
+        ));
+
+        given(getPaperPort.findById(paperId)).willReturn(getPaper(paperId));
+
+        // when & then
+        assertThatThrownBy(() -> updatePaperService.updatePaper(command))
+            .isInstanceOf(ForbiddenException.class)
+            .hasMessage("해당 다이어리의 페이퍼 수정 권한이 없습니다.");
+
+        verify(getPaperPort).findById(paperId);
     }
 
     private UpdatePaperCommand createUpdatePaperCommand(PaperId paperId, Long userId) {
