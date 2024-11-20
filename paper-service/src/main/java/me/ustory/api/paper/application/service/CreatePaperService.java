@@ -1,6 +1,7 @@
 package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
+import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
@@ -10,6 +11,7 @@ import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Image;
 import me.ustory.api.paper.domain.Images;
+import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -26,10 +28,14 @@ class CreatePaperService implements CreatePaperUseCase {
 
     @Override
     public PaperId createPaper(CreatePaperCommand command) {
-//        MemberInfo 불러오기
+
         DiaryInfo diaryInfo = getDiaryFeignPort.getDiaryById(command.diaryId());
 
         DiaryInfo savedDiaryInfo = createDiaryPort.createDiary(diaryInfo);
+
+        if (!savedDiaryInfo.getMemberInfo().isContains(MemberId.of(command.writerId()))) {
+            throw new ForbiddenException("해당 다이어리의 페이퍼 작성 권한이 없습니다.");
+        }
 
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             command.title(),
@@ -47,7 +53,6 @@ class CreatePaperService implements CreatePaperUseCase {
         Paper paper = Paper.builder()
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
-            // MemberInfo 넣기
             .diary(savedDiaryInfo)
             .build();
 

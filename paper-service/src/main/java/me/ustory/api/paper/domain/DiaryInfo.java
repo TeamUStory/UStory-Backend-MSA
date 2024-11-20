@@ -23,6 +23,10 @@ public class DiaryInfo {
         return new DiaryInfo(id, memberInfo, name, Image.of(imageUrl), color, Image.of(markerUrl));
     }
 
+    public boolean isIndividualDiary() {
+        return memberInfo.isIndividual();
+    }
+
     private DiaryInfo(DiaryId id, MemberInfo memberInfo, String name, Image image, String color, Image marker) {
         this.id = id;
         this.memberInfo = memberInfo;
@@ -30,10 +34,6 @@ public class DiaryInfo {
         this.image = image;
         this.color = color;
         this.marker = marker;
-    }
-
-    public boolean isIndividual() {
-        return memberInfo.isIndividual();
     }
 
     @Override

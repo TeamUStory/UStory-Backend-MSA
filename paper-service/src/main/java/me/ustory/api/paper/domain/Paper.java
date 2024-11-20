@@ -28,7 +28,7 @@ public class Paper {
         this.basicInfo = paperBasicInfo;
         this.detail = paperDetail;
         this.diary = diary;
-        this.locked = (locked != null) ? locked : !diary.isIndividual();
+        this.locked = (locked != null) ? locked : !diary.isIndividualDiary();
     }
 
     public void changeBasicInfo(PaperBasicInfo paperBasicInfo) {

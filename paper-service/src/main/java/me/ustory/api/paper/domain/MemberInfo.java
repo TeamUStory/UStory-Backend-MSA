@@ -14,12 +14,23 @@ public class MemberInfo {
         return new MemberInfo(memberIds);
     }
 
-    private MemberInfo(List<MemberId> memberIds) {
-        this.memberIds = memberIds;
+    public boolean isContains(MemberId memberId) {
+        return memberIds.contains(memberId);
     }
 
     public boolean isIndividual() {
         return memberIds.size() <= 1;
+    }
+
+    private MemberInfo(List<MemberId> memberIds) {
+        validate(memberIds);
+        this.memberIds = memberIds;
+    }
+
+    private void validate(List<MemberId> memberIds) {
+        if (memberIds.isEmpty()) {
+            throw new IllegalArgumentException("Member는 1명 이상이어야 합니다.");
+        }
     }
 
     @Override

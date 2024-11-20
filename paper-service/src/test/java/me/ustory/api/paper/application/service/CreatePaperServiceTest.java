@@ -1,5 +1,6 @@
 package me.ustory.api.paper.application.service;
 
+import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
 import me.ustory.api.paper.application.port.out.CreatePaperPort;
@@ -19,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDate;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -43,10 +45,12 @@ class CreatePaperServiceTest {
     void createPaper() {
         // given
         Long diaryId = 1L;
+        Long userId = 1L;
+        List<MemberId> membersId = List.of(MemberId.of(1L));
 
-        CreatePaperCommand expectedCommand = createPaperCommand(diaryId);
+        CreatePaperCommand expectedCommand = createPaperCommand(diaryId, userId);
 
-        DiaryInfo diaryInfo = createDiaryInfo(diaryId);
+        DiaryInfo diaryInfo = createDiaryInfo(diaryId, membersId);
 
         given(getDiaryFeignPort.getDiaryById(1L)).willReturn(diaryInfo);
         given(createDiaryPort.createDiary(any(DiaryInfo.class))).willReturn(diaryInfo);
@@ -55,19 +59,42 @@ class CreatePaperServiceTest {
         createPaperService.createPaper(expectedCommand);
 
         // then
-        // MemberInfo 불러오기 로직이 호출되었는지 검증
         verify(getDiaryFeignPort).getDiaryById(diaryId);
 
         verify(createDiaryPort).createDiary(any(DiaryInfo.class));
         verify(createPaperPort).createPaper(any(Paper.class));
     }
 
-    private CreatePaperCommand createPaperCommand(Long diaryId) {
+    @DisplayName("다이어리에 속하지 않은 사람은 Paper를 작성할 수 없다.")
+    @Test
+    void createPaperWithNotContainsMember() {
+        // given
+        Long diaryId = 1L;
+        Long userId = 2L;
+        List<MemberId> membersId = List.of(MemberId.of(1L));
+
+        CreatePaperCommand expectedCommand = createPaperCommand(diaryId, userId);
+
+        DiaryInfo diaryInfo = createDiaryInfo(diaryId, membersId);
+
+        given(getDiaryFeignPort.getDiaryById(1L)).willReturn(diaryInfo);
+        given(createDiaryPort.createDiary(any(DiaryInfo.class))).willReturn(diaryInfo);
+
+        // when & then
+        assertThatThrownBy(() -> createPaperService.createPaper(expectedCommand))
+            .isInstanceOf(ForbiddenException.class)
+            .hasMessage("해당 다이어리의 페이퍼 작성 권한이 없습니다.");
+
+        // then
+        verify(getDiaryFeignPort).getDiaryById(diaryId);
+    }
+
+    private CreatePaperCommand createPaperCommand(Long diaryId, Long userId) {
         String title = "제목";
         String thumbnailImage = "https://www.대표이미지.gif";
         List<String> images = List.of("https://www.이미지1.gif", "https://www.이미지2.gif");
         LocalDate visitedDate = LocalDate.of(2020, 1, 1);
-        Long writerId = 1L;
+        Long writerId = userId;
         String city = "도로주소";
         String store = "가게명";
         Double coordinateX = 37.5494;
@@ -87,10 +114,10 @@ class CreatePaperServiceTest {
         );
     }
 
-    private DiaryInfo createDiaryInfo(Long diaryId) {
+    private DiaryInfo createDiaryInfo(Long diaryId, List<MemberId> membersId) {
         return DiaryInfo.of(
             DiaryId.of(diaryId),
-            MemberInfo.of(List.of(MemberId.of(1L))),
+            MemberInfo.of(membersId),
             "다이어리이름",
             "https://www.다이어리이미지.gif",
             "#000000",
