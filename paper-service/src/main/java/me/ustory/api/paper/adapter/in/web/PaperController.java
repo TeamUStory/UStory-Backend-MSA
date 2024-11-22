@@ -8,6 +8,7 @@ import me.ustory.api.common.controller.response.SuccessResponse;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.response.CreatePaperResponse;
+import me.ustory.api.paper.adapter.in.web.response.GetPapersCountResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPaperPreviewResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPaperResponse;
 import me.ustory.api.paper.adapter.in.web.response.UpdatePaperResponse;
@@ -17,13 +18,13 @@ import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperUseCase;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperId;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -101,6 +101,18 @@ public class PaperController {
         List<GetPaperPreviewResponse> response = papers.stream()
             .map(GetPaperPreviewResponse::of)
             .toList();
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(SuccessResponse.success(response));
+    }
+
+    @GetMapping("/written/count")
+    public ResponseEntity<ApiResponse<GetPapersCountResponse>> countPapersByUser(@RequestParam(name = "userId") Long userId) {
+        GetWrittenPapersCountCommand command = new GetWrittenPapersCountCommand(MemberId.of(userId));
+        int count = getPaperUseCase.getCountPapersByWriterId(command);
+
+        GetPapersCountResponse response = new GetPapersCountResponse(count);
 
         return ResponseEntity
             .status(HttpStatus.OK)

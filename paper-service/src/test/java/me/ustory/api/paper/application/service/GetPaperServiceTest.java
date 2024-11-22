@@ -4,6 +4,7 @@ import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
@@ -82,6 +83,23 @@ class GetPaperServiceTest {
             .allSatisfy(paper -> assertThat(paper.getWriter()).isEqualTo(writerId));
 
         verify(getPaperPort).findByWriterId(any(MemberId.class), any(PaginationRequest.class));
+    }
+
+    @DisplayName("작성한 Paper의 개수를 불러온다.")
+    @Test
+    void getWrittenPapersCount() {
+        // given
+        MemberId writerId = MemberId.of(1L);
+        GetWrittenPapersCountCommand command = new GetWrittenPapersCountCommand(writerId);
+        int expectedCount = 1;
+
+        given(getPaperPort.findCountByWriterId(writerId)).willReturn(expectedCount);
+
+        // when
+        int count = getPaperService.getCountPapersByWriterId(command);
+
+        // then
+        assertThat(expectedCount).isEqualTo(count);
     }
 
     @DisplayName("Diary에 속한 Paper를 불러온다.")

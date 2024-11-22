@@ -68,6 +68,16 @@ class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePa
     }
 
     @Override
+    public int findCountByWriterId(MemberId memberId) {
+        Long count = queryFactory.select(paperEntity.count())
+            .from(paperEntity)
+            .where(paperEntity.writerId.eq(memberId.getValue()))
+            .fetchOne();
+
+        return count == null ? 0 : count.intValue();
+    }
+
+    @Override
     public List<Paper> findByDiaryId(DiaryId diaryId, PaginationRequest paginationRequest, LocalDate startDate, LocalDate endDate) {
         PageRequest pageRequest = PageRequest.of(paginationRequest.page() - 1, paginationRequest.size());
         List<PaperEntity> paperEntities = queryFactory.selectFrom(paperEntity)

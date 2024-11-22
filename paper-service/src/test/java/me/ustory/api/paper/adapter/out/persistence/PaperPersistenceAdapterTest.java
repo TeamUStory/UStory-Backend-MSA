@@ -183,6 +183,34 @@ class PaperPersistenceAdapterTest {
             .containsOnly(writerId);
     }
 
+    @DisplayName("작성한 Paper의 개수를 불러온다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @Test
+    void getWrittenPapersCount() {
+        // given
+        Long writerId = 1L;
+
+        // when
+        int count = paperPersistenceAdapter.findCountByWriterId(MemberId.of(writerId));
+
+        // then
+        assertThat(count).isEqualTo(3);
+    }
+
+    @DisplayName("작성한 Paper가 없는 경우, 0개로 반환한다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @Test
+    void getWrittenPapersCountWithoutWrittenPaper() {
+        // given
+        Long writerId = 2L;
+
+        // when
+        int count = paperPersistenceAdapter.findCountByWriterId(MemberId.of(writerId));
+
+        // then
+        assertThat(count).isZero();
+    }
+
     @DisplayName("다이어리에 속한 Paper를 불러온다.")
     @Sql("PaperPersistenceAdapterTest.sql")
     @Test

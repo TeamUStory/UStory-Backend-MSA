@@ -5,6 +5,7 @@ import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperId;
@@ -30,6 +31,11 @@ class GetPaperService implements GetPaperUseCase {
     }
 
     @Override
+    public int getCountPapersByWriterId(GetWrittenPapersCountCommand command) {
+        return getPaperPort.findCountByWriterId(command.writerId());
+    }
+
+    @Override
     public List<Paper> getPapersByDiaryId(GetDiaryPapersCommand command) {
         return getPaperPort.findByDiaryId(command.diaryId(), command.paginationRequest(), command.startDate(), command.endDate());
     }
@@ -37,11 +43,6 @@ class GetPaperService implements GetPaperUseCase {
     @Override
     public List<Paper> getPapersByMemberId(Long memberId) {
         return List.of();
-    }
-
-    @Override
-    public int getCountPapersByWriterId(Long writerId) {
-        return 0;
     }
 
 }

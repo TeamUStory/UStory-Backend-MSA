@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
+import me.ustory.api.paper.adapter.in.web.response.GetPapersCountResponse;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperUseCase;
 import me.ustory.api.paper.domain.Address;
@@ -218,6 +220,25 @@ class PaperControllerTest {
 
         // verify
         verify(getPaperUseCase).getPapersByWriterId(command);
+    }
+
+    @DisplayName("작성한 Paper의 개수를 조회한다.")
+    @Test
+    void getWrittenPapersCountByUserId() throws Exception {
+        // given
+        Long writerId = 1L;
+
+        GetWrittenPapersCountCommand command = new GetWrittenPapersCountCommand(MemberId.of(writerId));
+        int count = 1;
+
+        given(getPaperUseCase.getCountPapersByWriterId(command)).willReturn(count);
+
+        // when & then
+        mockMvc.perform(get("/api/papers/written/count")
+                .param("userId", String.valueOf(writerId))
+                .contentType(APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.count").value(count));
     }
 
     @DisplayName("Diary에 속한 Paper를 조회한다.")
