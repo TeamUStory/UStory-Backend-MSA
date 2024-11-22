@@ -7,6 +7,8 @@ import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.response.GetPapersCountResponse;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
+import me.ustory.api.paper.application.port.in.DeletePaperCommand;
+import me.ustory.api.paper.application.port.in.DeletePaperUseCase;
 import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
@@ -46,9 +48,11 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static reactor.core.publisher.Mono.when;
 
 @WebMvcTest(controllers = PaperController.class)
 class PaperControllerTest {
@@ -67,6 +71,9 @@ class PaperControllerTest {
 
     @MockBean
     private UpdatePaperUseCase updatePaperUseCase;
+
+    @MockBean
+    private DeletePaperUseCase deletePaperUseCase;
 
     @DisplayName("Paper를 생성한다.")
     @Test
@@ -310,6 +317,25 @@ class PaperControllerTest {
             .andExpect(jsonPath("$.data[1].diaryColor").value(papers.get(1).getDiary().getColor()))
             .andExpect(jsonPath("$.data[1].diaryImageUrl").value(papers.get(1).getDiary().getImage().getUrl()))
             .andExpect(jsonPath("$.data[1].diaryMarkerUrl").value(papers.get(1).getDiary().getMarker().getUrl()));
+    }
+
+    @DisplayName("Paper를 삭제한다.")
+    @Test
+    void deletePaperById() throws Exception {
+        // given
+        Long paperId = 1L;
+        Long userId = 1L;
+
+        DeletePaperCommand command = new DeletePaperCommand(PaperId.of(paperId), MemberId.of(userId));
+
+        // when & then
+        mockMvc.perform(delete("/api/papers/{paperId}", paperId)
+                .param("userId", String.valueOf(userId))
+                .contentType(APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.message").value("성공적으로 삭제되었습니다."));
+
+        verify(deletePaperUseCase).deletePaperById(command);
     }
 
     private Paper getPaper(Long paperId, Long diaryId) {

@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -84,8 +83,8 @@ class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePa
     public List<Paper> findByMemberId(MemberId memberId) {
         List<Tuple> result = queryFactory.select(paperEntity, paperDetailEntity)
             .from(paperEntity)
-                .join(paperDetailEntity)
-                .on(paperEntity.id.eq(paperDetailEntity.id))
+            .join(paperDetailEntity)
+            .on(paperEntity.id.eq(paperDetailEntity.id))
             .where(paperEntity.diaryInfo.members.memberIds.contains(memberId.getValue()),
                 paperEntity.deletedAt.isNull())
             .orderBy(paperEntity.createdAt.desc())
@@ -132,6 +131,13 @@ class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePa
         paperJpaRepository.save(PaperMapper.mapToJpaEntityWithId(paper));
         paperDetailJpaRepository.save(PaperDetailMapper.mapToJpaEntity(paper.getPaperId().getId(), paper.getDetail()));
         return paper.getPaperId();
+    }
+
+    @Override
+    public void deletePaper(PaperId paperId) {
+        PaperEntity paper = paperJpaRepository.findById(paperId.getId()).orElseThrow();
+        paper.delete();
+        paperJpaRepository.save(paper);
     }
 
     private BooleanExpression startDateCondition(LocalDate startDate) {

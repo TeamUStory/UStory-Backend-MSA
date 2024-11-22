@@ -8,6 +8,7 @@ import me.ustory.api.common.controller.response.SuccessResponse;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.response.CreatePaperResponse;
+import me.ustory.api.paper.adapter.in.web.response.DeletePaperResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPaperMapResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPapersCountResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPaperPreviewResponse;
@@ -15,6 +16,8 @@ import me.ustory.api.paper.adapter.in.web.response.GetPaperResponse;
 import me.ustory.api.paper.adapter.in.web.response.UpdatePaperResponse;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
+import me.ustory.api.paper.application.port.in.DeletePaperCommand;
+import me.ustory.api.paper.application.port.in.DeletePaperUseCase;
 import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
@@ -29,6 +32,7 @@ import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,6 +54,7 @@ public class PaperController {
     private final CreatePaperUseCase createPaperUseCase;
     private final GetPaperUseCase getPaperUseCase;
     private final UpdatePaperUseCase updatePaperUseCase;
+    private final DeletePaperUseCase deletePaperUseCase;
 
     @PostMapping
     public ResponseEntity<ApiResponse<CreatePaperResponse>> create(
@@ -156,6 +161,20 @@ public class PaperController {
         return ResponseEntity
             .status(HttpStatus.OK)
             .body(SuccessResponse.success(response));
+    }
+
+    @DeleteMapping("/{paperId}")
+    public ResponseEntity<ApiResponse<DeletePaperResponse>> deletePaper(
+        @PathVariable Long paperId,
+        @RequestParam(name = "userId") Long userId
+    ) {
+        DeletePaperCommand command = new DeletePaperCommand(PaperId.of(paperId), MemberId.of(userId));
+
+        deletePaperUseCase.deletePaperById(command);
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(SuccessResponse.success(new DeletePaperResponse("성공적으로 삭제되었습니다.")));
     }
 
 }

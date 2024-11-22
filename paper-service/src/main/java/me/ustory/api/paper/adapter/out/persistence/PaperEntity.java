@@ -54,4 +54,8 @@ class PaperEntity extends BaseEntity {
 
     private Boolean isLocked;
 
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
+
 }

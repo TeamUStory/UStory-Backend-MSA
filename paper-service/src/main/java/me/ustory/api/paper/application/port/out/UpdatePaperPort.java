@@ -6,5 +6,6 @@ import me.ustory.api.paper.domain.PaperId;
 public interface UpdatePaperPort {
 
     PaperId updatePaper(Paper paper);
+    void deletePaper(PaperId paperId);
 
 }

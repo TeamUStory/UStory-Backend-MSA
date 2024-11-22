@@ -311,6 +311,21 @@ class PaperPersistenceAdapterTest {
             .isEmpty();
     }
 
+    @DisplayName("Paper를 Soft Delete 한다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @Test
+    void deletePaperById() {
+        // given
+        PaperId paperId = PaperId.of(1L);
+
+        // when
+        paperPersistenceAdapter.deletePaper(paperId);
+
+        // then
+        PaperEntity deletedPaper = paperJpaRepository.findById(paperId.getId()).orElseThrow();
+        assertThat(deletedPaper.getDeletedAt()).isNotNull();
+    }
+
     private Paper getPaper(PaperBasicInfo paperBasicInfo, PaperDetail paperDetail) {
         return Paper.builder()
             .paperBasicInfo(paperBasicInfo)
