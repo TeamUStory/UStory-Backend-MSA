@@ -1,6 +1,7 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
+import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
@@ -48,7 +49,7 @@ class GetPaperServiceTest {
         PaperId paperId = PaperId.of(1L);
         GetPaperCommand command = new GetPaperCommand(paperId);
 
-        Paper paper = getPaper(1L);
+        Paper paper = getPaper(MemberId.of(1L), DiaryId.of(1L));
 
         given(getPaperPort.findById(paperId)).willReturn(paper);
 
@@ -65,10 +66,10 @@ class GetPaperServiceTest {
     @Test
     void getWrittenPapers() {
         // given
-        Long writerId = 1L;
+        MemberId writerId = MemberId.of(1L);
         PaginationRequest paginationRequest = new PaginationRequest(1, 20, LocalDateTime.of(2024, 11, 11, 10, 0));
         GetWrittenPapersCommand command = new GetWrittenPapersCommand(writerId, paginationRequest);
-        List<Paper> papers = List.of(getPaper(writerId), getPaper(writerId));
+        List<Paper> papers = List.of(getPaper(writerId, DiaryId.of(1L)), getPaper(writerId, DiaryId.of(1L)));
 
         given(getPaperPort.findByWriterId(writerId, paginationRequest)).willReturn(papers);
 
@@ -78,20 +79,45 @@ class GetPaperServiceTest {
         // then
         assertThat(getPapers)
             .hasSize(papers.size())
-            .allSatisfy(paper -> assertThat(paper.getWriter().getValue()).isEqualTo(writerId));
+            .allSatisfy(paper -> assertThat(paper.getWriter()).isEqualTo(writerId));
 
-        verify(getPaperPort).findByWriterId(any(Long.class), any(PaginationRequest.class));
+        verify(getPaperPort).findByWriterId(any(MemberId.class), any(PaginationRequest.class));
     }
 
-    private Paper getPaper(Long writerId) {
+    @DisplayName("Diary에 속한 Paper를 불러온다.")
+    @Test
+    void getPapersByDiaryId() {
+        // given
+        DiaryId diaryId = DiaryId.of(1L);
+        PaginationRequest paginationRequest = new PaginationRequest(1, 20, LocalDateTime.of(2024, 11, 11, 10, 0));
+        LocalDate startDate = LocalDate.of(2024, 10, 10);
+        LocalDate endDate = LocalDate.of(2024, 11, 11);
+
+        GetDiaryPapersCommand command = new GetDiaryPapersCommand(diaryId, paginationRequest, startDate, endDate);
+        List<Paper> papers = List.of(getPaper(MemberId.of(1L), diaryId), getPaper(MemberId.of(1L), diaryId));
+
+        given(getPaperPort.findByDiaryId(diaryId, paginationRequest, startDate, endDate)).willReturn(papers);
+
+        // when
+        List<Paper> getPapers = getPaperService.getPapersByDiaryId(command);
+
+        // then
+        assertThat(getPapers)
+            .hasSize(2)
+            .allSatisfy(paper -> assertThat(paper.getDiary().getId()).isEqualTo(diaryId));
+
+        verify(getPaperPort).findByDiaryId(any(DiaryId.class), any(PaginationRequest.class), any(LocalDate.class), any(LocalDate.class));
+    }
+
+    private Paper getPaper(MemberId writerId, DiaryId diaryId) {
         PaperBasicInfo paperBasicInfo = getPaperBasicInfo();
         PaperDetail paperDetail = getPaperDetail();
         return Paper.builder()
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
-            .writer(MemberId.of(writerId))
+            .writer(writerId)
             .diary(DiaryInfo.of(
-                DiaryId.of(1L),
+                diaryId,
                 MemberInfo.of(List.of(MemberId.of(1L))),
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",

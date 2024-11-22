@@ -13,13 +13,17 @@ import me.ustory.api.paper.adapter.in.web.response.GetPaperResponse;
 import me.ustory.api.paper.adapter.in.web.response.UpdatePaperResponse;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
+import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperUseCase;
+import me.ustory.api.paper.domain.DiaryId;
+import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperId;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +36,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -89,16 +95,36 @@ public class PaperController {
         @RequestParam(name = "userId") Long userId,
         @ModelAttribute PaginationRequest paginationRequest
     ) {
-        GetWrittenPapersCommand command = new GetWrittenPapersCommand(userId, paginationRequest);
+        GetWrittenPapersCommand command = new GetWrittenPapersCommand(MemberId.of(userId), paginationRequest);
         List<Paper> papers = getPaperUseCase.getPapersByWriterId(command);
 
-        List<GetPaperPreviewResponse> result = papers.stream()
+        List<GetPaperPreviewResponse> response = papers.stream()
             .map(GetPaperPreviewResponse::of)
             .toList();
 
         return ResponseEntity
             .status(HttpStatus.OK)
-            .body(SuccessResponse.success(result));
+            .body(SuccessResponse.success(response));
+    }
+
+    @GetMapping("/diary/{diaryId}")
+    public ResponseEntity<ApiResponse<List<GetPaperPreviewResponse>>> getPapersByDiary(
+        @PathVariable Long diaryId,
+        @ModelAttribute PaginationRequest paginationRequest,
+        @RequestParam(name = "startDate", required = false) LocalDate startDate,
+        @RequestParam(name = "endDate", required = false) LocalDate endDate
+    ) {
+        GetDiaryPapersCommand command = new GetDiaryPapersCommand(DiaryId.of(diaryId), paginationRequest, startDate, endDate);
+
+        List<Paper> papers = getPaperUseCase.getPapersByDiaryId(command);
+
+        List<GetPaperPreviewResponse> response = papers.stream()
+            .map(GetPaperPreviewResponse::of)
+            .toList();
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(SuccessResponse.success(response));
     }
 
 }

@@ -6,6 +6,7 @@ import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
+import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
@@ -114,9 +115,10 @@ class PaperControllerTest {
         // given
         Long userId = 1L;
         Long paperId = 1L;
+        Long diaryId = 1L;
 
         GetPaperCommand command = new GetPaperCommand(PaperId.of(paperId));
-        Paper paper = getPaper(paperId);
+        Paper paper = getPaper(paperId, diaryId);
 
         given(getPaperUseCase.getPaperById(command)).willReturn(paper);
 
@@ -187,10 +189,11 @@ class PaperControllerTest {
     void getWrittenPaperByMemberId() throws Exception {
         // given
         Long userId = 1L;
+        Long diaryId = 1L;
         PaginationRequest paginationRequest = new PaginationRequest(1, 20, LocalDateTime.of(2024, 11, 10, 10, 0));
 
-        GetWrittenPapersCommand command = new GetWrittenPapersCommand(userId, paginationRequest);
-        List<Paper> papers = List.of(getPaper(1L), getPaper(2L));
+        GetWrittenPapersCommand command = new GetWrittenPapersCommand(MemberId.of(userId), paginationRequest);
+        List<Paper> papers = List.of(getPaper(1L, diaryId), getPaper(2L, diaryId));
 
         given(getPaperUseCase.getPapersByWriterId(command)).willReturn(papers);
 
@@ -217,7 +220,43 @@ class PaperControllerTest {
         verify(getPaperUseCase).getPapersByWriterId(command);
     }
 
-    private Paper getPaper(Long paperId) {
+    @DisplayName("Diary에 속한 Paper를 조회한다.")
+    @Test
+    void getPaperByDiaryId() throws Exception {
+        // given
+        Long diaryId = 1L;
+        PaginationRequest paginationRequest = new PaginationRequest(1, 20, LocalDateTime.of(2024, 11, 10, 10, 0));
+        LocalDate startDate = null;
+        LocalDate endDate = null;
+
+        GetDiaryPapersCommand command = new GetDiaryPapersCommand(DiaryId.of(diaryId), paginationRequest, startDate, endDate);
+        List<Paper> papers = List.of(getPaper(1L, diaryId), getPaper(2L, diaryId));
+
+        given(getPaperUseCase.getPapersByDiaryId(command)).willReturn(papers);
+
+        // when & then
+        mockMvc.perform(get("/api/papers/diary/{diaryId}", diaryId)
+                .param("page", String.valueOf(paginationRequest.page()))
+                .param("size", String.valueOf(paginationRequest.size()))
+                .param("requestTime", paginationRequest.requestTime().toString())
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data[0].paperId").value(papers.get(0).getPaperId().getId()))
+            .andExpect(jsonPath("$.data[0].title").value(papers.get(0).getTitle()))
+            .andExpect(jsonPath("$.data[0].thumbnailImageUrl").value(papers.get(0).getThumbnailUrl()))
+            .andExpect(jsonPath("$.data[0].store").value(papers.get(0).getStore()))
+            .andExpect(jsonPath("$.data[0].diaryName").value(papers.get(0).getDiary().getName()))
+            .andExpect(jsonPath("$.data[1].paperId").value(papers.get(1).getPaperId().getId()))
+            .andExpect(jsonPath("$.data[1].title").value(papers.get(1).getTitle()))
+            .andExpect(jsonPath("$.data[1].thumbnailImageUrl").value(papers.get(1).getThumbnailUrl()))
+            .andExpect(jsonPath("$.data[1].store").value(papers.get(1).getStore()))
+            .andExpect(jsonPath("$.data[1].diaryName").value(papers.get(1).getDiary().getName()));
+
+        // verify
+        verify(getPaperUseCase).getPapersByDiaryId(command);
+    }
+
+    private Paper getPaper(Long paperId, Long diaryId) {
         PaperDetail detail = getDetail();
         PaperBasicInfo basicInfo = getBasicInfo();
         return Paper.builder()
@@ -226,7 +265,7 @@ class PaperControllerTest {
             .paperDetail(detail)
             .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
-                DiaryId.of(1L),
+                DiaryId.of(diaryId),
                 MemberInfo.of(List.of(MemberId.of(1L))),
                 "다이어리 이름",
                 "https://www.diary-image.gif",

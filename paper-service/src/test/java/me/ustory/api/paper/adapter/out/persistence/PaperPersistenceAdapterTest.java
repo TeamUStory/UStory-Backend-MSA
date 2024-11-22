@@ -15,7 +15,9 @@ import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -26,6 +28,7 @@ import org.springframework.test.context.jdbc.Sql;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -148,7 +151,7 @@ class PaperPersistenceAdapterTest {
         PaginationRequest paginationRequest = new PaginationRequest(1, 20, requestTime);
 
         // when
-        List<Paper> papers = paperPersistenceAdapter.findByWriterId(writerId, paginationRequest);
+        List<Paper> papers = paperPersistenceAdapter.findByWriterId(MemberId.of(writerId), paginationRequest);
 
         // then
         assertThat(papers).hasSize(3)
@@ -171,7 +174,7 @@ class PaperPersistenceAdapterTest {
         PaginationRequest paginationRequest = new PaginationRequest(1, 20, requestTime);
 
         // when
-        List<Paper> papers = paperPersistenceAdapter.findByWriterId(writerId, paginationRequest);
+        List<Paper> papers = paperPersistenceAdapter.findByWriterId(MemberId.of(writerId), paginationRequest);
 
         // then
         assertThat(papers).hasSize(expectedSize)
@@ -180,7 +183,51 @@ class PaperPersistenceAdapterTest {
             .containsOnly(writerId);
     }
 
-    private static Paper getPaper(PaperBasicInfo paperBasicInfo, PaperDetail paperDetail) {
+    @DisplayName("다이어리에 속한 Paper를 불러온다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @Test
+    void getPaperByDiaryId() {
+        // given
+        DiaryId diaryId = DiaryId.of(1L);
+        LocalDateTime requestTime = LocalDateTime.of(2024, 11, 19, 18, 0);
+        PaginationRequest paginationRequest = new PaginationRequest(1, 20, requestTime);
+
+        // when
+        List<Paper> papers = paperPersistenceAdapter.findByDiaryId(diaryId, paginationRequest, null, null);
+
+        // then
+        assertThat(papers).hasSize(3)
+            .extracting(Paper::getDiary)
+            .extracting(DiaryInfo::getId)
+            .containsOnly(diaryId);
+    }
+
+    @DisplayName("다이어리에 속한 Paper를 불러올 때, 날짜 범위를 지정할 수 있다.")
+    @ParameterizedTest
+    @MethodSource("dateRangeProvider")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    void getPapersWithDateRange(LocalDate startDate, LocalDate endDate, int expectedSize) {
+        // given
+        DiaryId diaryId = DiaryId.of(1L);
+        LocalDateTime requestTime = LocalDateTime.of(2024, 11, 19, 18, 0);
+        PaginationRequest paginationRequest = new PaginationRequest(1, 20, requestTime);
+
+        // when
+        List<Paper> papers = paperPersistenceAdapter.findByDiaryId(diaryId, paginationRequest, startDate, endDate);
+
+        // then
+        if (expectedSize > 0) {
+            assertThat(papers).hasSize(expectedSize)
+                .extracting(Paper::getDiary)
+                .extracting(DiaryInfo::getId)
+                .containsOnly(diaryId);
+        }
+        else {
+            assertThat(papers).isEmpty();
+        }
+    }
+
+    private Paper getPaper(PaperBasicInfo paperBasicInfo, PaperDetail paperDetail) {
         return Paper.builder()
             .paperBasicInfo(paperBasicInfo)
             .paperDetail(paperDetail)
@@ -196,19 +243,27 @@ class PaperPersistenceAdapterTest {
             .build();
     }
 
-    private static PaperDetail getPaperDetail() {
+    private PaperDetail getPaperDetail() {
         return PaperDetail.of(
             Images.of(List.of("https://www.이미지1.gif", "https://www.이미지2.gif")),
             Address.of("도로주소", 37.5494, 126.9169)
         );
     }
 
-    private static PaperBasicInfo getPaperBasicInfo() {
+    private PaperBasicInfo getPaperBasicInfo() {
         return PaperBasicInfo.of(
             "제목",
             Image.of("https://www.대표이미지.png"),
             "가게명",
             LocalDate.of(2024, 10, 1)
+        );
+    }
+
+    private static Stream<Arguments> dateRangeProvider() {
+        return Stream.of(
+            Arguments.of(LocalDate.of(2024, 11, 15), LocalDate.of(2024, 11, 18), 2),
+            Arguments.of(LocalDate.of(2024, 11, 18), LocalDate.of(2024, 11, 19), 3),
+            Arguments.of(LocalDate.of(2024, 11, 20), LocalDate.of(2024, 11, 21), 0)
         );
     }
 }
