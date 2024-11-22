@@ -2,6 +2,7 @@ package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
@@ -143,6 +144,30 @@ class GetPaperServiceTest {
                 "https://www.마크업이미지.png"
             ))
             .build();
+    }
+
+    @DisplayName("Member와 연관된 Paper를 불러온다.")
+    @Test
+    void getPaperByMemberId() {
+        // given
+        MemberId memberId = MemberId.of(1L);
+        GetMemberPapersCommand command = new GetMemberPapersCommand(memberId);
+
+        given(getPaperPort.findByMemberId(memberId)).willReturn(List.of(getPaper(MemberId.of(1L), DiaryId.of(1L)), getPaper(MemberId.of(1L), DiaryId.of(1L))));
+
+        // when
+        List<Paper> papers = getPaperService.getPapersByMemberId(command);
+
+        // then
+        assertThat(papers).hasSize(2)
+            .extracting(Paper::getDiary)
+            .extracting(DiaryInfo::getMemberInfo)
+            .extracting(MemberInfo::getMemberIds)
+            .allSatisfy(memberIds ->
+                assertThat(memberIds).contains(memberId)
+            );
+
+        verify(getPaperPort).findByMemberId(any(MemberId.class));
     }
 
     private PaperDetail getPaperDetail() {

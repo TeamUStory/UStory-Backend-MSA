@@ -2,6 +2,7 @@ package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
@@ -41,8 +42,8 @@ class GetPaperService implements GetPaperUseCase {
     }
 
     @Override
-    public List<Paper> getPapersByMemberId(Long memberId) {
-        return List.of();
+    public List<Paper> getPapersByMemberId(GetMemberPapersCommand command) {
+        return getPaperPort.findByMemberId(command.memberId());
     }
 
 }

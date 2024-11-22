@@ -1,7 +1,9 @@
 package me.ustory.api.paper.adapter.out.persistence;
 
+import static me.ustory.api.paper.adapter.out.persistence.QPaperDetailEntity.paperDetailEntity;
 import static me.ustory.api.paper.adapter.out.persistence.QPaperEntity.paperEntity;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -53,7 +56,7 @@ class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePa
     @Override
     public List<Paper> findByWriterId(MemberId writerId, PaginationRequest paginationRequest) {
         PageRequest pageRequest = PageRequest.of(paginationRequest.page() - 1, paginationRequest.size());
-        List<PaperEntity> paperEntities =  queryFactory.selectFrom(paperEntity)
+        List<PaperEntity> paperEntities = queryFactory.selectFrom(paperEntity)
             .where(paperEntity.writerId.eq(writerId.getValue()),
                 paperEntity.createdAt.loe(paginationRequest.requestTime()),
                 paperEntity.deletedAt.isNull())
@@ -75,6 +78,33 @@ class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePa
             .fetchOne();
 
         return count == null ? 0 : count.intValue();
+    }
+
+    @Override
+    public List<Paper> findByMemberId(MemberId memberId) {
+        List<Tuple> result = queryFactory.select(paperEntity, paperDetailEntity)
+            .from(paperEntity)
+                .join(paperDetailEntity)
+                .on(paperEntity.id.eq(paperDetailEntity.id))
+            .where(paperEntity.diaryInfo.members.memberIds.contains(memberId.getValue()),
+                paperEntity.deletedAt.isNull())
+            .orderBy(paperEntity.createdAt.desc())
+            .fetch();
+
+        if (result.isEmpty()) {
+            return List.of();
+        }
+
+        return result.stream()
+            .map(tuple -> {
+                PaperEntity tuplePaperEntity = tuple.get(paperEntity);
+                PaperDetailEntity tupleDetailEntity = tuple.get(paperDetailEntity);
+                return PaperMapper.mapToDomain(
+                    tuplePaperEntity,
+                    PaperDetailMapper.mapToDomain(tupleDetailEntity)
+                );
+            })
+            .toList();
     }
 
     @Override

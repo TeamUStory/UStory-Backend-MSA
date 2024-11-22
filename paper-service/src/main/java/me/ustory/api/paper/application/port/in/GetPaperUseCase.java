@@ -9,5 +9,5 @@ public interface GetPaperUseCase {
     List<Paper> getPapersByWriterId(GetWrittenPapersCommand command);
     int getCountPapersByWriterId(GetWrittenPapersCountCommand command);
     List<Paper> getPapersByDiaryId(GetDiaryPapersCommand command);
-    List<Paper> getPapersByMemberId(Long memberId);
+    List<Paper> getPapersByMemberId(GetMemberPapersCommand command);
 }

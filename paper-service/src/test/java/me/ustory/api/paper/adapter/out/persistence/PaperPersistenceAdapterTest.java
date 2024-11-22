@@ -158,6 +158,10 @@ class PaperPersistenceAdapterTest {
             .extracting(Paper::getWriter)
             .extracting(MemberId::getValue)
             .containsOnly(writerId);
+
+        assertThat(papers).hasSize(3)
+            .extracting(Paper::getDetail)
+            .allSatisfy(detail -> assertThat(detail).isNull());
     }
 
     @DisplayName("작성한 Paper를 불러올 때, 생성 시간이 요청 시간보다 늦는 Paper만 불러온다.")
@@ -181,6 +185,10 @@ class PaperPersistenceAdapterTest {
             .extracting(Paper::getWriter)
             .extracting(MemberId::getValue)
             .containsOnly(writerId);
+
+        assertThat(papers).hasSize(expectedSize)
+            .extracting(Paper::getDetail)
+            .allSatisfy(detail -> assertThat(detail).isNull());
     }
 
     @DisplayName("작성한 Paper의 개수를 불러온다.")
@@ -228,6 +236,10 @@ class PaperPersistenceAdapterTest {
             .extracting(Paper::getDiary)
             .extracting(DiaryInfo::getId)
             .containsOnly(diaryId);
+
+        assertThat(papers).hasSize(3)
+            .extracting(Paper::getDetail)
+            .allSatisfy(detail -> assertThat(detail).isNull());
     }
 
     @DisplayName("다이어리에 속한 Paper를 불러올 때, 날짜 범위를 지정할 수 있다.")
@@ -249,10 +261,54 @@ class PaperPersistenceAdapterTest {
                 .extracting(Paper::getDiary)
                 .extracting(DiaryInfo::getId)
                 .containsOnly(diaryId);
+
+            assertThat(papers).hasSize(expectedSize)
+                .extracting(Paper::getDetail)
+                .allSatisfy(detail -> assertThat(detail).isNull());
         }
         else {
             assertThat(papers).isEmpty();
         }
+    }
+
+    @DisplayName("Member와 연관된 모든 Paper를 불러온다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @Test
+    void getPapersByMemberId() {
+        // given
+        MemberId memberId = MemberId.of(1L);
+
+        // when
+        List<Paper> papers = paperPersistenceAdapter.findByMemberId(memberId);
+
+        // then
+        assertThat(papers).hasSize(3)
+            .extracting(Paper::getDiary)
+            .extracting(DiaryInfo::getMemberInfo)
+            .extracting(MemberInfo::getMemberIds)
+            .allSatisfy(memberIds -> {
+                assertThat(memberIds).contains(memberId);
+            });
+
+        assertThat(papers).hasSize(3)
+            .extracting(Paper::getDetail)
+            .isNotNull();
+    }
+
+    @DisplayName("Member와 연관된 Paper가 존재하지 않는 경우, 빈리스트를 반환한다.")
+    @Sql("PaperPersistenceAdapterTest.sql")
+    @Test
+    void getPapersByMemberIdWhenDontExistPapers() {
+        // given
+        MemberId memberId = MemberId.of(2L);
+
+        // when
+        List<Paper> papers = paperPersistenceAdapter.findByMemberId(memberId);
+
+        // then
+        assertThat(papers)
+            .isInstanceOf(List.class)
+            .isEmpty();
     }
 
     private Paper getPaper(PaperBasicInfo paperBasicInfo, PaperDetail paperDetail) {

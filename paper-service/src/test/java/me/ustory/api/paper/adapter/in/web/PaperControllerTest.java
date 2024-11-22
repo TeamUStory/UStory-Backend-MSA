@@ -8,6 +8,7 @@ import me.ustory.api.paper.adapter.in.web.response.GetPapersCountResponse;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
@@ -218,7 +219,6 @@ class PaperControllerTest {
             .andExpect(jsonPath("$.data[1].store").value(papers.get(1).getStore()))
             .andExpect(jsonPath("$.data[1].diaryName").value(papers.get(1).getDiary().getName()));
 
-        // verify
         verify(getPaperUseCase).getPapersByWriterId(command);
     }
 
@@ -273,8 +273,43 @@ class PaperControllerTest {
             .andExpect(jsonPath("$.data[1].store").value(papers.get(1).getStore()))
             .andExpect(jsonPath("$.data[1].diaryName").value(papers.get(1).getDiary().getName()));
 
-        // verify
         verify(getPaperUseCase).getPapersByDiaryId(command);
+    }
+
+    @DisplayName("사용자와 연관된 모든 Paper를 조회한다.")
+    @Test
+    void getPaperByMemberId() throws Exception {
+        // given
+        Long userId = 1L;
+
+        GetMemberPapersCommand command = new GetMemberPapersCommand(MemberId.of(userId));
+        List<Paper> papers = List.of(getPaper(1L, 1L), getPaper(2L, 1L));
+
+        given(getPaperUseCase.getPapersByMemberId(command)).willReturn(papers);
+
+        // when & then
+        mockMvc.perform(get("/api/papers/map")
+                .param("userId", String.valueOf(userId))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data[0].paperId").value(papers.get(0).getPaperId().getId()))
+            .andExpect(jsonPath("$.data[0].title").value(papers.get(0).getBasicInfo().getTitle()))
+            .andExpect(jsonPath("$.data[0].thumbnailImageUrl").value(papers.get(0).getBasicInfo().getThumbnailImage().getUrl()))
+            .andExpect(jsonPath("$.data[0].store").value(papers.get(0).getBasicInfo().getStore()))
+            .andExpect(jsonPath("$.data[0].coordinateX").value(papers.get(0).getDetail().getAddress().getCoordinateXValue()))
+            .andExpect(jsonPath("$.data[0].coordinateY").value(papers.get(0).getDetail().getAddress().getCoordinateYValue()))
+            .andExpect(jsonPath("$.data[0].diaryColor").value(papers.get(0).getDiary().getColor()))
+            .andExpect(jsonPath("$.data[0].diaryImageUrl").value(papers.get(0).getDiary().getImage().getUrl()))
+            .andExpect(jsonPath("$.data[0].diaryMarkerUrl").value(papers.get(0).getDiary().getMarker().getUrl()))
+            .andExpect(jsonPath("$.data[1].paperId").value(papers.get(1).getPaperId().getId()))
+            .andExpect(jsonPath("$.data[1].title").value(papers.get(1).getBasicInfo().getTitle()))
+            .andExpect(jsonPath("$.data[1].thumbnailImageUrl").value(papers.get(1).getBasicInfo().getThumbnailImage().getUrl()))
+            .andExpect(jsonPath("$.data[1].store").value(papers.get(1).getBasicInfo().getStore()))
+            .andExpect(jsonPath("$.data[1].coordinateX").value(papers.get(1).getDetail().getAddress().getCoordinateXValue()))
+            .andExpect(jsonPath("$.data[1].coordinateY").value(papers.get(1).getDetail().getAddress().getCoordinateYValue()))
+            .andExpect(jsonPath("$.data[1].diaryColor").value(papers.get(1).getDiary().getColor()))
+            .andExpect(jsonPath("$.data[1].diaryImageUrl").value(papers.get(1).getDiary().getImage().getUrl()))
+            .andExpect(jsonPath("$.data[1].diaryMarkerUrl").value(papers.get(1).getDiary().getMarker().getUrl()));
     }
 
     private Paper getPaper(Long paperId, Long diaryId) {

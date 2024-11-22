@@ -15,5 +15,6 @@ public interface GetPaperPort {
     List<Paper> findByWriterId(MemberId writerId, PaginationRequest paginationRequest);
     List<Paper> findByDiaryId(DiaryId diaryId, PaginationRequest paginationRequest, LocalDate startDate, LocalDate endDate);
     int findCountByWriterId(MemberId memberId);
+    List<Paper> findByMemberId(MemberId memberId);
 
 }

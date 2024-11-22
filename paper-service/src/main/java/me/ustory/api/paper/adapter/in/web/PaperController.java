@@ -8,6 +8,7 @@ import me.ustory.api.common.controller.response.SuccessResponse;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.response.CreatePaperResponse;
+import me.ustory.api.paper.adapter.in.web.response.GetPaperMapResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPapersCountResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPaperPreviewResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPaperResponse;
@@ -15,6 +16,7 @@ import me.ustory.api.paper.adapter.in.web.response.UpdatePaperResponse;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
 import me.ustory.api.paper.application.port.in.GetPaperCommand;
 import me.ustory.api.paper.application.port.in.GetPaperUseCase;
 import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
@@ -132,6 +134,23 @@ public class PaperController {
 
         List<GetPaperPreviewResponse> response = papers.stream()
             .map(GetPaperPreviewResponse::of)
+            .toList();
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(SuccessResponse.success(response));
+    }
+
+    @GetMapping("/map")
+    public ResponseEntity<ApiResponse<List<GetPaperMapResponse>>> getPapersByUserForMap(
+        @RequestParam(name = "userId") Long userId
+    ) {
+        GetMemberPapersCommand command = new GetMemberPapersCommand(MemberId.of(userId));
+
+        List<Paper> papers = getPaperUseCase.getPapersByMemberId(command);
+
+        List<GetPaperMapResponse> response = papers.stream()
+            .map(GetPaperMapResponse::from)
             .toList();
 
         return ResponseEntity
