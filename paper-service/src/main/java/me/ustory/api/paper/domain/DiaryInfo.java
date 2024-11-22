@@ -1,0 +1,64 @@
+package me.ustory.api.paper.domain;
+
+import lombok.Getter;
+
+import java.util.Objects;
+
+@Getter
+public class DiaryInfo {
+
+    private final DiaryId id;
+
+    private MemberInfo memberInfo;
+
+    private String name;
+
+    private Image image;
+
+    private String color;
+
+    private Image marker;
+
+    public static DiaryInfo of(DiaryId id, MemberInfo memberInfo, String name, String imageUrl, String color, String markerUrl) {
+        return new DiaryInfo(id, memberInfo, name, Image.of(imageUrl), color, Image.of(markerUrl));
+    }
+
+    public boolean isIndividualDiary() {
+        return memberInfo.isIndividual();
+    }
+
+    private DiaryInfo(DiaryId id, MemberInfo memberInfo, String name, Image image, String color, Image marker) {
+        this.id = id;
+        this.memberInfo = memberInfo;
+        this.name = name;
+        this.image = image;
+        this.color = color;
+        this.marker = marker;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DiaryInfo diaryInfo = (DiaryInfo) o;
+        return Objects.equals(id, diaryInfo.id) && Objects.equals(memberInfo, diaryInfo.memberInfo) && Objects.equals(name, diaryInfo.name) && Objects.equals(image, diaryInfo.image) && Objects.equals(color, diaryInfo.color) && Objects.equals(marker, diaryInfo.marker);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, memberInfo, name, image, color, marker);
+    }
+
+    @Override
+    public String toString() {
+        return "DiaryInfo{" +
+            "id=" + id +
+            ", memberInfo=" + memberInfo +
+            ", name='" + name + '\'' +
+            ", image=" + image +
+            ", color='" + color + '\'' +
+            ", marker=" + marker +
+            '}';
+    }
+
+}
