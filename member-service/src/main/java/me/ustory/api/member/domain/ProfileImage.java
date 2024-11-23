@@ -1,4 +1,4 @@
-package me.ustory.api.paper.domain;
+package me.ustory.api.member.domain;
 
 import java.util.Objects;
 
