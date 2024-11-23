@@ -13,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,5 +52,19 @@ class CommentPersistenceAdapterTest {
         assertThat(commentEntity.getPaperId()).isEqualTo(paperId.getValue());
         assertThat(commentEntity.getContent()).isEqualTo(content);
         assertThat(commentEntity.getCreatedAt()).isNotNull();
+    }
+
+    @DisplayName("댓글을 불러온다.")
+    @Sql("CommentPersistenceAdapterTest.sql")
+    @Test
+    void getCommentById() {
+        // given
+        CommentId commentId = CommentId.of(1L);
+
+        // when
+        Comment comment = commentPersistenceAdapter.getComment(commentId);
+
+        // then
+        assertThat(comment.getCommentId()).isEqualTo(commentId);
     }
 }

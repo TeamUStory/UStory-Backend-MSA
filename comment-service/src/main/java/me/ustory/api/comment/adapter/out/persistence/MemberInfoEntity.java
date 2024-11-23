@@ -3,9 +3,11 @@ package me.ustory.api.comment.adapter.out.persistence;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ustory.api.common.BaseEntity;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 class MemberInfoEntity extends BaseEntity {

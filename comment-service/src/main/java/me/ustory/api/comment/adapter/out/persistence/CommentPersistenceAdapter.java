@@ -2,6 +2,7 @@ package me.ustory.api.comment.adapter.out.persistence;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.application.port.out.CreateCommentPort;
+import me.ustory.api.comment.application.port.out.GetCommentPort;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.comment.domain.MemberInfo;
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-class CommentPersistenceAdapter implements CreateCommentPort {
+class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort {
 
     private final CommentJpaRepository commentJpaRepository;
 
@@ -24,4 +25,8 @@ class CommentPersistenceAdapter implements CreateCommentPort {
         return CommentId.of(savedCommentEntity.getId());
     }
 
+    @Override
+    public Comment getComment(CommentId id) {
+        return CommentMapper.mapToDomain(commentJpaRepository.findById(id.getValue()).orElseThrow());
+    }
 }

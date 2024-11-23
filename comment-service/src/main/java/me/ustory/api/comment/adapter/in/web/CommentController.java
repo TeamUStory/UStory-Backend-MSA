@@ -4,8 +4,12 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.adapter.in.web.request.CreateCommentRequest;
 import me.ustory.api.comment.adapter.in.web.response.CreateCommentResponse;
+import me.ustory.api.comment.adapter.in.web.response.GetCommentResponse;
 import me.ustory.api.comment.application.port.in.CreateCommentCommand;
 import me.ustory.api.comment.application.port.in.CreateCommentUseCase;
+import me.ustory.api.comment.application.port.in.GetCommentCommand;
+import me.ustory.api.comment.application.port.in.GetCommentUseCase;
+import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.common.controller.response.ApiResponse;
 import me.ustory.api.common.controller.response.SuccessResponse;
@@ -27,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CreateCommentUseCase createCommentUseCase;
+    private final GetCommentUseCase getCommentUseCase;
 
     @PostMapping
     public ResponseEntity<ApiResponse<CreateCommentResponse>> createComment(
@@ -45,10 +50,18 @@ public class CommentController {
     }
 
     @GetMapping("/{commentId}")
-    public void getComment(
+    public ResponseEntity<ApiResponse<GetCommentResponse>> getComment(
         @PathVariable(name = "commentId") Long commentId
     ) {
+        GetCommentCommand command = GetCommentCommand.of(commentId);
 
+        Comment comment = getCommentUseCase.getComment(command);
+
+        GetCommentResponse response = GetCommentResponse.of(comment);
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(SuccessResponse.success(response));
     }
 
     @GetMapping
