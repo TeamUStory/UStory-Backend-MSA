@@ -5,15 +5,18 @@ import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.adapter.in.web.request.CreateCommentRequest;
 import me.ustory.api.comment.adapter.in.web.request.UpdateCommentRequest;
 import me.ustory.api.comment.adapter.in.web.response.CreateCommentResponse;
+import me.ustory.api.comment.adapter.in.web.response.DeleteCommentResponse;
 import me.ustory.api.comment.adapter.in.web.response.GetCommentResponse;
 import me.ustory.api.comment.adapter.in.web.response.UpdateCommentResponse;
 import me.ustory.api.comment.application.port.in.CreateCommentCommand;
 import me.ustory.api.comment.application.port.in.CreateCommentUseCase;
+import me.ustory.api.comment.application.port.in.DeleteCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentUseCase;
 import me.ustory.api.comment.application.port.in.GetCommentsCommand;
 import me.ustory.api.comment.application.port.in.UpdateCommentCommand;
 import me.ustory.api.comment.application.port.in.UpdateCommentUseCase;
+import me.ustory.api.comment.application.port.in.DeleteCommentUseCase;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.common.controller.response.ApiResponse;
@@ -40,6 +43,7 @@ public class CommentController {
     private final CreateCommentUseCase createCommentUseCase;
     private final GetCommentUseCase getCommentUseCase;
     private final UpdateCommentUseCase updateCommentUseCase;
+    private final DeleteCommentUseCase deleteCommentUseCase;
 
     @PostMapping
     public ResponseEntity<ApiResponse<CreateCommentResponse>> createComment(
@@ -105,10 +109,18 @@ public class CommentController {
     }
 
     @DeleteMapping("/{commentId}")
-    public void deleteComment(
+    public ResponseEntity<ApiResponse<DeleteCommentResponse>> deleteComment(
         @PathVariable(name = "commentId") Long commentId,
         @RequestParam("memberId") Long memberId
     ) {
+        DeleteCommentCommand command = DeleteCommentCommand.of(commentId, memberId);
 
+        deleteCommentUseCase.deleteComment(command);
+
+        DeleteCommentResponse response = new DeleteCommentResponse("성공적으로 삭제되었습니다.");
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(SuccessResponse.success(response));
     }
 }

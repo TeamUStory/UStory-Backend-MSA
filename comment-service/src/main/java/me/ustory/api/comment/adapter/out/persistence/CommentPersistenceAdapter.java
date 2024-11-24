@@ -3,6 +3,7 @@ package me.ustory.api.comment.adapter.out.persistence;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.application.port.out.CreateCommentPort;
+import me.ustory.api.comment.application.port.out.DeleteCommentPort;
 import me.ustory.api.comment.application.port.out.GetCommentPort;
 import me.ustory.api.comment.application.port.out.UpdateCommentPort;
 import me.ustory.api.comment.domain.Comment;
@@ -17,7 +18,7 @@ import static me.ustory.api.comment.adapter.out.persistence.QCommentEntity.comme
 
 @Component
 @RequiredArgsConstructor
-class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort, UpdateCommentPort {
+class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort, UpdateCommentPort, DeleteCommentPort {
 
     private final JPAQueryFactory queryFactory;
     private final CommentJpaRepository commentJpaRepository;
@@ -56,5 +57,10 @@ class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort, Up
         CommentEntity commentEntity = commentJpaRepository.save(CommentMapper.mapToEntityWithId(comment, memberInfoEntity));
 
         return CommentId.of(commentEntity.getId());
+    }
+
+    @Override
+    public void deleteComment(CommentId commentId) {
+        commentJpaRepository.deleteById(commentId.getValue());
     }
 }

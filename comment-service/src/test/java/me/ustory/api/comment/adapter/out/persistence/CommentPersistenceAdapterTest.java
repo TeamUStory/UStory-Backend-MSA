@@ -106,4 +106,19 @@ class CommentPersistenceAdapterTest {
         CommentEntity updatedCommentEntity = commentJpaRepository.findById(updatedCommentId.getValue()).orElseThrow();
         assertThat(updatedCommentEntity.getContent()).isEqualTo(comment.getContent());
     }
+
+    @DisplayName("댓글을 삭제한다.")
+    @Sql("CommentPersistenceAdapterTest.sql")
+    @Test
+    void deleteComment() {
+        // given
+        CommentId commentId = CommentId.of(1L);
+
+        // when
+        commentPersistenceAdapter.deleteComment(commentId);
+
+        // then
+        assertThat(commentJpaRepository.findAll()).hasSize(2);
+        assertThat(commentJpaRepository.existsById(commentId.getValue())).isFalse();
+    }
 }

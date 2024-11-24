@@ -1,16 +1,17 @@
 package me.ustory.api.comment.adapter.in.web;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ustory.api.comment.adapter.in.web.request.CreateCommentRequest;
 import me.ustory.api.comment.adapter.in.web.request.UpdateCommentRequest;
 import me.ustory.api.comment.application.port.in.CreateCommentCommand;
 import me.ustory.api.comment.application.port.in.CreateCommentUseCase;
+import me.ustory.api.comment.application.port.in.DeleteCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentUseCase;
 import me.ustory.api.comment.application.port.in.GetCommentsCommand;
 import me.ustory.api.comment.application.port.in.UpdateCommentCommand;
 import me.ustory.api.comment.application.port.in.UpdateCommentUseCase;
+import me.ustory.api.comment.application.port.in.DeleteCommentUseCase;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.comment.domain.Image;
@@ -29,11 +30,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,6 +55,9 @@ class CommentControllerTest {
 
     @MockBean
     private UpdateCommentUseCase updateCommentUseCase;
+
+    @MockBean
+    private DeleteCommentUseCase deleteCommentUseCase;
 
     @DisplayName("댓글을 작성한다.")
     @Test
@@ -148,12 +152,30 @@ class CommentControllerTest {
         given(updateCommentUseCase.updateComment(command)).willReturn(CommentId.of(commentId));
 
         // when & then
-        mockMvc.perform(put("/api/comments/{commandId}", commentId)
+        mockMvc.perform(put("/api/comments/{commentId}", commentId)
                 .param("memberId", String.valueOf(memberId))
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data.commentId").value(commentId));
+    }
+
+    @DisplayName("댓글을 삭제한다.")
+    @Test
+    void deleteComment() throws Exception {
+        // given
+        Long commentId = 1L;
+        Long memberId = 1L;
+        DeleteCommentCommand command = DeleteCommentCommand.of(memberId, commentId);
+
+        // when & then
+        mockMvc.perform(delete("/api/comments/{commentId}", commentId)
+                .param("memberId", String.valueOf(memberId))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data.message").value("성공적으로 삭제되었습니다."));
+
+        verify(deleteCommentUseCase).deleteComment(command);
     }
 
     private static Comment getComment(Long paperId, Long commentId) {
