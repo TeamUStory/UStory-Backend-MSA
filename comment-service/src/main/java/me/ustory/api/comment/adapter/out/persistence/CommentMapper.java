@@ -10,6 +10,10 @@ public class CommentMapper {
         return CommentEntity.withoutId(comment.getPaperId().getValue(), memberInfoEntity, comment.getContent());
     }
 
+    public static CommentEntity mapToEntityWithId(Comment comment, MemberInfoEntity memberInfoEntity) {
+        return CommentEntity.withId(comment.getCommentId().getValue(), comment.getPaperId().getValue(), memberInfoEntity, comment.getContent());
+    }
+
     public static Comment mapToDomain(CommentEntity commentEntity) {
         return Comment.withId(
             CommentId.of(commentEntity.getId()),

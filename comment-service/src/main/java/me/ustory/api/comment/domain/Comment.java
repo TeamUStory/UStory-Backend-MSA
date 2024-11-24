@@ -3,6 +3,7 @@ package me.ustory.api.comment.domain;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 public class Comment {
@@ -60,5 +61,29 @@ public class Comment {
         }
 
         return content;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(commentId, comment.commentId) && Objects.equals(paperId, comment.paperId) && Objects.equals(memberInfo, comment.memberInfo) && Objects.equals(content, comment.content) && Objects.equals(createdAt, comment.createdAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(commentId, paperId, memberInfo, content, createdAt);
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+            "commentId=" + commentId +
+            ", paperId=" + paperId +
+            ", memberInfo=" + memberInfo +
+            ", content='" + content + '\'' +
+            ", createdAt=" + createdAt +
+            '}';
     }
 }

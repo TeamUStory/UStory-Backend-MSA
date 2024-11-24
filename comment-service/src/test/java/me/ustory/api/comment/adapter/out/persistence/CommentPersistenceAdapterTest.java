@@ -86,4 +86,24 @@ class CommentPersistenceAdapterTest {
         assertThat(comments.get(1).getPaperId()).isEqualTo(paperId);
         assertThat(comments.get(2).getPaperId()).isEqualTo(paperId);
     }
+
+    @DisplayName("댓글을 수정한다.")
+    @Sql("CommentPersistenceAdapterTest.sql")
+    @Test
+    void updateComment() {
+        // given
+        CommentId commentId = CommentId.of(1L);
+
+        Comment comment = commentPersistenceAdapter.getComment(commentId);
+        comment.changeContent("수정된 댓글");
+
+        // when
+        CommentId updatedCommentId = commentPersistenceAdapter.updateComment(comment);
+
+        // then
+        assertThat(commentId).isEqualTo(updatedCommentId);
+
+        CommentEntity updatedCommentEntity = commentJpaRepository.findById(updatedCommentId.getValue()).orElseThrow();
+        assertThat(updatedCommentEntity.getContent()).isEqualTo(comment.getContent());
+    }
 }

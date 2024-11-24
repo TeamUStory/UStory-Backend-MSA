@@ -11,6 +11,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import me.ustory.api.common.BaseEntity;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -30,6 +32,10 @@ class CommentEntity extends BaseEntity {
 
     public static CommentEntity withoutId(Long paperId, MemberInfoEntity memberInfoEntity, String content) {
         return new CommentEntity(null, paperId, memberInfoEntity, content);
+    }
+
+    public static CommentEntity withId(Long commentId, Long paperId, MemberInfoEntity memberInfoEntity, String content) {
+        return new CommentEntity(commentId, paperId, memberInfoEntity, content);
     }
 
     private CommentEntity(Long id, Long paperId, MemberInfoEntity memberInfo, String content) {

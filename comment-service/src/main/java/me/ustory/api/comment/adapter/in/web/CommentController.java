@@ -3,13 +3,17 @@ package me.ustory.api.comment.adapter.in.web;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.adapter.in.web.request.CreateCommentRequest;
+import me.ustory.api.comment.adapter.in.web.request.UpdateCommentRequest;
 import me.ustory.api.comment.adapter.in.web.response.CreateCommentResponse;
 import me.ustory.api.comment.adapter.in.web.response.GetCommentResponse;
+import me.ustory.api.comment.adapter.in.web.response.UpdateCommentResponse;
 import me.ustory.api.comment.application.port.in.CreateCommentCommand;
 import me.ustory.api.comment.application.port.in.CreateCommentUseCase;
 import me.ustory.api.comment.application.port.in.GetCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentUseCase;
 import me.ustory.api.comment.application.port.in.GetCommentsCommand;
+import me.ustory.api.comment.application.port.in.UpdateCommentCommand;
+import me.ustory.api.comment.application.port.in.UpdateCommentUseCase;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.common.controller.response.ApiResponse;
@@ -35,6 +39,7 @@ public class CommentController {
 
     private final CreateCommentUseCase createCommentUseCase;
     private final GetCommentUseCase getCommentUseCase;
+    private final UpdateCommentUseCase updateCommentUseCase;
 
     @PostMapping
     public ResponseEntity<ApiResponse<CreateCommentResponse>> createComment(
@@ -83,11 +88,20 @@ public class CommentController {
     }
 
     @PutMapping("/{commentId}")
-    public void updateComment(
+    public ResponseEntity<ApiResponse<UpdateCommentResponse>> updateComment(
         @PathVariable(name = "commentId") Long commentId,
-        @RequestParam("memberId") Long memberId
+        @RequestParam("memberId") Long memberId,
+        @Valid @RequestBody UpdateCommentRequest request
     ) {
+        UpdateCommentCommand command = UpdateCommentCommand.of(commentId, memberId, request.content());
 
+        CommentId updatedCommentId = updateCommentUseCase.updateComment(command);
+
+        UpdateCommentResponse response = UpdateCommentResponse.of(updatedCommentId);
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(SuccessResponse.success(response));
     }
 
     @DeleteMapping("/{commentId}")

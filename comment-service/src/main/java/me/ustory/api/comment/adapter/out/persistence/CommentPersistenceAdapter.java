@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.application.port.out.CreateCommentPort;
 import me.ustory.api.comment.application.port.out.GetCommentPort;
+import me.ustory.api.comment.application.port.out.UpdateCommentPort;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.comment.domain.MemberInfo;
@@ -16,7 +17,7 @@ import static me.ustory.api.comment.adapter.out.persistence.QCommentEntity.comme
 
 @Component
 @RequiredArgsConstructor
-class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort {
+class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort, UpdateCommentPort {
 
     private final JPAQueryFactory queryFactory;
     private final CommentJpaRepository commentJpaRepository;
@@ -45,5 +46,15 @@ class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort {
             .fetch();
 
         return commentEntities.stream().map(CommentMapper::mapToDomain).toList();
+    }
+
+    @Override
+    public CommentId updateComment(Comment comment) {
+        MemberInfo memberInfo = comment.getMemberInfo();
+        MemberInfoEntity memberInfoEntity = MemberInfoEntity.withId(memberInfo.getId().getValue(), memberInfo.getNickname(), memberInfo.getProfile().getUrl());
+
+        CommentEntity commentEntity = commentJpaRepository.save(CommentMapper.mapToEntityWithId(comment, memberInfoEntity));
+
+        return CommentId.of(commentEntity.getId());
     }
 }

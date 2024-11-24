@@ -15,6 +15,10 @@ public class MemberInfo {
         return new MemberInfo(id, nickname, profile);
     }
 
+    public boolean isNotSameMember(MemberId memberId) {
+        return !this.id.equals(memberId);
+    }
+
     private MemberInfo(MemberId id, String nickname, Image profile) {
         this.id = id;
         this.nickname = validateNickname(nickname);
