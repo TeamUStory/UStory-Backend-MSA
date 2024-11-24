@@ -9,6 +9,7 @@ import me.ustory.api.comment.application.port.in.CreateCommentCommand;
 import me.ustory.api.comment.application.port.in.CreateCommentUseCase;
 import me.ustory.api.comment.application.port.in.GetCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentUseCase;
+import me.ustory.api.comment.application.port.in.GetCommentsCommand;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.common.controller.response.ApiResponse;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/comments")
@@ -65,10 +68,18 @@ public class CommentController {
     }
 
     @GetMapping
-    public void getComments(
+    public ResponseEntity<ApiResponse<List<GetCommentResponse>>> getComments(
         @RequestParam("paperId") Long paperId
     ) {
+        GetCommentsCommand command = GetCommentsCommand.of(paperId);
 
+        List<Comment> comments = getCommentUseCase.getComments(command);
+
+        List<GetCommentResponse> response = comments.stream().map(GetCommentResponse::of).toList();
+
+        return ResponseEntity
+            .status(HttpStatus.OK)
+            .body(SuccessResponse.success(response));
     }
 
     @PutMapping("/{commentId}")

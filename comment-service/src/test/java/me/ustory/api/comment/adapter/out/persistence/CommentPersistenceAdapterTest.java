@@ -15,12 +15,14 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-@Import({CommentPersistenceAdapter.class, JpaConfig.class, CommentMapper.class, MemberInfoMapper.class})
+@Import({CommentPersistenceAdapter.class, JpaConfig.class, QueryDslConfig.class, CommentMapper.class, MemberInfoMapper.class})
 @ActiveProfiles("test")
 class CommentPersistenceAdapterTest {
 
@@ -66,5 +68,22 @@ class CommentPersistenceAdapterTest {
 
         // then
         assertThat(comment.getCommentId()).isEqualTo(commentId);
+    }
+
+    @DisplayName("Paper에 속한 모든 댓글을 불러온다.")
+    @Sql("CommentPersistenceAdapterTest.sql")
+    @Test
+    void getCommentsByPaperId() {
+        // given
+        PaperId paperId = PaperId.of(1L);
+
+        // when
+        List<Comment> comments = commentPersistenceAdapter.getComments(paperId);
+
+        // then
+        assertThat(comments).hasSize(3);
+        assertThat(comments.get(0).getPaperId()).isEqualTo(paperId);
+        assertThat(comments.get(1).getPaperId()).isEqualTo(paperId);
+        assertThat(comments.get(2).getPaperId()).isEqualTo(paperId);
     }
 }

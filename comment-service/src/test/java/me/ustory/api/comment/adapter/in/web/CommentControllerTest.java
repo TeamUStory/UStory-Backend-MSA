@@ -6,6 +6,7 @@ import me.ustory.api.comment.application.port.in.CreateCommentCommand;
 import me.ustory.api.comment.application.port.in.CreateCommentUseCase;
 import me.ustory.api.comment.application.port.in.GetCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentUseCase;
+import me.ustory.api.comment.application.port.in.GetCommentsCommand;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.comment.domain.Image;
@@ -21,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -95,5 +97,43 @@ class CommentControllerTest {
             .andExpect(jsonPath("$.data.nickname").value(nickname))
             .andExpect(jsonPath("$.data.profileImageUrl").value(profileImage.getUrl()))
             .andExpect(jsonPath("$.data.createdAt").value(createdAt.toLocalDate().toString()));
+    }
+
+    @DisplayName("Paper에 속한 모든 댓글을 불러온다.")
+    @Test
+    void getComments() throws Exception {
+        // given
+        Long paperId = 1L;
+        GetCommentsCommand command = GetCommentsCommand.of(paperId);
+        List<Comment> comments = List.of(getComment(paperId, 1L), getComment(paperId, 2L));
+
+        given(getCommentUseCase.getComments(command)).willReturn(comments);
+
+        // when & then
+        mockMvc.perform(get("/api/comments")
+                .param("paperId", String.valueOf(paperId))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.data[0].commentId").value(comments.get(0).getCommentId().getValue()))
+            .andExpect(jsonPath("$.data[0].content").value(comments.get(0).getContent()))
+            .andExpect(jsonPath("$.data[0].nickname").value(comments.get(0).getMemberInfo().getNickname()))
+            .andExpect(jsonPath("$.data[0].profileImageUrl").value(comments.get(0).getMemberInfo().getProfile().getUrl()))
+            .andExpect(jsonPath("$.data[0].createdAt").value(comments.get(0).getCreatedAt().toLocalDate().toString()))
+            .andExpect(jsonPath("$.data[1].commentId").value(comments.get(1).getCommentId().getValue()))
+            .andExpect(jsonPath("$.data[1].content").value(comments.get(1).getContent()))
+            .andExpect(jsonPath("$.data[1].nickname").value(comments.get(1).getMemberInfo().getNickname()))
+            .andExpect(jsonPath("$.data[1].profileImageUrl").value(comments.get(1).getMemberInfo().getProfile().getUrl()))
+            .andExpect(jsonPath("$.data[1].createdAt").value(comments.get(1).getCreatedAt().toLocalDate().toString()));
+    }
+
+    private static Comment getComment(Long paperId, Long commentId) {
+        Long memberId = 1L;
+        String nickname = "닉네임";
+        Image profileImage = Image.of("https://www.example.come/이미지.png");
+        MemberInfo memberInfo = MemberInfo.of(MemberId.of(memberId), nickname, profileImage);
+        String content = "댓글 내용";
+        LocalDateTime createdAt = LocalDateTime.of(2024, 10, 10, 10, 10);
+
+        return Comment.withId(CommentId.of(commentId), PaperId.of(paperId), memberInfo, content, createdAt);
     }
 }
