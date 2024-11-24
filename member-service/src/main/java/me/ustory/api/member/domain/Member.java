@@ -22,8 +22,6 @@ public class Member {
 
     private final ProfileDescription profileDescription;
 
-    private LocalDateTime deletedAt;
-
     @Builder
     private Member(MemberId memberId, Email email, Name name, Nickname nickname, Password password, ProfileImage profileImage, ProfileDescription profileDescription) {
         this.memberId = memberId;
