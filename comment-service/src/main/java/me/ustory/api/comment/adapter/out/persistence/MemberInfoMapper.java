@@ -10,7 +10,7 @@ import me.ustory.api.comment.domain.MemberInfo;
 class MemberInfoMapper {
 
     public static MemberInfoEntity mapToEntity(MemberInfo memberInfo) {
-        return MemberInfoEntity.withoutId(memberInfo.getNickname(), memberInfo.getProfile().getUrl());
+        return MemberInfoEntity.of(memberInfo.getId().getValue(), memberInfo.getNickname(), memberInfo.getProfile().getUrl());
     }
 
     public static MemberInfo mapToDomain(MemberInfoEntity memberInfo) {

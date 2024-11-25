@@ -19,11 +19,7 @@ class MemberInfoEntity extends BaseEntity {
 
     private String profileImage;
 
-    public static MemberInfoEntity withoutId(String nickname, String profileImage) {
-        return new MemberInfoEntity(null, nickname, profileImage);
-    }
-
-    public static MemberInfoEntity withId(Long id, String nickname, String profileImage) {
+    public static MemberInfoEntity of(Long id, String nickname, String profileImage) {
         return new MemberInfoEntity(id, nickname, profileImage);
     }
 

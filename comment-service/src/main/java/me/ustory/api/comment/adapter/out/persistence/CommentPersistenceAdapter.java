@@ -25,9 +25,8 @@ class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort, Up
 
     @Override
     public CommentId createComment(Comment comment) {
-        MemberInfo memberInfo = comment.getMemberInfo();
-        MemberInfoEntity memberInfoEntity = MemberInfoEntity.withoutId(memberInfo.getNickname(), memberInfo.getProfile().getUrl());
-        CommentEntity commentEntity = CommentEntity.withoutId(comment.getPaperId().getValue(), memberInfoEntity, comment.getContent());
+        MemberInfoEntity memberInfoEntity = MemberInfoMapper.mapToEntity(comment.getMemberInfo());
+        CommentEntity commentEntity = CommentMapper.mapToEntity(comment, memberInfoEntity);
 
         CommentEntity savedCommentEntity = commentJpaRepository.save(commentEntity);
 
@@ -51,8 +50,7 @@ class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort, Up
 
     @Override
     public CommentId updateComment(Comment comment) {
-        MemberInfo memberInfo = comment.getMemberInfo();
-        MemberInfoEntity memberInfoEntity = MemberInfoEntity.withId(memberInfo.getId().getValue(), memberInfo.getNickname(), memberInfo.getProfile().getUrl());
+        MemberInfoEntity memberInfoEntity = MemberInfoMapper.mapToEntity(comment.getMemberInfo());
 
         CommentEntity commentEntity = commentJpaRepository.save(CommentMapper.mapToEntityWithId(comment, memberInfoEntity));
 
