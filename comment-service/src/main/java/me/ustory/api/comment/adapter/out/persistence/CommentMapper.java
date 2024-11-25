@@ -1,10 +1,13 @@
 package me.ustory.api.comment.adapter.out.persistence;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.comment.domain.PaperId;
 
-public class CommentMapper {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+class CommentMapper {
 
     public static CommentEntity mapToEntity(Comment comment, MemberInfoEntity memberInfoEntity) {
         return CommentEntity.withoutId(comment.getPaperId().getValue(), memberInfoEntity, comment.getContent());

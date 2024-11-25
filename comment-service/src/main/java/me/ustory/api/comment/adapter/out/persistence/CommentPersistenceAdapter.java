@@ -8,7 +8,6 @@ import me.ustory.api.comment.application.port.out.GetCommentPort;
 import me.ustory.api.comment.application.port.out.UpdateCommentPort;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
-import me.ustory.api.comment.domain.MemberInfo;
 import me.ustory.api.comment.domain.PaperId;
 import org.springframework.stereotype.Component;
 
