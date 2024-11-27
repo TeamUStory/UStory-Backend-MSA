@@ -1,8 +1,8 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
-import me.ustory.api.common.kafka.CommentKafkaRequest;
-import me.ustory.api.common.kafka.UnlockPaperNotificationDTO;
+import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
+import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
@@ -31,7 +31,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -117,8 +116,8 @@ class UpdatePaperServiceTest {
     @Test
     void unlockPaper() {
         // given
-        CommentKafkaRequest request = new CommentKafkaRequest(1L, 2);
-        UnlockPaperCommand command = UnlockPaperCommand.of(request);
+        CreateCommentKafkaDTO dto = new CreateCommentKafkaDTO(1L, 2);
+        UnlockPaperCommand command = UnlockPaperCommand.of(dto);
 
         Paper paper = getPaper(PaperId.of(1L));
         given(getPaperPort.findById(command.paperId())).willReturn(paper);
@@ -128,15 +127,15 @@ class UpdatePaperServiceTest {
 
         // then
         verify(updatePaperPort).updatePaper(any(Paper.class));
-        verify(sendUnlockPaperNotificationPort).sendUnlockPaperNotification(any(UnlockPaperNotificationDTO.class));
+        verify(sendUnlockPaperNotificationPort).sendUnlockPaperNotification(any(UnlockPaperNotificationKafkaDTO.class));
     }
 
     @DisplayName("잠금 해제 조건에 해당하지 않으면, 잠금 해제 및 업데이트 로직을 수행하지 않는다.")
     @Test
     void unlockPaperWithInvalidCommentCount() {
         // given
-        CommentKafkaRequest request = new CommentKafkaRequest(1L, 1);
-        UnlockPaperCommand command = UnlockPaperCommand.of(request);
+        CreateCommentKafkaDTO dto = new CreateCommentKafkaDTO(1L, 1);
+        UnlockPaperCommand command = UnlockPaperCommand.of(dto);
 
         Paper paper = getPaper(PaperId.of(1L));
         given(getPaperPort.findById(command.paperId())).willReturn(paper);

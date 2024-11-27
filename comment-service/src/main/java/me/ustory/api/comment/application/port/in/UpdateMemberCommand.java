@@ -1,6 +1,6 @@
 package me.ustory.api.comment.application.port.in;
 
-import me.ustory.api.common.kafka.MemberKafkaResponse;
+import me.ustory.api.common.kafka.UpdateMemberKafkaDTO;
 import me.ustory.api.comment.domain.Image;
 import me.ustory.api.comment.domain.MemberId;
 
@@ -9,7 +9,7 @@ public record UpdateMemberCommand(
     String nickname,
     Image profile
 ) {
-    public static UpdateMemberCommand of(MemberKafkaResponse request) {
+    public static UpdateMemberCommand of(UpdateMemberKafkaDTO request) {
         return new UpdateMemberCommand(
             MemberId.of(request.memberId()),
             request.nickname(),

@@ -1,7 +1,7 @@
 package me.ustory.api.paper.adapter.out.kafka;
 
-import me.ustory.api.common.kafka.CreatePaperNotificationDTO;
-import me.ustory.api.common.kafka.UnlockPaperNotificationDTO;
+import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
+import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -18,7 +18,7 @@ import java.util.Map;
 public class KafkaProducerConfig {
 
     @Bean
-    public ProducerFactory<String, CreatePaperNotificationDTO> createPaperProducerFactory() {
+    public ProducerFactory<String, CreatePaperNotificationKafkaDTO> createPaperProducerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -29,12 +29,12 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, CreatePaperNotificationDTO> createPaperKafkaTemplate() {
+    public KafkaTemplate<String, CreatePaperNotificationKafkaDTO> createPaperKafkaTemplate() {
         return new KafkaTemplate<>(createPaperProducerFactory());
     }
 
     @Bean
-    public ProducerFactory<String, UnlockPaperNotificationDTO> unlockPaperProducerFactory() {
+    public ProducerFactory<String, UnlockPaperNotificationKafkaDTO> unlockPaperProducerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -45,7 +45,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, UnlockPaperNotificationDTO> unlockPaperKafkaTemplate() {
+    public KafkaTemplate<String, UnlockPaperNotificationKafkaDTO> unlockPaperKafkaTemplate() {
         return new KafkaTemplate<>(unlockPaperProducerFactory());
     }
 }

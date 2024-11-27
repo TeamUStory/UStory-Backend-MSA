@@ -1,6 +1,6 @@
 package me.ustory.api.paper.adapter.in.kafka;
 
-import me.ustory.api.common.kafka.CommentKafkaRequest;
+import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
 import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
 import me.ustory.api.paper.application.port.in.UnlockPaperUseCase;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
@@ -27,10 +26,10 @@ class CommentKafkaConsumerTest {
     @Test
     void listener() {
         // given
-        CommentKafkaRequest request = new CommentKafkaRequest(1L, 3);
+        CreateCommentKafkaDTO dto = new CreateCommentKafkaDTO(1L, 3);
 
         // when
-        commentKafkaConsumer.listener(request);
+        commentKafkaConsumer.listener(dto);
 
         // then
         verify(unlockPaperUseCase).unlockPaper(any(UnlockPaperCommand.class));
