@@ -84,6 +84,48 @@ class CommentControllerTest {
         verify(createCommentUseCase).createComment(command);
     }
 
+    @DisplayName("댓글을 작성할 때 댓글 내용은 필수 값이다.")
+    @Test
+    void createCommentWithoutContent() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long paperId = 1L;
+        String content = " ";
+
+        CreateCommentRequest request = new CreateCommentRequest(paperId, content);
+
+        // when & then
+        mockMvc.perform(post("/api/comments")
+                .param("memberId", String.valueOf(memberId))
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errorCode").value("V003"))
+            .andExpect(jsonPath("$.message").value("파라미터 값이 잘못되었습니다."))
+            .andExpect(jsonPath("$.detailMessage").value("댓글 내용은 필수 값 입니다."));
+    }
+
+    @DisplayName("댓글을 작성할 때 PaperId는 필수 값이다.")
+    @Test
+    void createCommentWithoutPaperId() throws Exception {
+        // given
+        Long memberId = 1L;
+        Long paperId = null;
+        String content = "댓글";
+
+        CreateCommentRequest request = new CreateCommentRequest(paperId, content);
+
+        // when & then
+        mockMvc.perform(post("/api/comments")
+                .param("memberId", String.valueOf(memberId))
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errorCode").value("V003"))
+            .andExpect(jsonPath("$.message").value("파라미터 값이 잘못되었습니다."))
+            .andExpect(jsonPath("$.detailMessage").value("Paper Id는 필수 값 입니다."));
+    }
+
     @DisplayName("댓글을 Id로 불러온다.")
     @Test
     void getComment() throws Exception {
@@ -110,6 +152,21 @@ class CommentControllerTest {
             .andExpect(jsonPath("$.data.nickname").value(nickname))
             .andExpect(jsonPath("$.data.profileImageUrl").value(profileImage.getUrl()))
             .andExpect(jsonPath("$.data.createdAt").value(createdAt.toLocalDate().toString()));
+    }
+
+    @DisplayName("댓글을 Id로 불러올 때, 댓글 Id의 자료형은 숫자이다.")
+    @Test
+    void getCommentInvalidateCommentId() throws Exception {
+        // given
+        String commentId = "1L";
+
+        // when & then
+        mockMvc.perform(get("/api/comments/{commentId}", commentId)
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errorCode").value("V003"))
+            .andExpect(jsonPath("$.message").value("파라미터 값이 잘못되었습니다."))
+            .andExpect(jsonPath("$.detailMessage").value("파라미터의 타입이 일치하지 않습니다."));
     }
 
     @DisplayName("Paper에 속한 모든 댓글을 불러온다.")
@@ -158,6 +215,26 @@ class CommentControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data.commentId").value(commentId));
+    }
+
+    @DisplayName("댓글을 수정할 때, 댓글 내용은 필수 값입니다.")
+    @Test
+    void updateCommentWithoutContent() throws Exception {
+        // given
+        Long commentId = 1L;
+        Long memberId = 1L;
+        String content = " ";
+        UpdateCommentRequest request = new UpdateCommentRequest(content);
+
+        // when & then
+        mockMvc.perform(put("/api/comments/{commentId}", commentId)
+                .param("memberId", String.valueOf(memberId))
+                .content(objectMapper.writeValueAsString(request))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.errorCode").value("V003"))
+            .andExpect(jsonPath("$.message").value("파라미터 값이 잘못되었습니다."))
+            .andExpect(jsonPath("$.detailMessage").value("댓글 내용은 필수 값 입니다."));
     }
 
     @DisplayName("댓글을 삭제한다.")
