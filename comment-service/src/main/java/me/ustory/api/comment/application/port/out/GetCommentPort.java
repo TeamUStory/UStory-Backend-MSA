@@ -9,4 +9,5 @@ import java.util.List;
 public interface GetCommentPort {
     Comment getComment(CommentId id);
     List<Comment> getComments(PaperId id);
+    int getCommentCount(PaperId id);
 }

@@ -48,6 +48,17 @@ class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort, Up
     }
 
     @Override
+    public int getCommentCount(PaperId id) {
+        Long count = queryFactory
+            .select(commentEntity.count())
+            .from(commentEntity)
+            .where(commentEntity.paperId.eq(id.getValue()))
+            .fetchOne();
+
+        return count != null ? count.intValue() : 0;
+    }
+
+    @Override
     public CommentId updateComment(Comment comment) {
         MemberInfoEntity memberInfoEntity = MemberInfoMapper.mapToEntity(comment.getMemberInfo());
 
