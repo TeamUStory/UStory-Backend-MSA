@@ -98,7 +98,7 @@ class CommentPersistenceAdapterTest {
         int commentCount = commentPersistenceAdapter.getCommentCount(paperId);
 
         // then
-        assertThat(commentCount).isEqualTo(3);
+        assertThat(commentCount).isEqualTo(1);
     }
 
     @DisplayName("댓글을 수정한다.")

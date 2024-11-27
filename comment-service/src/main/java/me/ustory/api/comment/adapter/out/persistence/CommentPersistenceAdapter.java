@@ -50,7 +50,7 @@ class CommentPersistenceAdapter implements CreateCommentPort, GetCommentPort, Up
     @Override
     public int getCommentCount(PaperId id) {
         Long count = queryFactory
-            .select(commentEntity.count())
+            .select(commentEntity.memberInfo.id.countDistinct())
             .from(commentEntity)
             .where(commentEntity.paperId.eq(id.getValue()))
             .fetchOne();
