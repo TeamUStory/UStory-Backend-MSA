@@ -27,6 +27,10 @@ public class DiaryInfo {
         return memberInfo.isIndividual();
     }
 
+    public boolean isSameMemberCount(int memberCount) {
+        return memberInfo.getMemberIds().size() == memberCount;
+    }
+
     private DiaryInfo(DiaryId id, MemberInfo memberInfo, String name, Image image, String color, Image marker) {
         this.id = id;
         this.memberInfo = memberInfo;

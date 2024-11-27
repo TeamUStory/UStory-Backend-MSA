@@ -1,7 +1,9 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
+import me.ustory.api.common.kafka.CommentKafkaRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
+import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
 import me.ustory.api.paper.application.port.out.UpdatePaperPort;
@@ -30,6 +32,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -80,7 +83,7 @@ class UpdatePaperServiceTest {
     void updatePaperWithNotContainingMember() {
         // given
         PaperId paperId = PaperId.of(1L);
-        Long userId = 2L;
+        Long userId = 3L;
         UpdatePaperCommand command = createUpdatePaperCommand(paperId, userId);
         Paper expectedPaper = getPaper(paperId);
         expectedPaper.changeBasicInfo(PaperBasicInfo.of(
@@ -103,6 +106,40 @@ class UpdatePaperServiceTest {
             .hasMessage("해당 다이어리의 페이퍼 수정 권한이 없습니다.");
 
         verify(getPaperPort).findById(paperId);
+    }
+
+    @DisplayName("잠금 해제 조건에 해당하면, 잠금을 해제하고 Paper를 업데이트한다.")
+    @Test
+    void unlockPaper() {
+        // given
+        CommentKafkaRequest request = new CommentKafkaRequest(1L, 2);
+        UnlockPaperCommand command = UnlockPaperCommand.of(request);
+
+        Paper paper = getPaper(PaperId.of(1L));
+        given(getPaperPort.findById(command.paperId())).willReturn(paper);
+
+        // when
+        updatePaperService.unlockPaper(command);
+
+        // then
+        verify(updatePaperPort).updatePaper(any(Paper.class));
+    }
+
+    @DisplayName("잠금 해제 조건에 해당하지 않으면, 잠금 해제 및 업데이트 로직을 수행하지 않는다.")
+    @Test
+    void unlockPaperWithInvalidCommentCount() {
+        // given
+        CommentKafkaRequest request = new CommentKafkaRequest(1L, 1);
+        UnlockPaperCommand command = UnlockPaperCommand.of(request);
+
+        Paper paper = getPaper(PaperId.of(1L));
+        given(getPaperPort.findById(command.paperId())).willReturn(paper);
+
+        // when
+        updatePaperService.unlockPaper(command);
+
+        // then
+        verify(updatePaperPort, never()).updatePaper(any(Paper.class));
     }
 
     private UpdatePaperCommand createUpdatePaperCommand(PaperId paperId, Long userId) {
@@ -132,7 +169,7 @@ class UpdatePaperServiceTest {
             .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
                 DiaryId.of(1L),
-                MemberInfo.of(List.of(MemberId.of(1L))),
+                MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L))),
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",
                 "#000000",

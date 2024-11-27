@@ -2,6 +2,8 @@ package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.exception.client.ForbiddenException;
+import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
+import me.ustory.api.paper.application.port.in.UnlockPaperUseCase;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.out.PaperConcurrencyLockPort;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class UpdatePaperService {
+class UpdatePaperService implements UnlockPaperUseCase {
 
     private final GetPaperPort getPaperPort;
     private final UpdatePaperPort updatePaperPort;
@@ -49,4 +51,13 @@ class UpdatePaperService {
         return updatePaperPort.updatePaper(paper);
     }
 
+    @Override
+    public void unlockPaper(UnlockPaperCommand command) {
+        Paper paper = getPaperPort.findById(command.paperId());
+
+        if (paper.isCanUnlock(command.commentCount())) {
+            paper.unLock();
+            updatePaperPort.updatePaper(paper);
+        }
+    }
 }

@@ -43,6 +43,10 @@ public class Paper {
         this.locked = false;
     }
 
+    public boolean isCanUnlock(int memberCount) {
+        return diary.isSameMemberCount(memberCount);
+    }
+
     public String getTitle() {
         return basicInfo.getTitle();
     }
