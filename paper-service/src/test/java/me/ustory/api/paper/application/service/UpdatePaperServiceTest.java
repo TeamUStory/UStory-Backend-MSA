@@ -2,10 +2,12 @@ package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.common.kafka.CommentKafkaRequest;
+import me.ustory.api.common.kafka.UnlockPaperNotificationDTO;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
+import me.ustory.api.paper.application.port.out.SendUnlockPaperNotificationPort;
 import me.ustory.api.paper.application.port.out.UpdatePaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
@@ -43,6 +45,9 @@ class UpdatePaperServiceTest {
 
     @Mock
     private UpdatePaperPort updatePaperPort;
+
+    @Mock
+    private SendUnlockPaperNotificationPort sendUnlockPaperNotificationPort;
 
     @InjectMocks
     private UpdatePaperService updatePaperService;
@@ -123,6 +128,7 @@ class UpdatePaperServiceTest {
 
         // then
         verify(updatePaperPort).updatePaper(any(Paper.class));
+        verify(sendUnlockPaperNotificationPort).sendUnlockPaperNotification(any(UnlockPaperNotificationDTO.class));
     }
 
     @DisplayName("잠금 해제 조건에 해당하지 않으면, 잠금 해제 및 업데이트 로직을 수행하지 않는다.")

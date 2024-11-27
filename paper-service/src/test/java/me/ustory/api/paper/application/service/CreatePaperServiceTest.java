@@ -1,15 +1,18 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
+import me.ustory.api.common.kafka.CreatePaperNotificationDTO;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
 import me.ustory.api.paper.application.port.out.CreatePaperPort;
 import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
+import me.ustory.api.paper.application.port.out.SendCreatePaperNotificationPort;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.MemberInfo;
 import me.ustory.api.paper.domain.Paper;
+import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,6 +40,9 @@ class CreatePaperServiceTest {
     @Mock
     private GetDiaryFeignPort getDiaryFeignPort;
 
+    @Mock
+    private SendCreatePaperNotificationPort sendCreatePaperNotificationPort;
+
     @InjectMocks
     private CreatePaperService createPaperService;
 
@@ -55,6 +61,8 @@ class CreatePaperServiceTest {
         given(getDiaryFeignPort.getDiaryById(1L)).willReturn(diaryInfo);
         given(createDiaryPort.createDiary(any(DiaryInfo.class))).willReturn(diaryInfo);
 
+        given(createPaperPort.createPaper(any(Paper.class))).willReturn(PaperId.of(1L));
+
         // when
         createPaperService.createPaper(expectedCommand);
 
@@ -63,6 +71,8 @@ class CreatePaperServiceTest {
 
         verify(createDiaryPort).createDiary(any(DiaryInfo.class));
         verify(createPaperPort).createPaper(any(Paper.class));
+
+        verify(sendCreatePaperNotificationPort).sendCreatePaperNotification(any(CreatePaperNotificationDTO.class));
     }
 
     @DisplayName("다이어리에 속하지 않은 사람은 Paper를 작성할 수 없다.")
