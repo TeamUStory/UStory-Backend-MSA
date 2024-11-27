@@ -1,6 +1,6 @@
 package me.ustory.api.paper.adapter.out.kafka;
 
-import me.ustory.api.common.kafka.UnlockPaperNotificationDTO;
+import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +11,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
@@ -19,7 +18,7 @@ import static org.mockito.Mockito.verify;
 class UnlockPaperNotificationKafkaProducerTest {
 
     @Mock
-    private KafkaTemplate<String, UnlockPaperNotificationDTO> unlockPaperKafkaTemplate;
+    private KafkaTemplate<String, UnlockPaperNotificationKafkaDTO> unlockPaperKafkaTemplate;
 
     @InjectMocks
     private UnlockPaperNotificationKafkaProducer unlockPaperNotificationKafkaProducer;
@@ -28,7 +27,7 @@ class UnlockPaperNotificationKafkaProducerTest {
     @Test
     void sendUnlockPaperNotification() {
         // given
-        UnlockPaperNotificationDTO dto = new UnlockPaperNotificationDTO(1L, List.of(2L, 3L));
+        UnlockPaperNotificationKafkaDTO dto = new UnlockPaperNotificationKafkaDTO(1L, List.of(2L, 3L));
 
         // when
         unlockPaperNotificationKafkaProducer.sendUnlockPaperNotification(dto);

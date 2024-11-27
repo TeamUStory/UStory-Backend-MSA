@@ -1,7 +1,7 @@
 package me.ustory.api.paper.application.port.out;
 
-import me.ustory.api.common.kafka.CreatePaperNotificationDTO;
+import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
 
 public interface SendCreatePaperNotificationPort {
-    void sendCreatePaperNotification(CreatePaperNotificationDTO dto);
+    void sendCreatePaperNotification(CreatePaperNotificationKafkaDTO dto);
 }

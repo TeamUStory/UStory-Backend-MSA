@@ -1,6 +1,6 @@
 package me.ustory.api.common.kafka;
 
-public record MemberKafkaResponse(
+public record UpdateMemberKafkaDTO(
     Long memberId,
     String nickname,
     String profileImageUrl

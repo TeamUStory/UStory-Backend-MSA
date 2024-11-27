@@ -1,7 +1,7 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
-import me.ustory.api.common.kafka.CreatePaperNotificationDTO;
+import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
 import me.ustory.api.paper.application.port.out.CreatePaperPort;
@@ -72,7 +72,7 @@ class CreatePaperServiceTest {
         verify(createDiaryPort).createDiary(any(DiaryInfo.class));
         verify(createPaperPort).createPaper(any(Paper.class));
 
-        verify(sendCreatePaperNotificationPort).sendCreatePaperNotification(any(CreatePaperNotificationDTO.class));
+        verify(sendCreatePaperNotificationPort).sendCreatePaperNotification(any(CreatePaperNotificationKafkaDTO.class));
     }
 
     @DisplayName("다이어리에 속하지 않은 사람은 Paper를 작성할 수 없다.")

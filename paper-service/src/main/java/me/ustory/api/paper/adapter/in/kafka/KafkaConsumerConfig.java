@@ -1,6 +1,6 @@
 package me.ustory.api.paper.adapter.in.kafka;
 
-import me.ustory.api.common.kafka.CommentKafkaRequest;
+import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class KafkaConsumerConfig {
 
     @Bean
-    public ConsumerFactory<String, CommentKafkaRequest> consumerFactory() {
+    public ConsumerFactory<String, CreateCommentKafkaDTO> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "paper-service");
@@ -27,13 +27,13 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(
             config,
             new StringDeserializer(),
-            new JsonDeserializer<>(CommentKafkaRequest.class)
+            new JsonDeserializer<>(CreateCommentKafkaDTO.class)
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, CommentKafkaRequest> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, CommentKafkaRequest> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, CreateCommentKafkaDTO> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, CreateCommentKafkaDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory());
 

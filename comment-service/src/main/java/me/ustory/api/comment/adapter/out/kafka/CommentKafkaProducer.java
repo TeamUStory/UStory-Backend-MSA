@@ -3,7 +3,7 @@ package me.ustory.api.comment.adapter.out.kafka;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.application.port.out.UnlockPaperPort;
 import me.ustory.api.comment.domain.PaperId;
-import me.ustory.api.common.kafka.CommentKafkaRequest;
+import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class CommentKafkaProducer implements UnlockPaperPort {
 
-    private final KafkaTemplate<String, CommentKafkaRequest> kafkaTemplate;
+    private final KafkaTemplate<String, CreateCommentKafkaDTO> kafkaTemplate;
 
     public void createdComment(PaperId paperId, int commentCount) {
-        kafkaTemplate.send("create-comment",new CommentKafkaRequest(paperId.getValue(), commentCount));
+        kafkaTemplate.send("create-comment",new CreateCommentKafkaDTO(paperId.getValue(), commentCount));
     }
 
 }

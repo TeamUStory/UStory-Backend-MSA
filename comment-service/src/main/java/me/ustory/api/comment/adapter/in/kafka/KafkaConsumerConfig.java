@@ -1,6 +1,6 @@
 package me.ustory.api.comment.adapter.in.kafka;
 
-import me.ustory.api.common.kafka.MemberKafkaResponse;
+import me.ustory.api.common.kafka.UpdateMemberKafkaDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class KafkaConsumerConfig {
 
     @Bean
-    public ConsumerFactory<String, MemberKafkaResponse> consumerFactory() {
+    public ConsumerFactory<String, UpdateMemberKafkaDTO> consumerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -28,13 +28,13 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(
             config,
             new StringDeserializer(),
-            new JsonDeserializer<>(MemberKafkaResponse.class)
+            new JsonDeserializer<>(UpdateMemberKafkaDTO.class)
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, MemberKafkaResponse> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, MemberKafkaResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, UpdateMemberKafkaDTO> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, UpdateMemberKafkaDTO> factory = new ConcurrentKafkaListenerContainerFactory<>();
 
         factory.setConsumerFactory(consumerFactory());
 

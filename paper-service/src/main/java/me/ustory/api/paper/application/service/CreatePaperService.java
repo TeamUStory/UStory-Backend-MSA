@@ -2,7 +2,7 @@ package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.exception.client.ForbiddenException;
-import me.ustory.api.common.kafka.CreatePaperNotificationDTO;
+import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
@@ -68,7 +68,7 @@ class CreatePaperService implements CreatePaperUseCase {
             .filter(memberId -> memberId.equals(command.writerId()))
             .toList();
 
-        CreatePaperNotificationDTO notificationDto = new CreatePaperNotificationDTO(savedPaperId.getId(), memberIds);
+        CreatePaperNotificationKafkaDTO notificationDto = new CreatePaperNotificationKafkaDTO(savedPaperId.getId(), memberIds);
 
         sendCreatePaperNotificationPort.sendCreatePaperNotification(notificationDto);
 

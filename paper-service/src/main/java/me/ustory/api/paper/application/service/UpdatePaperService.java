@@ -2,11 +2,10 @@ package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.exception.client.ForbiddenException;
-import me.ustory.api.common.kafka.UnlockPaperNotificationDTO;
+import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
 import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
 import me.ustory.api.paper.application.port.in.UnlockPaperUseCase;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
-import me.ustory.api.paper.application.port.out.PaperConcurrencyLockPort;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
 import me.ustory.api.paper.application.port.out.SendUnlockPaperNotificationPort;
 import me.ustory.api.paper.application.port.out.UpdatePaperPort;
@@ -68,7 +67,7 @@ class UpdatePaperService implements UnlockPaperUseCase {
                 .map(MemberId::getValue)
                 .toList();
 
-            UnlockPaperNotificationDTO notificationDto = new UnlockPaperNotificationDTO(paper.getPaperId().getId(), memberIds);
+            UnlockPaperNotificationKafkaDTO notificationDto = new UnlockPaperNotificationKafkaDTO(paper.getPaperId().getId(), memberIds);
 
             sendUnlockPaperNotificationPort.sendUnlockPaperNotification(notificationDto);
         }

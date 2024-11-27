@@ -1,6 +1,6 @@
 package me.ustory.api.comment.adapter.out.kafka;
 
-import me.ustory.api.common.kafka.CommentKafkaRequest;
+import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import java.util.Map;
 public class KafkaProducerConfig {
 
     @Bean
-    public ProducerFactory<String, CommentKafkaRequest> producerFactory() {
+    public ProducerFactory<String, CreateCommentKafkaDTO> producerFactory() {
         Map<String, Object> config = new HashMap<>();
 
         config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
@@ -28,7 +28,7 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public KafkaTemplate<String, CommentKafkaRequest> kafkaTemplate() {
+    public KafkaTemplate<String, CreateCommentKafkaDTO> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
