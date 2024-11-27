@@ -23,6 +23,10 @@ public class DiaryInfo {
         return new DiaryInfo(id, memberInfo, name, Image.of(imageUrl), color, Image.of(markerUrl));
     }
 
+    public static DiaryInfo of(DiaryId id, MemberInfo memberInfo, String name, Image imageUrl, String color, Image markerUrl) {
+        return new DiaryInfo(id, memberInfo, name, imageUrl, color, markerUrl);
+    }
+
     public boolean isIndividualDiary() {
         return memberInfo.isIndividual();
     }

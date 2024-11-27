@@ -1,13 +1,19 @@
 package me.ustory.api.paper.adapter.out.persistence;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
+import me.ustory.api.paper.application.port.out.GetDiaryPort;
+import me.ustory.api.paper.application.port.out.UpdateDiaryPort;
+import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
-class DiaryInfoPersistenceAdapter implements CreateDiaryPort {
+class DiaryInfoPersistenceAdapter implements CreateDiaryPort, GetDiaryPort, UpdateDiaryPort {
 
     private final DiaryInfoJpaRepository diaryInfoJpaRepository;
 
@@ -16,4 +22,15 @@ class DiaryInfoPersistenceAdapter implements CreateDiaryPort {
         return DiaryInfoMapper.mapToDomain(diaryInfoJpaRepository.save(DiaryInfoMapper.mapToEntity(diaryInfo)));
     }
 
+    @Override
+    public boolean isExistDiary(DiaryId diaryId) {
+        Optional<DiaryInfoEntity> diaryInfoEntity = diaryInfoJpaRepository.findById(diaryId.getValue());
+        return diaryInfoEntity.isPresent();
+    }
+
+    @Override
+    @Transactional
+    public void updateDiary(DiaryInfo diaryInfo) {
+        diaryInfoJpaRepository.save(DiaryInfoMapper.mapToEntity(diaryInfo));
+    }
 }
