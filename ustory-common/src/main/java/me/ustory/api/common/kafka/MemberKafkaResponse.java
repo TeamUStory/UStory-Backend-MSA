@@ -1,4 +1,4 @@
-package me.ustory.api.comment.adapter.in.kafka;
+package me.ustory.api.common.kafka;
 
 public record MemberKafkaResponse(
     Long memberId,

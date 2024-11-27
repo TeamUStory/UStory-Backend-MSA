@@ -1,6 +1,6 @@
 package me.ustory.api.comment.application.port.in;
 
-import me.ustory.api.comment.adapter.in.kafka.MemberKafkaResponse;
+import me.ustory.api.common.kafka.MemberKafkaResponse;
 import me.ustory.api.comment.domain.Image;
 import me.ustory.api.comment.domain.MemberId;
 
