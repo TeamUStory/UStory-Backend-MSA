@@ -25,6 +25,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.UnsatisfiedServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @RequiredArgsConstructor
@@ -41,8 +42,6 @@ public class GlobalExceptionHandler {
     private static final String METHOD_NOT_ALLOWED_LOG_MESSAGE = "Method not allowed: ";
     private static final String CONFLICT_LOG_MESSAGE = "Conflict error occurred: ";
     private static final String UNSUPPORTED_MEDIA_TYPE_LOG_MESSAGE = "Unsupported Media Type error occurred: ";
-    private static final String INTERNAL_SERVER_LOG_MESSAGE = "Internal server error occurred: ";
-    private static final String METHOD_NOT_ALLOWED_MESSAGE = "Method not allowed. Allowed method: %s";
 
     /**
      * Validation Exception
@@ -53,6 +52,7 @@ public class GlobalExceptionHandler {
         ValidationException.class,
         UnsatisfiedServletRequestParameterException.class,
         MethodArgumentNotValidException.class,
+        MethodArgumentTypeMismatchException.class,
         InvalidTokenException.class
     })
     public ResponseEntity<ApiResponse<?>> handleValidationException(Exception ex) {
@@ -63,19 +63,29 @@ public class GlobalExceptionHandler {
 
         if (ex instanceof UnsatisfiedServletRequestParameterException) {
             customException = new ValidationException(ex.getMessage(), ErrorCode.MISSING_REQUIRED_PARAMETER);
+        } else if (ex instanceof MethodArgumentNotValidException methodArgumentNotValidException) {
+            String detailMessage = methodArgumentNotValidException.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .map(error -> error.getDefaultMessage())
+                .findFirst()
+                .orElse("유효성 검사 실패");
 
-        } else if (ex instanceof MethodArgumentNotValidException) {
-            customException = new ValidationException(ex.getMessage(), ErrorCode.VALIDATION_PARAMETER_EXCEPTION);
-
+            customException = new ValidationException(detailMessage, ErrorCode.VALIDATION_PARAMETER_EXCEPTION);
+        } else if (ex instanceof MethodArgumentTypeMismatchException) {
+            customException = new ValidationException("파라미터의 타입이 일치하지 않습니다.", ErrorCode.VALIDATION_PARAMETER_EXCEPTION);
         } else if (ex instanceof InvalidTokenException) {
             customException = new ValidationException(ex.getMessage(), ErrorCode.INVALID_TOKEN_EXCEPTION);
-
         } else {
             customException = (ValidationException) ex;
         }
 
         return new ResponseEntity<>(ErrorResponse.of(customException), HttpStatus.BAD_REQUEST);
     }
+
+    private static final String INTERNAL_SERVER_LOG_MESSAGE = "Internal server error occurred: ";
+
+    private static final String METHOD_NOT_ALLOWED_MESSAGE = "Method not allowed. Allowed method: %s";
 
     /**
      * Unauthorized Exception
