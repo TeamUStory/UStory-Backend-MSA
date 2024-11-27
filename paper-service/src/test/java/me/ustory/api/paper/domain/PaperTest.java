@@ -50,6 +50,21 @@ class PaperTest {
         assertThat(paper.isLocked()).isFalse();
     }
 
+    @DisplayName("Paper의 잠금을 해제할 수 있는지 확인한다.")
+    @Test
+    void isCanUnlock() {
+        // given
+        DiaryInfo diaryInfo = createDiaryInfo(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L)));
+        Paper paper = createPaper(diaryInfo);
+
+        int memberCount = 3;
+        int invalidMemberCount = 2;
+
+        // when & then
+        assertThat(paper.isCanUnlock(memberCount)).isTrue();
+        assertThat(paper.isCanUnlock(invalidMemberCount)).isFalse();
+    }
+
     private Paper createPaper(DiaryInfo diaryInfo) {
 
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(

@@ -2,11 +2,13 @@ package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.exception.client.ForbiddenException;
+import me.ustory.api.common.kafka.CreatePaperNotificationDTO;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.out.CreateDiaryPort;
 import me.ustory.api.paper.application.port.out.CreatePaperPort;
 import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
+import me.ustory.api.paper.application.port.out.SendCreatePaperNotificationPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Image;
@@ -18,6 +20,8 @@ import me.ustory.api.paper.domain.PaperDetail;
 import me.ustory.api.paper.domain.PaperId;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 class CreatePaperService implements CreatePaperUseCase {
@@ -25,6 +29,7 @@ class CreatePaperService implements CreatePaperUseCase {
     private final CreatePaperPort createPaperPort;
     private final CreateDiaryPort createDiaryPort;
     private final GetDiaryFeignPort getDiaryFeignPort;
+    private final SendCreatePaperNotificationPort sendCreatePaperNotificationPort;
 
     @Override
     public PaperId createPaper(CreatePaperCommand command) {
@@ -56,7 +61,18 @@ class CreatePaperService implements CreatePaperUseCase {
             .diary(savedDiaryInfo)
             .build();
 
-        return createPaperPort.createPaper(paper);
+        PaperId savedPaperId = createPaperPort.createPaper(paper);
+
+        List<Long> memberIds = paper.getDiary().getMemberInfo().getMemberIds().stream()
+            .map(MemberId::getValue)
+            .filter(memberId -> memberId.equals(command.writerId()))
+            .toList();
+
+        CreatePaperNotificationDTO notificationDto = new CreatePaperNotificationDTO(savedPaperId.getId(), memberIds);
+
+        sendCreatePaperNotificationPort.sendCreatePaperNotification(notificationDto);
+
+        return savedPaperId;
     }
 
 }

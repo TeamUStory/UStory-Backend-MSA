@@ -2,9 +2,13 @@ package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.exception.client.ForbiddenException;
+import me.ustory.api.common.kafka.UnlockPaperNotificationDTO;
+import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
+import me.ustory.api.paper.application.port.in.UnlockPaperUseCase;
 import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
 import me.ustory.api.paper.application.port.out.PaperConcurrencyLockPort;
 import me.ustory.api.paper.application.port.out.GetPaperPort;
+import me.ustory.api.paper.application.port.out.SendUnlockPaperNotificationPort;
 import me.ustory.api.paper.application.port.out.UpdatePaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.Image;
@@ -16,12 +20,15 @@ import me.ustory.api.paper.domain.PaperDetail;
 import me.ustory.api.paper.domain.PaperId;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
-class UpdatePaperService {
+class UpdatePaperService implements UnlockPaperUseCase {
 
     private final GetPaperPort getPaperPort;
     private final UpdatePaperPort updatePaperPort;
+    private final SendUnlockPaperNotificationPort sendUnlockPaperNotificationPort;
 
     public PaperId updatePaper(UpdatePaperCommand command) {
         Paper paper = getPaperPort.findById(command.paperId());
@@ -49,4 +56,21 @@ class UpdatePaperService {
         return updatePaperPort.updatePaper(paper);
     }
 
+    @Override
+    public void unlockPaper(UnlockPaperCommand command) {
+        Paper paper = getPaperPort.findById(command.paperId());
+
+        if (paper.isCanUnlock(command.commentCount())) {
+            paper.unLock();
+            updatePaperPort.updatePaper(paper);
+
+            List<Long> memberIds = paper.getDiary().getMemberInfo().getMemberIds().stream()
+                .map(MemberId::getValue)
+                .toList();
+
+            UnlockPaperNotificationDTO notificationDto = new UnlockPaperNotificationDTO(paper.getPaperId().getId(), memberIds);
+
+            sendUnlockPaperNotificationPort.sendUnlockPaperNotification(notificationDto);
+        }
+    }
 }

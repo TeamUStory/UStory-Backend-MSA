@@ -48,6 +48,69 @@ class DiaryInfoPersistenceAdapterTest {
         assertThat(diaryInfoEntity.getMarkerUrl()).isEqualTo(diaryInfo.getMarker().getUrl());
     }
 
+    @DisplayName("저장된 Diary인지 확인한다.")
+    @Test
+    void isExistDiary() {
+        // given
+        Long diaryId = 1L;
+
+        DiaryInfoEntity diaryInfoEntity = DiaryInfoEntity.of(
+            diaryId,
+            MembersInfoEntity.of(List.of(1L, 2L)),
+            "다이어리명",
+            "https://www.example.com/다이어리이미지.png",
+            "#00000",
+            "https://www.example.com/마커이미지.png"
+        );
+
+        diaryInfoJpaRepository.save(diaryInfoEntity);
+
+        // when
+        boolean result = diaryInfoPersistenceAdapter.isExistDiary(DiaryId.of(diaryId));
+        boolean invalidResult = diaryInfoPersistenceAdapter.isExistDiary(DiaryId.of(2L));
+
+        // then
+        assertThat(result).isTrue();
+        assertThat(invalidResult).isFalse();
+    }
+
+    @DisplayName("Diary Info를 업데이트한다.")
+    @Test
+    void updateDiaryInfo() {
+        // given
+        Long diaryId = 1L;
+        DiaryInfoEntity diaryInfoEntity = DiaryInfoEntity.of(
+            diaryId,
+            MembersInfoEntity.of(List.of(1L, 2L)),
+            "다이어리명",
+            "https://www.example.com/다이어리이미지.png",
+            "#00000",
+            "https://www.example.com/마커이미지.png"
+        );
+
+        diaryInfoJpaRepository.save(diaryInfoEntity);
+
+        DiaryInfo expectedDiaryInfo = DiaryInfo.of(
+            DiaryId.of(diaryId),
+            MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
+            "다이어리명 변경",
+            "https://www.example.com/다이어리이미지변경.png",
+            "#00001",
+            "https://www.example.com/마커이미지변경.png"
+        );
+
+        // when
+        diaryInfoPersistenceAdapter.updateDiary(expectedDiaryInfo);
+
+        // then
+        DiaryInfoEntity updatedDiaryInfoEntity = diaryInfoJpaRepository.findById(diaryId).orElseThrow();
+
+        assertThat(updatedDiaryInfoEntity.getName()).isEqualTo(expectedDiaryInfo.getName());
+        assertThat(updatedDiaryInfoEntity.getImageUrl()).isEqualTo(expectedDiaryInfo.getImage().getUrl());
+        assertThat(updatedDiaryInfoEntity.getColor()).isEqualTo(expectedDiaryInfo.getColor());
+        assertThat(updatedDiaryInfoEntity.getMarkerUrl()).isEqualTo(expectedDiaryInfo.getMarker().getUrl());
+    }
+
     private DiaryInfo createDiaryInfo(Long diaryId) {
         return DiaryInfo.of(
             DiaryId.of(diaryId),

@@ -3,6 +3,7 @@ package me.ustory.api.comment.adapter.out.kafka;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.application.port.out.UnlockPaperPort;
 import me.ustory.api.comment.domain.PaperId;
+import me.ustory.api.common.kafka.CommentKafkaRequest;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
