@@ -87,6 +87,20 @@ class CommentPersistenceAdapterTest {
         assertThat(comments.get(2).getPaperId()).isEqualTo(paperId);
     }
 
+    @DisplayName("Paper에 속한 모든 댓글 개수를 불러온다.")
+    @Sql("CommentPersistenceAdapterTest.sql")
+    @Test
+    void getCommentCountByPaperId() {
+        // given
+        PaperId paperId = PaperId.of(1L);
+
+        // when
+        int commentCount = commentPersistenceAdapter.getCommentCount(paperId);
+
+        // then
+        assertThat(commentCount).isEqualTo(1);
+    }
+
     @DisplayName("댓글을 수정한다.")
     @Sql("CommentPersistenceAdapterTest.sql")
     @Test

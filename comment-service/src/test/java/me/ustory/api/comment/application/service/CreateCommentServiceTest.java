@@ -2,7 +2,9 @@ package me.ustory.api.comment.application.service;
 
 import me.ustory.api.comment.application.port.in.CreateCommentCommand;
 import me.ustory.api.comment.application.port.out.CreateCommentPort;
+import me.ustory.api.comment.application.port.out.GetCommentPort;
 import me.ustory.api.comment.application.port.out.GetMemberFeignPort;
+import me.ustory.api.comment.application.port.out.UnlockPaperPort;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
 import me.ustory.api.comment.domain.Image;
@@ -31,6 +33,12 @@ class CreateCommentServiceTest {
     @Mock
     private CreateCommentPort createCommentPort;
 
+    @Mock
+    private GetCommentPort getCommentPort;
+
+    @Mock
+    private UnlockPaperPort unlockPaperPort;
+
     @InjectMocks
     private CreateCommentService createCommentService;
 
@@ -52,6 +60,9 @@ class CreateCommentServiceTest {
         CommentId commentId = CommentId.of(1L);
         given(createCommentPort.createComment(any(Comment.class))).willReturn(commentId);
 
+        int commentCount = 1;
+        given(getCommentPort.getCommentCount(PaperId.of(paperId))).willReturn(commentCount);
+
         // when
         CommentId createdCommentId = createCommentService.createComment(command);
 
@@ -60,5 +71,6 @@ class CreateCommentServiceTest {
 
         verify(getMemberFeignPort).getMemberInfoById(MemberId.of(memberId));
         verify(createCommentPort).createComment(any(Comment.class));
+        verify(unlockPaperPort).createdComment(PaperId.of(paperId), commentCount);
     }
 }
