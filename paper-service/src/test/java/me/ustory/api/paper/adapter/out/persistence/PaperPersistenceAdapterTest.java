@@ -4,7 +4,7 @@ import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
-import me.ustory.api.paper.domain.Image;
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.MemberInfo;

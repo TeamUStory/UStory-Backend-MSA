@@ -1,4 +1,4 @@
-package me.ustory.api.paper.domain;
+package me.ustory.api.common.vo;
 
 import java.util.Objects;
 

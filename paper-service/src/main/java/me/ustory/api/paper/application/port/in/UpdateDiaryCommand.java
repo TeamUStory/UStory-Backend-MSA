@@ -1,9 +1,9 @@
 package me.ustory.api.paper.application.port.in;
 
 import me.ustory.api.common.kafka.UpdateDiaryKafkaDTO;
-import me.ustory.api.paper.domain.Color;
+import me.ustory.api.common.vo.Color;
 import me.ustory.api.paper.domain.DiaryId;
-import me.ustory.api.paper.domain.Image;
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.MemberInfo;
 

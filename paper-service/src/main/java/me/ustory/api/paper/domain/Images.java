@@ -1,5 +1,7 @@
 package me.ustory.api.paper.domain;
 
+import me.ustory.api.common.vo.Image;
+
 import java.util.List;
 import java.util.Objects;
 

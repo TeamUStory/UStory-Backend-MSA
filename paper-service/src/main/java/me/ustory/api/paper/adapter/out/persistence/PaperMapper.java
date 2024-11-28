@@ -2,7 +2,7 @@ package me.ustory.api.paper.adapter.out.persistence;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import me.ustory.api.paper.domain.Image;
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;

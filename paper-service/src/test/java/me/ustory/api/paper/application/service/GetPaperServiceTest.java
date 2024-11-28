@@ -10,7 +10,7 @@ import me.ustory.api.paper.application.port.out.GetPaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
-import me.ustory.api.paper.domain.Image;
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.MemberInfo;
@@ -30,7 +30,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
