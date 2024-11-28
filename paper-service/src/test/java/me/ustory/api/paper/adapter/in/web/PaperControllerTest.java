@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
-import me.ustory.api.paper.adapter.in.web.response.GetPapersCountResponse;
 import me.ustory.api.paper.application.port.in.CreatePaperCommand;
 import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
 import me.ustory.api.paper.application.port.in.DeletePaperCommand;
@@ -139,8 +138,8 @@ class PaperControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.data.title").value(paper.getBasicInfo().getTitle()))
             .andExpect(jsonPath("$.data.thumbnailImageUrl").value(paper.getBasicInfo().getThumbnailImage().getUrl()))
-            .andExpect(jsonPath("$.data.imageUrls[0]").value(paper.getDetail().getImages().getImagesUrl().get(0)))
-            .andExpect(jsonPath("$.data.imageUrls[1]").value(paper.getDetail().getImages().getImagesUrl().get(1)))
+            .andExpect(jsonPath("$.data.imageUrls[0]").value(paper.getDetail().getImages().getImageUrls().get(0)))
+            .andExpect(jsonPath("$.data.imageUrls[1]").value(paper.getDetail().getImages().getImageUrls().get(1)))
             .andExpect(jsonPath("$.data.visitedAt").value(paper.getBasicInfo().getVisitedAt().toString()))
             .andExpect(jsonPath("$.data.store").value(paper.getBasicInfo().getStore()))
             .andExpect(jsonPath("$.data.city").value(paper.getDetail().getAddress().getCity()))
