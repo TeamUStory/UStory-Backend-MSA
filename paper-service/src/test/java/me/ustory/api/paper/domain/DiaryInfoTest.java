@@ -22,7 +22,7 @@ class DiaryInfoTest {
             individualMemberInfo,
             "다이어리이름",
             "https://www.example.com/다이어리이미지.png",
-            "#00000",
+            "#000000",
             "https://www.example.com/마크업이미지.png"
         );
         DiaryInfo diaryInfo = DiaryInfo.of(
@@ -30,7 +30,7 @@ class DiaryInfoTest {
             memberInfo,
             "다이어리이름",
             "https://www.example.com/다이어리이미지.png",
-            "#00000",
+            "#000000",
             "https://www.example.com/마크업이미지.png"
         );
 
@@ -49,7 +49,7 @@ class DiaryInfoTest {
             memberInfo,
             "다이어리이름",
             "https://www.example.com/다이어리이미지.png",
-            "#00000",
+            "#000000",
             "https://www.example.com/마크업이미지.png"
         );
 

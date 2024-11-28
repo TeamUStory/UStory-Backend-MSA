@@ -1,6 +1,7 @@
 package me.ustory.api.paper.application.port.in;
 
 import me.ustory.api.common.kafka.UpdateDiaryKafkaDTO;
+import me.ustory.api.paper.domain.Color;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.Image;
 import me.ustory.api.paper.domain.MemberId;
@@ -11,7 +12,7 @@ public record UpdateDiaryCommand(
     MemberInfo memberInfo,
     String name,
     Image image,
-    String color,
+    Color color,
     Image marker
 ) {
     public static UpdateDiaryCommand of(UpdateDiaryKafkaDTO dto) {
@@ -20,7 +21,7 @@ public record UpdateDiaryCommand(
             MemberInfo.of(dto.memberIds().stream().map(MemberId::of).toList()),
             dto.diaryName(),
             Image.of(dto.imageUrl()),
-            dto.color(),
+            Color.of(dto.color()),
             Image.of(dto.markerUrl())
         );
     }

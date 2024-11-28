@@ -18,7 +18,7 @@ class DiaryInfoMapper {
             mapToMembersInfoEntity(diaryInfo.getMemberInfo().getMemberIds()),
             diaryInfo.getName(),
             diaryInfo.getImage().getUrl(),
-            diaryInfo.getColor(),
+            diaryInfo.getColor().getValue(),
             diaryInfo.getMarker().getUrl()
         );
     }

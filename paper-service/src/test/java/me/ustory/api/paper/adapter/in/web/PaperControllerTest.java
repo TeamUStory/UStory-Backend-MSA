@@ -305,7 +305,7 @@ class PaperControllerTest {
             .andExpect(jsonPath("$.data[0].store").value(papers.get(0).getBasicInfo().getStore()))
             .andExpect(jsonPath("$.data[0].coordinateX").value(papers.get(0).getDetail().getAddress().getCoordinateXValue()))
             .andExpect(jsonPath("$.data[0].coordinateY").value(papers.get(0).getDetail().getAddress().getCoordinateYValue()))
-            .andExpect(jsonPath("$.data[0].diaryColor").value(papers.get(0).getDiary().getColor()))
+            .andExpect(jsonPath("$.data[0].diaryColor").value(papers.get(0).getDiary().getColor().getValue()))
             .andExpect(jsonPath("$.data[0].diaryImageUrl").value(papers.get(0).getDiary().getImage().getUrl()))
             .andExpect(jsonPath("$.data[0].diaryMarkerUrl").value(papers.get(0).getDiary().getMarker().getUrl()))
             .andExpect(jsonPath("$.data[1].paperId").value(papers.get(1).getPaperId().getId()))
@@ -314,7 +314,7 @@ class PaperControllerTest {
             .andExpect(jsonPath("$.data[1].store").value(papers.get(1).getBasicInfo().getStore()))
             .andExpect(jsonPath("$.data[1].coordinateX").value(papers.get(1).getDetail().getAddress().getCoordinateXValue()))
             .andExpect(jsonPath("$.data[1].coordinateY").value(papers.get(1).getDetail().getAddress().getCoordinateYValue()))
-            .andExpect(jsonPath("$.data[1].diaryColor").value(papers.get(1).getDiary().getColor()))
+            .andExpect(jsonPath("$.data[1].diaryColor").value(papers.get(1).getDiary().getColor().getValue()))
             .andExpect(jsonPath("$.data[1].diaryImageUrl").value(papers.get(1).getDiary().getImage().getUrl()))
             .andExpect(jsonPath("$.data[1].diaryMarkerUrl").value(papers.get(1).getDiary().getMarker().getUrl()));
     }

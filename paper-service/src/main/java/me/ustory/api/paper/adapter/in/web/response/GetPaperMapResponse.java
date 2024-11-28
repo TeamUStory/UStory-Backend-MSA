@@ -27,7 +27,7 @@ public record GetPaperMapResponse(
             paper.getDetail().getAddress().getCoordinateXValue(),
             paper.getDetail().getAddress().getCoordinateYValue(),
 
-            paper.getDiary().getColor(),
+            paper.getDiary().getColor().getValue(),
             paper.getDiary().getImage().getUrl(),
             paper.getDiary().getMarker().getUrl()
         );
