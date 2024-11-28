@@ -7,9 +7,9 @@ import java.util.Objects;
 @Getter
 public class PaperDetail {
 
-    private Images images;
+    private final Images images;
 
-    private Address address;
+    private final Address address;
 
     public static PaperDetail of(Images images, Address address) {
         return new PaperDetail(images, address);

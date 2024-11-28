@@ -7,11 +7,11 @@ import java.util.Objects;
 @Getter
 public class Address {
 
-    private String city;
+    private final String city;
 
-    private Coordinate coordinateX;
+    private final Coordinate coordinateX;
 
-    private Coordinate coordinateY;
+    private final Coordinate coordinateY;
 
     public static Address of(String city, Double coordinateX, Double coordinateY) {
         return new Address(city, Coordinate.latitude(coordinateX), Coordinate.longitude(coordinateY));
