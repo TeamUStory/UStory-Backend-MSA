@@ -10,7 +10,7 @@ import java.time.Duration;
 
 @Component
 @RequiredArgsConstructor
-public class RedisLockRepositoryPaper implements PaperConcurrencyLockPort {
+public class RedisPaperLockRepository implements PaperConcurrencyLockPort {
 
     private final RedisTemplate<String, String> redisTemplate;
 

@@ -7,7 +7,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 import java.util.TimeZone;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {
+    "me.ustory.api.paper",
+    "me.ustory.api.common"
+})
 @EnableFeignClients
 @EnableDiscoveryClient
 public class PaperServiceApplication {

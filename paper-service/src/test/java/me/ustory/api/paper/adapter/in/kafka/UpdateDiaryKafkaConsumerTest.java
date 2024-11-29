@@ -29,7 +29,7 @@ class UpdateDiaryKafkaConsumerTest {
     @Test
     void listener() {
         // given
-        UpdateDiaryKafkaDTO dto = new UpdateDiaryKafkaDTO(1L, List.of(1L, 2L), "다이어리이름", "https://www.example.com/이미지.png", "#00001", "https://www.example.com/이미지2.png");
+        UpdateDiaryKafkaDTO dto = new UpdateDiaryKafkaDTO(1L, List.of(1L, 2L), "다이어리이름", "https://www.example.com/이미지.png", "#000000", "https://www.example.com/이미지2.png");
 
         // when
         updateDiaryKafkaConsumer.listener(dto);

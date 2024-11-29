@@ -3,9 +3,10 @@ package me.ustory.api.paper.application.service;
 import me.ustory.api.paper.application.port.in.UpdateDiaryCommand;
 import me.ustory.api.paper.application.port.out.GetDiaryPort;
 import me.ustory.api.paper.application.port.out.UpdateDiaryPort;
+import me.ustory.api.common.vo.Color;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
-import me.ustory.api.paper.domain.Image;
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.MemberInfo;
 import org.junit.jupiter.api.DisplayName;
@@ -17,7 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
@@ -44,7 +44,7 @@ class UpdateDiaryServiceTest {
             MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
             "Updated Diary",
             Image.of("https://www.example.com/이미지.png"),
-            "#00000",
+            Color.of("#000000"),
             Image.of("https://www.example.com/이미지2.png")
         );
 
@@ -75,7 +75,7 @@ class UpdateDiaryServiceTest {
             MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
             "Updated Diary",
             Image.of("https://www.example.com/이미지.png"),
-            "#00000",
+            Color.of("#000000"),
             Image.of("https://www.example.com/이미지2.png")
         );
 

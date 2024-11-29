@@ -1,6 +1,7 @@
 package me.ustory.api.paper.domain;
 
 import lombok.Getter;
+import me.ustory.api.common.vo.Image;
 
 import java.time.LocalDate;
 import java.util.Objects;

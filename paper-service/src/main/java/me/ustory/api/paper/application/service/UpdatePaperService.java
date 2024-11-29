@@ -10,7 +10,7 @@ import me.ustory.api.paper.application.port.out.GetPaperPort;
 import me.ustory.api.paper.application.port.out.SendUnlockPaperNotificationPort;
 import me.ustory.api.paper.application.port.out.UpdatePaperPort;
 import me.ustory.api.paper.domain.Address;
-import me.ustory.api.paper.domain.Image;
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;

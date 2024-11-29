@@ -1,6 +1,8 @@
 package me.ustory.api.paper.domain;
 
 import lombok.Getter;
+import me.ustory.api.common.vo.Color;
+import me.ustory.api.common.vo.Image;
 
 import java.util.Objects;
 
@@ -9,21 +11,21 @@ public class DiaryInfo {
 
     private final DiaryId id;
 
-    private MemberInfo memberInfo;
+    private final MemberInfo memberInfo;
 
-    private String name;
+    private final String name;
 
-    private Image image;
+    private final Image image;
 
-    private String color;
+    private final Color color;
 
-    private Image marker;
+    private final Image marker;
 
     public static DiaryInfo of(DiaryId id, MemberInfo memberInfo, String name, String imageUrl, String color, String markerUrl) {
-        return new DiaryInfo(id, memberInfo, name, Image.of(imageUrl), color, Image.of(markerUrl));
+        return new DiaryInfo(id, memberInfo, name, Image.of(imageUrl), Color.of(color), Image.of(markerUrl));
     }
 
-    public static DiaryInfo of(DiaryId id, MemberInfo memberInfo, String name, Image imageUrl, String color, Image markerUrl) {
+    public static DiaryInfo of(DiaryId id, MemberInfo memberInfo, String name, Image imageUrl, Color color, Image markerUrl) {
         return new DiaryInfo(id, memberInfo, name, imageUrl, color, markerUrl);
     }
 
@@ -35,7 +37,7 @@ public class DiaryInfo {
         return memberInfo.getMemberIds().size() == memberCount;
     }
 
-    private DiaryInfo(DiaryId id, MemberInfo memberInfo, String name, Image image, String color, Image marker) {
+    private DiaryInfo(DiaryId id, MemberInfo memberInfo, String name, Image image, Color color, Image marker) {
         this.id = id;
         this.memberInfo = memberInfo;
         this.name = name;

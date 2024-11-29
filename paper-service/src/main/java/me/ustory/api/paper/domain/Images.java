@@ -1,14 +1,13 @@
 package me.ustory.api.paper.domain;
 
-import lombok.Getter;
+import me.ustory.api.common.vo.Image;
 
 import java.util.List;
 import java.util.Objects;
 
-@Getter
 public class Images {
 
-    private final List<Image> images;
+    private final List<Image> imageList;
 
     public static Images of(List<String> images) {
         return new Images(images.stream()
@@ -16,14 +15,14 @@ public class Images {
             .toList());
     }
 
-    public List<String> getImagesUrl() {
-        return images.stream()
+    public List<String> getImageUrls() {
+        return imageList.stream()
             .map(Image::getUrl)
             .toList();
     }
 
-    private Images(List<Image> images) {
-        this.images = images;
+    private Images(List<Image> imageList) {
+        this.imageList = imageList;
     }
 
     @Override
@@ -31,18 +30,18 @@ public class Images {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Images images1 = (Images) o;
-        return Objects.equals(images, images1.images);
+        return Objects.equals(imageList, images1.imageList);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(images);
+        return Objects.hashCode(imageList);
     }
 
     @Override
     public String toString() {
         return "Images{" +
-            "images=" + images +
+            "images=" + imageList +
             '}';
     }
 }

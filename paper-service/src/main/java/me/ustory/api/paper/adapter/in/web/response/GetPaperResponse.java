@@ -34,7 +34,7 @@ public record GetPaperResponse(
         return new GetPaperResponse(
             paper.getTitle(),
             paper.getThumbnailUrl(),
-            paper.getDetail().getImages().getImagesUrl(),
+            paper.getDetail().getImages().getImageUrls(),
             paper.getVisitedDate(),
             paper.getDetail().getAddress().getCity(),
             paper.getStore(),
