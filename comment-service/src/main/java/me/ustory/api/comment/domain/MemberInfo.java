@@ -1,6 +1,7 @@
 package me.ustory.api.comment.domain;
 
 import lombok.Getter;
+import me.ustory.api.common.vo.Image;
 
 @Getter
 public class MemberInfo {

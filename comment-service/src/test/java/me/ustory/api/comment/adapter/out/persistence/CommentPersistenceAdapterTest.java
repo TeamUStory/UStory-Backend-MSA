@@ -1,8 +1,8 @@
 package me.ustory.api.comment.adapter.out.persistence;
 
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
-import me.ustory.api.comment.domain.Image;
 import me.ustory.api.comment.domain.MemberId;
 import me.ustory.api.comment.domain.MemberInfo;
 import me.ustory.api.comment.domain.PaperId;

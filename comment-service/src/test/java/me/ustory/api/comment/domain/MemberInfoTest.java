@@ -1,5 +1,6 @@
 package me.ustory.api.comment.domain;
 
+import me.ustory.api.common.vo.Image;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
 package me.ustory.api.comment.application.port.in;
 
 import me.ustory.api.common.kafka.UpdateMemberKafkaDTO;
-import me.ustory.api.comment.domain.Image;
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.comment.domain.MemberId;
 
 public record UpdateMemberCommand(
