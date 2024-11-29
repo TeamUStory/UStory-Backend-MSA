@@ -2,7 +2,7 @@ package me.ustory.api.comment.adapter.out.feign;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import me.ustory.api.comment.domain.Image;
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.comment.domain.MemberId;
 import me.ustory.api.comment.domain.MemberInfo;
 

@@ -1,15 +1,14 @@
 package me.ustory.api.comment.application.service;
 
-import me.ustory.api.comment.application.port.in.CreateCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentCommand;
 import me.ustory.api.comment.application.port.in.GetCommentsCommand;
 import me.ustory.api.comment.application.port.out.GetCommentPort;
 import me.ustory.api.comment.domain.Comment;
 import me.ustory.api.comment.domain.CommentId;
-import me.ustory.api.comment.domain.Image;
 import me.ustory.api.comment.domain.MemberId;
 import me.ustory.api.comment.domain.MemberInfo;
 import me.ustory.api.comment.domain.PaperId;
+import me.ustory.api.common.vo.Image;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
