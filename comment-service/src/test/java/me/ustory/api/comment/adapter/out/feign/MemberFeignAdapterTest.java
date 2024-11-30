@@ -2,6 +2,7 @@ package me.ustory.api.comment.adapter.out.feign;
 
 import me.ustory.api.comment.domain.MemberId;
 import me.ustory.api.comment.domain.MemberInfo;
+import me.ustory.api.common.feign.MemberFeignDTO;
 import me.ustory.api.common.vo.Image;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -31,7 +31,7 @@ class MemberFeignAdapterTest {
         Long memberId = 1L;
         String nickname = "닉네임";
         String profileImage = "https://www.example.com/프로필.png";
-        MemberFeignResponse response = new MemberFeignResponse(memberId, nickname, profileImage);
+        MemberFeignDTO response = new MemberFeignDTO(memberId, nickname, profileImage);
         given(memberFeignClient.findMemberById(memberId)).willReturn(response);
 
         // when
