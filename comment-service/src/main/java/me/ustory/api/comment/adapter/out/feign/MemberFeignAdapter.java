@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import me.ustory.api.comment.application.port.out.GetMemberFeignPort;
 import me.ustory.api.comment.domain.MemberId;
 import me.ustory.api.comment.domain.MemberInfo;
+import me.ustory.api.common.feign.MemberFeignDTO;
 import org.springframework.stereotype.Component;
 
 @Component
