@@ -2,6 +2,7 @@ package me.ustory.api.paper.adapter.out.feign;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import me.ustory.api.common.feign.DiaryFeignDTO;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.MemberId;

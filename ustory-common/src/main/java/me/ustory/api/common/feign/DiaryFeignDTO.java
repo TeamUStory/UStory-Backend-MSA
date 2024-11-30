@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.out.feign;
+package me.ustory.api.common.feign;
 
 import java.util.List;
 

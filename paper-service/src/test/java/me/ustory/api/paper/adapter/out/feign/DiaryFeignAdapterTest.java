@@ -1,5 +1,6 @@
 package me.ustory.api.paper.adapter.out.feign;
 
+import me.ustory.api.common.feign.DiaryFeignDTO;
 import me.ustory.api.paper.domain.DiaryInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

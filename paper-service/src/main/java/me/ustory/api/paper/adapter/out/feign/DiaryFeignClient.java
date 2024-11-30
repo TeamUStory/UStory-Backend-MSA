@@ -1,5 +1,6 @@
 package me.ustory.api.paper.adapter.out.feign;
 
+import me.ustory.api.common.feign.DiaryFeignDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

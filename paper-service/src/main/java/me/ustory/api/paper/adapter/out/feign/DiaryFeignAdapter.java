@@ -1,6 +1,7 @@
 package me.ustory.api.paper.adapter.out.feign;
 
 import lombok.RequiredArgsConstructor;
+import me.ustory.api.common.feign.DiaryFeignDTO;
 import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
 import me.ustory.api.paper.domain.DiaryInfo;
 import org.springframework.stereotype.Component;
