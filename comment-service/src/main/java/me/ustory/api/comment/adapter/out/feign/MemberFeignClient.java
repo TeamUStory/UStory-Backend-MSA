@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 interface MemberFeignClient {
 
     @GetMapping
-    MemberFeignResponse findMemberById(@RequestParam("id") Long id);
+    MemberFeignDTO findMemberById(@RequestParam("id") Long id);
 
 }

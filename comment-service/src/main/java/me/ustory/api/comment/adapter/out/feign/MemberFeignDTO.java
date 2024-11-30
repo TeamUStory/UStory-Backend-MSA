@@ -1,6 +1,6 @@
 package me.ustory.api.comment.adapter.out.feign;
 
-record MemberFeignResponse(
+record MemberFeignDTO(
     Long memberId,
     String nickname,
     String profileImage

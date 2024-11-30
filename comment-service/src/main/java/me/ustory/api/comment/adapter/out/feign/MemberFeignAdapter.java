@@ -14,7 +14,7 @@ class MemberFeignAdapter implements GetMemberFeignPort {
 
     @Override
     public MemberInfo getMemberInfoById(MemberId memberId) {
-        MemberFeignResponse response = memberFeignClient.findMemberById(memberId.getValue());
+        MemberFeignDTO response = memberFeignClient.findMemberById(memberId.getValue());
         return MemberFeignMapper.mapToDomain(response);
     }
 

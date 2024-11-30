@@ -9,7 +9,7 @@ import me.ustory.api.comment.domain.MemberInfo;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 class MemberFeignMapper {
 
-    public static MemberInfo mapToDomain(MemberFeignResponse response) {
+    public static MemberInfo mapToDomain(MemberFeignDTO response) {
         return MemberInfo.of(MemberId.of(response.memberId()), response.nickname(), Image.of(response.profileImage()));
     }
 
