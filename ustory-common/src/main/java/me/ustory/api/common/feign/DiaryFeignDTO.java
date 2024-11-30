@@ -1,8 +1,8 @@
-package me.ustory.api.paper.adapter.out.feign;
+package me.ustory.api.common.feign;
 
 import java.util.List;
 
-public record DiaryFeignResponse(
+public record DiaryFeignDTO(
     Long diaryId,
     List<Long> membersId,
     String name,
