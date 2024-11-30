@@ -13,7 +13,7 @@ public class DiaryFeignAdapter implements GetDiaryFeignPort {
 
     @Override
     public DiaryInfo getDiaryById(Long diaryId) {
-        DiaryFeignResponse response = diaryFeignClient.findDiaryById(diaryId);
+        DiaryFeignDTO response = diaryFeignClient.findDiaryById(diaryId);
         return DiaryFeignMapper.mapToDomain(response);
     }
 

@@ -28,7 +28,7 @@ class DiaryFeignAdapterTest {
     void getDiaryById() {
         // given
         Long diaryId = 1L;
-        DiaryFeignResponse response = createDiaryFeignResponse(diaryId);
+        DiaryFeignDTO response = createDiaryFeignResponse(diaryId);
 
         given(diaryFeignClient.findDiaryById(diaryId)).willReturn(response);
 
@@ -42,8 +42,8 @@ class DiaryFeignAdapterTest {
         assertThat(result.getId().getValue()).isEqualTo(response.diaryId());
     }
 
-    private DiaryFeignResponse createDiaryFeignResponse(Long diaryId) {
-        return new DiaryFeignResponse(
+    private DiaryFeignDTO createDiaryFeignResponse(Long diaryId) {
+        return new DiaryFeignDTO(
             diaryId,
             List.of(1L),
             "다이어리 이름",
