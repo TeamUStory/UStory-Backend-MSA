@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.out.kafka;
+package me.ustory.api.paper.adapter.out.kafka.config;
 
 import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
 import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
