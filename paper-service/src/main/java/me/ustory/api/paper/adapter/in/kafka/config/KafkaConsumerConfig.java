@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.in.kafka;
+package me.ustory.api.paper.adapter.in.kafka.config;
 
 import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
