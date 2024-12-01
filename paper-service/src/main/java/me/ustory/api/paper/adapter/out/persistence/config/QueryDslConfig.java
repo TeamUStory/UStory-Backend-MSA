@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.out.persistence;
+package me.ustory.api.paper.adapter.out.persistence.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
