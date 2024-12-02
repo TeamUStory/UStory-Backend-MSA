@@ -1,13 +1,13 @@
 package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
-import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
-import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
-import me.ustory.api.paper.application.port.in.GetPaperCommand;
-import me.ustory.api.paper.application.port.in.GetPaperUseCase;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
-import me.ustory.api.paper.application.port.out.GetPaperPort;
+import me.ustory.api.paper.application.port.in.web.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetMemberPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetPaperCommand;
+import me.ustory.api.paper.application.port.in.web.GetPaperUseCase;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCountCommand;
+import me.ustory.api.paper.application.port.out.persistence.GetPaperPort;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperId;
 import org.springframework.stereotype.Service;

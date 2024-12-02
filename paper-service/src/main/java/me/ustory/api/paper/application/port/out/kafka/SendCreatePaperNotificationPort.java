@@ -1,4 +1,4 @@
-package me.ustory.api.paper.application.port.out;
+package me.ustory.api.paper.application.port.out.kafka;
 
 import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
 

@@ -1,10 +1,10 @@
 package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
-import me.ustory.api.paper.application.port.in.UpdateDiaryCommand;
-import me.ustory.api.paper.application.port.in.UpdateDiaryUseCase;
-import me.ustory.api.paper.application.port.out.GetDiaryPort;
-import me.ustory.api.paper.application.port.out.UpdateDiaryPort;
+import me.ustory.api.paper.application.port.in.kafka.UpdateDiaryCommand;
+import me.ustory.api.paper.application.port.in.kafka.UpdateDiaryUseCase;
+import me.ustory.api.paper.application.port.out.persistence.GetDiaryPort;
+import me.ustory.api.paper.application.port.out.persistence.UpdateDiaryPort;
 import me.ustory.api.paper.domain.DiaryInfo;
 import org.springframework.stereotype.Service;
 

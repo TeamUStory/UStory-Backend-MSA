@@ -1,4 +1,4 @@
-package me.ustory.api.paper.application.port.in;
+package me.ustory.api.paper.application.port.in.kafka;
 
 import me.ustory.api.common.kafka.UpdateDiaryKafkaDTO;
 import me.ustory.api.common.vo.Color;

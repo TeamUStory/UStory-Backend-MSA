@@ -2,7 +2,7 @@ package me.ustory.api.paper.adapter.out.kafka;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
-import me.ustory.api.paper.application.port.out.SendUnlockPaperNotificationPort;
+import me.ustory.api.paper.application.port.out.kafka.SendUnlockPaperNotificationPort;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 

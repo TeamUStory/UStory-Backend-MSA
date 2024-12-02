@@ -1,8 +1,8 @@
 package me.ustory.api.paper.adapter.in.kafka;
 
 import me.ustory.api.common.kafka.UpdateDiaryKafkaDTO;
-import me.ustory.api.paper.application.port.in.UpdateDiaryCommand;
-import me.ustory.api.paper.application.port.in.UpdateDiaryUseCase;
+import me.ustory.api.paper.application.port.in.kafka.UpdateDiaryCommand;
+import me.ustory.api.paper.application.port.in.kafka.UpdateDiaryUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +12,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 

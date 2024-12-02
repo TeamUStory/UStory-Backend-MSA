@@ -1,8 +1,8 @@
 package me.ustory.api.paper.adapter.in.kafka;
 
 import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
-import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
-import me.ustory.api.paper.application.port.in.UnlockPaperUseCase;
+import me.ustory.api.paper.application.port.in.kafka.UnlockPaperCommand;
+import me.ustory.api.paper.application.port.in.kafka.UnlockPaperUseCase;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

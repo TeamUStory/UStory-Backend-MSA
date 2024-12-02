@@ -1,4 +1,4 @@
-package me.ustory.api.paper.application.port.in;
+package me.ustory.api.paper.application.port.in.kafka;
 
 import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
 import me.ustory.api.paper.domain.PaperId;

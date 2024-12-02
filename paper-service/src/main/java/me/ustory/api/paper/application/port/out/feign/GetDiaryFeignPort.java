@@ -1,4 +1,4 @@
-package me.ustory.api.paper.application.port.out;
+package me.ustory.api.paper.application.port.out.feign;
 
 import me.ustory.api.paper.domain.DiaryInfo;
 

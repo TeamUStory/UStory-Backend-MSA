@@ -1,9 +1,9 @@
 package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
-import me.ustory.api.paper.application.port.in.DeletePaperCommand;
-import me.ustory.api.paper.application.port.in.DeletePaperUseCase;
-import me.ustory.api.paper.application.port.out.UpdatePaperPort;
+import me.ustory.api.paper.application.port.in.web.DeletePaperCommand;
+import me.ustory.api.paper.application.port.in.web.DeletePaperUseCase;
+import me.ustory.api.paper.application.port.out.persistence.UpdatePaperPort;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,12 +1,12 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
-import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
-import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
-import me.ustory.api.paper.application.port.in.GetPaperCommand;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
-import me.ustory.api.paper.application.port.out.GetPaperPort;
+import me.ustory.api.paper.application.port.in.web.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetMemberPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetPaperCommand;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCountCommand;
+import me.ustory.api.paper.application.port.out.persistence.GetPaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;

@@ -2,11 +2,11 @@ package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
-import me.ustory.api.paper.application.port.in.CreatePaperCommand;
-import me.ustory.api.paper.application.port.out.CreateDiaryPort;
-import me.ustory.api.paper.application.port.out.CreatePaperPort;
-import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
-import me.ustory.api.paper.application.port.out.SendCreatePaperNotificationPort;
+import me.ustory.api.paper.application.port.in.web.CreatePaperCommand;
+import me.ustory.api.paper.application.port.out.persistence.CreateDiaryPort;
+import me.ustory.api.paper.application.port.out.persistence.CreatePaperPort;
+import me.ustory.api.paper.application.port.out.feign.GetDiaryFeignPort;
+import me.ustory.api.paper.application.port.out.kafka.SendCreatePaperNotificationPort;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.MemberId;
