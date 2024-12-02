@@ -115,7 +115,9 @@ public class PaperController {
     }
 
     @GetMapping("/written/count")
-    public ResponseEntity<ApiResponse<GetPapersCountResponse>> countPapersByUser(@RequestParam(name = "userId") Long userId) {
+    public ResponseEntity<ApiResponse<GetPapersCountResponse>> countPapersByUser(
+        @RequestParam(name = "userId") Long userId
+    ) {
         GetWrittenPapersCountCommand command = new GetWrittenPapersCountCommand(MemberId.of(userId));
         int count = getPaperUseCase.getCountPapersByWriterId(command);
 
