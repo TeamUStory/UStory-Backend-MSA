@@ -1,6 +1,8 @@
 package me.ustory.api.paper.adapter.out.persistence;
 
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
+import me.ustory.api.paper.adapter.out.persistence.config.JpaConfig;
+import me.ustory.api.paper.adapter.out.persistence.config.QueryDslConfig;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
