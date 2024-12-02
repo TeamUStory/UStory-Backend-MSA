@@ -1,36 +1,40 @@
 package me.ustory.api.paper.application.port.in.web;
 
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
+import me.ustory.api.paper.domain.Coordinate;
+import me.ustory.api.paper.domain.DiaryId;
+import me.ustory.api.paper.domain.Images;
+import me.ustory.api.paper.domain.MemberId;
 
 import java.time.LocalDate;
-import java.util.List;
 
 public record CreatePaperCommand(
     String title,
-    String thumbnailImageUrl,
+    Image thumbnail,
     LocalDate visitedAt,
-    Long writerId,
-    Long diaryId,
+    MemberId writerId,
+    DiaryId diaryId,
 
-    List<String> imageUrls,
+    Images imageUrls,
 
     String city,
     String store,
-    Double coordinateX,
-    Double coordinateY
+    Coordinate coordinateX,
+    Coordinate coordinateY
 ) {
     public static CreatePaperCommand of(CreatePaperRequest request, Long writerId) {
         return new CreatePaperCommand(
             request.title(),
-            request.thumbnailImageUrl(),
+            Image.of(request.thumbnailImageUrl()),
             request.visitedAt(),
-            writerId,
-            request.diaryId(),
-            request.imageUrls(),
+            MemberId.of(writerId),
+            DiaryId.of(request.diaryId()),
+            Images.of(request.imageUrls()),
             request.city(),
             request.store(),
-            request.coordinateX(),
-            request.coordinateY()
+            Coordinate.latitude(request.coordinateX()),
+            Coordinate.longitude(request.coordinateY())
         );
     }
 }

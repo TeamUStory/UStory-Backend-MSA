@@ -17,6 +17,11 @@ public class Address {
         return new Address(city, Coordinate.latitude(coordinateX), Coordinate.longitude(coordinateY));
     }
 
+    public static Address of(String city, Coordinate coordinateX, Coordinate coordinateY) {
+        // TODO: Coordinate가 X인지 Y인지 검증해야함
+        return new Address(city, coordinateX, coordinateY);
+    }
+
     public double getCoordinateXValue() {
         return coordinateX.getValue();
     }
