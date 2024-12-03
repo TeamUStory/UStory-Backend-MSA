@@ -63,7 +63,7 @@ class PaperPersistenceAdapterTest {
         // then
         PaperEntity savedPaper = paperJpaRepository.findById(savedPaperId.getId()).orElseThrow();
         assertThat(savedPaper.getTitle()).isEqualTo(paper.getTitle());
-        assertThat(savedPaper.getThumbnailImageUrl()).isEqualTo(paper.getThumbnailUrl());
+        assertThat(savedPaper.getThumbnail().getUrl()).isEqualTo(paper.getThumbnailUrl());
         assertThat(savedPaper.getStore()).isEqualTo(paper.getStore());
         assertThat(savedPaper.getVisitedAt()).isEqualTo(paper.getVisitedDate());
 

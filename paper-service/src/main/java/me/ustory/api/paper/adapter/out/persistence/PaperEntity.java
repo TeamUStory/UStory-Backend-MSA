@@ -1,5 +1,6 @@
 package me.ustory.api.paper.adapter.out.persistence;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -8,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,8 +42,8 @@ class PaperEntity extends BaseEntity {
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
     private String title;
 
-    @Column(name = "thumbnail_image_url", nullable = false, columnDefinition = "VARCHAR(1000)")
-    private String thumbnailImageUrl;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ImageEntity thumbnail;
 
     @Column(name = "store", nullable = false, columnDefinition = "varchar(200)")
     private String store;

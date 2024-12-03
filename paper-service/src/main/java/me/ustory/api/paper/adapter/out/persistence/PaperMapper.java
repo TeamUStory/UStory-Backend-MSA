@@ -17,7 +17,7 @@ class PaperMapper {
             .title(paper.getTitle())
             .writerId(paper.getWriter().getValue())
             .diaryInfo(DiaryInfoMapper.mapToEntity(paper.getDiary()))
-            .thumbnailImageUrl(paper.getThumbnailUrl())
+            .thumbnail(ImageMapper.mapToJpaEntity(Image.of(paper.getThumbnailUrl())))
             .store(paper.getStore())
             .visitedAt(paper.getVisitedDate())
             .isLocked(paper.isLocked())
@@ -30,7 +30,7 @@ class PaperMapper {
             .title(paper.getTitle())
             .writerId(paper.getWriter().getValue())
             .diaryInfo(DiaryInfoMapper.mapToEntity(paper.getDiary()))
-            .thumbnailImageUrl(paper.getThumbnailUrl())
+            .thumbnail(ImageMapper.mapToJpaEntity(Image.of(paper.getThumbnailUrl())))
             .store(paper.getStore())
             .visitedAt(paper.getVisitedDate())
             .isLocked(paper.isLocked())
@@ -40,7 +40,7 @@ class PaperMapper {
     public static Paper mapToDomain(PaperEntity paperEntity) {
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             paperEntity.getTitle(),
-            Image.of(paperEntity.getThumbnailImageUrl()),
+            ImageMapper.mapToDomain(paperEntity.getThumbnail()),
             paperEntity.getStore(),
             paperEntity.getVisitedAt()
         );
@@ -57,7 +57,7 @@ class PaperMapper {
     public static Paper mapToDomain(PaperEntity paperEntity, PaperDetail paperDetail) {
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             paperEntity.getTitle(),
-            Image.of(paperEntity.getThumbnailImageUrl()),
+            ImageMapper.mapToDomain(paperEntity.getThumbnail()),
             paperEntity.getStore(),
             paperEntity.getVisitedAt()
         );
