@@ -1,6 +1,7 @@
 package me.ustory.api.paper.adapter.out.feign;
 
 import me.ustory.api.common.feign.DiaryFeignDTO;
+import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +35,7 @@ class DiaryFeignAdapterTest {
         given(diaryFeignClient.findDiaryById(diaryId)).willReturn(response);
 
         // when
-        DiaryInfo result = diaryFeignAdapter.getDiaryById(diaryId);
+        DiaryInfo result = diaryFeignAdapter.getDiaryById(DiaryId.of(diaryId));
 
         // then
         verify(diaryFeignClient).findDiaryById(diaryId);
