@@ -1,6 +1,8 @@
 package me.ustory.api.paper.adapter.out.kafka;
 
 import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
+import me.ustory.api.paper.domain.MemberId;
+import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,9 +30,11 @@ class UnlockPaperNotificationKafkaProducerTest {
     void sendUnlockPaperNotification() {
         // given
         UnlockPaperNotificationKafkaDTO dto = new UnlockPaperNotificationKafkaDTO(1L, List.of(2L, 3L));
+        PaperId paperId = PaperId.of(1L);
+        List<MemberId> memberIds = List.of(MemberId.of(2L), MemberId.of(3L));
 
         // when
-        unlockPaperNotificationKafkaProducer.sendUnlockPaperNotification(dto);
+        unlockPaperNotificationKafkaProducer.sendUnlockPaperNotification(paperId, memberIds);
 
         // then
         verify(unlockPaperKafkaTemplate).send(eq("unlock-paper-notification"), eq(dto));

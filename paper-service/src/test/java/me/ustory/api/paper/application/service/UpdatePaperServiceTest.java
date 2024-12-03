@@ -32,6 +32,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -127,7 +128,7 @@ class UpdatePaperServiceTest {
 
         // then
         verify(updatePaperPort).updatePaper(any(Paper.class));
-        verify(sendUnlockPaperNotificationPort).sendUnlockPaperNotification(any(UnlockPaperNotificationKafkaDTO.class));
+        verify(sendUnlockPaperNotificationPort).sendUnlockPaperNotification(any(PaperId.class), anyList());
     }
 
     @DisplayName("잠금 해제 조건에 해당하지 않으면, 잠금 해제 및 업데이트 로직을 수행하지 않는다.")

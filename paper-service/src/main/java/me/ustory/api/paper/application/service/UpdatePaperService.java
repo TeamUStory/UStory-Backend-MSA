@@ -61,13 +61,9 @@ class UpdatePaperService implements UnlockPaperUseCase {
             paper.unLock();
             updatePaperPort.updatePaper(paper);
 
-            List<Long> memberIds = paper.getDiary().getMemberInfo().getMemberIds().stream()
-                .map(MemberId::getValue)
-                .toList();
+            List<MemberId> memberIds = paper.getDiary().getMemberInfo().getMemberIds();
 
-            UnlockPaperNotificationKafkaDTO notificationDto = new UnlockPaperNotificationKafkaDTO(paper.getPaperId().getId(), memberIds);
-
-            sendUnlockPaperNotificationPort.sendUnlockPaperNotification(notificationDto);
+            sendUnlockPaperNotificationPort.sendUnlockPaperNotification(paper.getPaperId(), memberIds);
         }
     }
 }
