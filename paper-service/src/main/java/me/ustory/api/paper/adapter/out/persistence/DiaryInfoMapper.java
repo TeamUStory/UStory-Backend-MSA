@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ class DiaryInfoMapper {
     public static DiaryInfoEntity mapToEntity(DiaryInfo diaryInfo) {
         return DiaryInfoEntity.of(
             diaryInfo.getId().getValue(),
-            mapToMembersInfoEntity(diaryInfo.getMemberInfo().getMemberIds()),
+            mapToMembersInfoEntity(diaryInfo.getMembers().getMemberIds()),
             diaryInfo.getName(),
             diaryInfo.getImage().getUrl(),
             diaryInfo.getColor().getValue(),
@@ -40,8 +40,8 @@ class DiaryInfoMapper {
         );
     }
 
-    private static MemberInfo mapToMemberIdsDomain(MembersInfoEntity membersInfoEntity) {
-        return MemberInfo.of(membersInfoEntity.getMemberIds().stream().map(MemberId::of).toList());
+    private static Members mapToMemberIdsDomain(MembersInfoEntity membersInfoEntity) {
+        return Members.of(membersInfoEntity.getMemberIds().stream().map(MemberId::of).toList());
     }
 
 }

@@ -5,7 +5,7 @@ import me.ustory.api.paper.adapter.out.persistence.config.JpaConfig;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +93,7 @@ class DiaryInfoPersistenceAdapterTest {
 
         DiaryInfo expectedDiaryInfo = DiaryInfo.of(
             DiaryId.of(diaryId),
-            MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
+            Members.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
             "다이어리명 변경",
             "https://www.example.com/다이어리이미지변경.png",
             "#000000",
@@ -115,7 +115,7 @@ class DiaryInfoPersistenceAdapterTest {
     private DiaryInfo createDiaryInfo(Long diaryId) {
         return DiaryInfo.of(
             DiaryId.of(diaryId),
-            MemberInfo.of(List.of(MemberId.of(1L))),
+            Members.of(List.of(MemberId.of(1L))),
             "다이어리이름",
             "https://www.다이어리이미지.gif",
             "#000000",

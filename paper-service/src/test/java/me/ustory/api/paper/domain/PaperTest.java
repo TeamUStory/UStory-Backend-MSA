@@ -91,7 +91,7 @@ class PaperTest {
     private DiaryInfo createDiaryInfo(List<MemberId> memberIds) {
         return DiaryInfo.of(
             DiaryId.of(1L),
-            MemberInfo.of(memberIds),
+            Members.of(memberIds),
             "다이어리명",
             "https://www.다이어리이미지.gif",
             "#000000",

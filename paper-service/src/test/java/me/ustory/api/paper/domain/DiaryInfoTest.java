@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class DiaryInfoTest {
 
@@ -14,12 +13,12 @@ class DiaryInfoTest {
     @Test
     void isIndividual() {
         // given
-        MemberInfo individualMemberInfo = MemberInfo.of(List.of(MemberId.of(1L)));
-        MemberInfo memberInfo = MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L)));
+        Members individualMembers = Members.of(List.of(MemberId.of(1L)));
+        Members members = Members.of(List.of(MemberId.of(1L), MemberId.of(2L)));
 
         DiaryInfo individualDiaryInfo = DiaryInfo.of(
             DiaryId.of(1L),
-            individualMemberInfo,
+            individualMembers,
             "다이어리이름",
             "https://www.example.com/다이어리이미지.png",
             "#000000",
@@ -27,7 +26,7 @@ class DiaryInfoTest {
         );
         DiaryInfo diaryInfo = DiaryInfo.of(
             DiaryId.of(1L),
-            memberInfo,
+            members,
             "다이어리이름",
             "https://www.example.com/다이어리이미지.png",
             "#000000",
@@ -43,10 +42,10 @@ class DiaryInfoTest {
     @Test
     void isSameMemberCount() {
         // given
-        MemberInfo memberInfo = MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L)));
+        Members members = Members.of(List.of(MemberId.of(1L), MemberId.of(2L)));
 
         DiaryInfo diaryInfo = DiaryInfo.of(DiaryId.of(1L),
-            memberInfo,
+            members,
             "다이어리이름",
             "https://www.example.com/다이어리이미지.png",
             "#000000",

@@ -13,7 +13,7 @@ import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
@@ -130,7 +130,7 @@ class CreatePaperServiceTest {
     private DiaryInfo createDiaryInfo(Long diaryId, List<MemberId> membersId) {
         return DiaryInfo.of(
             DiaryId.of(diaryId),
-            MemberInfo.of(membersId),
+            Members.of(membersId),
             "다이어리이름",
             "https://www.다이어리이미지.gif",
             "#000000",

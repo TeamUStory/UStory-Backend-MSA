@@ -2,7 +2,6 @@ package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
-import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
 import me.ustory.api.paper.application.port.in.kafka.UnlockPaperCommand;
 import me.ustory.api.paper.application.port.in.web.UpdatePaperCommand;
@@ -15,7 +14,7 @@ import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -175,7 +174,7 @@ class UpdatePaperServiceTest {
             .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
                 DiaryId.of(1L),
-                MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L))),
+                Members.of(List.of(MemberId.of(1L), MemberId.of(2L))),
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",
                 "#000000",

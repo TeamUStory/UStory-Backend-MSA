@@ -6,12 +6,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Getter
-public class MemberInfo {
+public class Members {
 
     private final List<MemberId> memberIds;
 
-    public static MemberInfo of(List<MemberId> memberIds) {
-        return new MemberInfo(memberIds);
+    public static Members of(List<MemberId> memberIds) {
+        return new Members(memberIds);
     }
 
     public boolean isContains(MemberId memberId) {
@@ -22,7 +22,7 @@ public class MemberInfo {
         return memberIds.size() <= 1;
     }
 
-    private MemberInfo(List<MemberId> memberIds) {
+    private Members(List<MemberId> memberIds) {
         validate(memberIds);
         this.memberIds = memberIds;
     }
@@ -37,7 +37,7 @@ public class MemberInfo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MemberInfo that = (MemberInfo) o;
+        Members that = (Members) o;
         return Objects.equals(memberIds, that.memberIds);
     }
 

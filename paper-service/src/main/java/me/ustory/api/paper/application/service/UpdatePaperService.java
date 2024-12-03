@@ -2,7 +2,6 @@ package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.exception.client.ForbiddenException;
-import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
 import me.ustory.api.paper.application.port.in.kafka.UnlockPaperCommand;
 import me.ustory.api.paper.application.port.in.kafka.UnlockPaperUseCase;
 import me.ustory.api.paper.application.port.in.web.UpdatePaperCommand;
@@ -10,8 +9,6 @@ import me.ustory.api.paper.application.port.out.persistence.GetPaperPort;
 import me.ustory.api.paper.application.port.out.kafka.SendUnlockPaperNotificationPort;
 import me.ustory.api.paper.application.port.out.persistence.UpdatePaperPort;
 import me.ustory.api.paper.domain.Address;
-import me.ustory.api.common.vo.Image;
-import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
@@ -32,7 +29,7 @@ class UpdatePaperService implements UnlockPaperUseCase {
     public PaperId updatePaper(UpdatePaperCommand command) {
         Paper paper = getPaperPort.findById(command.paperId());
 
-        if (!paper.getDiary().getMemberInfo().isContains(command.updaterId())) {
+        if (!paper.getDiary().getMembers().isContains(command.updaterId())) {
             throw new ForbiddenException("해당 다이어리의 페이퍼 수정 권한이 없습니다.");
         }
 
@@ -61,7 +58,7 @@ class UpdatePaperService implements UnlockPaperUseCase {
             paper.unLock();
             updatePaperPort.updatePaper(paper);
 
-            List<MemberId> memberIds = paper.getDiary().getMemberInfo().getMemberIds();
+            List<MemberId> memberIds = paper.getDiary().getMembers().getMemberIds();
 
             sendUnlockPaperNotificationPort.sendUnlockPaperNotification(paper.getPaperId(), memberIds);
         }

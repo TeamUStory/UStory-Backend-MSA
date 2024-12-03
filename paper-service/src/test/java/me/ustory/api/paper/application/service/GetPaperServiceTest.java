@@ -13,7 +13,7 @@ import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -136,7 +136,7 @@ class GetPaperServiceTest {
             .writer(writerId)
             .diary(DiaryInfo.of(
                 diaryId,
-                MemberInfo.of(List.of(MemberId.of(1L))),
+                Members.of(List.of(MemberId.of(1L))),
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",
                 "#000000",
@@ -160,8 +160,8 @@ class GetPaperServiceTest {
         // then
         assertThat(papers).hasSize(2)
             .extracting(Paper::getDiary)
-            .extracting(DiaryInfo::getMemberInfo)
-            .extracting(MemberInfo::getMemberIds)
+            .extracting(DiaryInfo::getMembers)
+            .extracting(Members::getMemberIds)
             .allSatisfy(memberIds ->
                 assertThat(memberIds).contains(memberId)
             );

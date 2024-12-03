@@ -22,7 +22,7 @@ import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -347,7 +347,7 @@ class PaperControllerTest {
             .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
                 DiaryId.of(diaryId),
-                MemberInfo.of(List.of(MemberId.of(1L))),
+                Members.of(List.of(MemberId.of(1L))),
                 "다이어리 이름",
                 "https://www.diary-image.gif",
                 "#FFFFFF",

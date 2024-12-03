@@ -21,7 +21,7 @@ public class UpdateDiaryService implements UpdateDiaryUseCase {
 
             DiaryInfo diaryInfo = DiaryInfo.of(
                 command.diaryId(),
-                command.memberInfo(),
+                command.members(),
                 command.name(),
                 command.image(),
                 command.color(),
