@@ -89,7 +89,7 @@ public class PaperController {
         @PathVariable Long paperId,
         @Valid @RequestBody UpdatePaperRequest request
     ) {
-        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), userId);
+        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), MemberId.of(userId));
         PaperId updatedPaperId = updatePaperUseCase.updatePaper(command);
 
         return ResponseEntity

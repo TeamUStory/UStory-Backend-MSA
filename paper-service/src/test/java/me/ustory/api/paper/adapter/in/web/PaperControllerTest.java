@@ -178,7 +178,7 @@ class PaperControllerTest {
             .coordinateY(coordinateY)
             .build();
 
-        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), userId);
+        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), MemberId.of(userId));
 
         given(updatePaperUseCase.updatePaper(command)).willReturn(PaperId.of(paperId));
 

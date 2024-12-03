@@ -56,8 +56,8 @@ class UpdatePaperServiceTest {
     void updatePaper() {
         // given
         PaperId paperId = PaperId.of(1L);
-        Long userId = 1L;
-        UpdatePaperCommand command = createUpdatePaperCommand(paperId, userId);
+        MemberId updaterId = MemberId.of(1L);
+        UpdatePaperCommand command = createUpdatePaperCommand(paperId, updaterId);
         Paper expectedPaper = getPaper(paperId);
         expectedPaper.changeBasicInfo(PaperBasicInfo.of(
             "제목1",
@@ -87,8 +87,8 @@ class UpdatePaperServiceTest {
     void updatePaperWithNotContainingMember() {
         // given
         PaperId paperId = PaperId.of(1L);
-        Long userId = 3L;
-        UpdatePaperCommand command = createUpdatePaperCommand(paperId, userId);
+        MemberId updaterId = MemberId.of(3L);
+        UpdatePaperCommand command = createUpdatePaperCommand(paperId, updaterId);
         Paper expectedPaper = getPaper(paperId);
         expectedPaper.changeBasicInfo(PaperBasicInfo.of(
             "제목1",
@@ -147,7 +147,7 @@ class UpdatePaperServiceTest {
         verify(updatePaperPort, never()).updatePaper(any(Paper.class));
     }
 
-    private UpdatePaperCommand createUpdatePaperCommand(PaperId paperId, Long userId) {
+    private UpdatePaperCommand createUpdatePaperCommand(PaperId paperId, MemberId userId) {
         UpdatePaperRequest request = new UpdatePaperRequest(
             "제목1",
             "https://www.대표이미지1.gif",

@@ -1,6 +1,10 @@
 package me.ustory.api.paper.application.port.in.web;
 
+import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
+import me.ustory.api.paper.domain.Coordinate;
+import me.ustory.api.paper.domain.Images;
+import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.PaperId;
 
 import java.time.LocalDate;
@@ -8,31 +12,31 @@ import java.util.List;
 
 public record UpdatePaperCommand(
     PaperId paperId,
-    Long updateUserId,
+    MemberId updaterId,
 
     String title,
-    String thumbnailImageUrl,
+    Image thumbnail,
     LocalDate visitedAt,
 
-    List<String> imageUrls,
+    Images images,
 
     String city,
     String store,
-    Double coordinateX,
-    Double coordinateY
+    Coordinate coordinateX,
+    Coordinate coordinateY
 ) {
-    public static UpdatePaperCommand of(UpdatePaperRequest request, PaperId paperId, Long userId) {
+    public static UpdatePaperCommand of(UpdatePaperRequest request, PaperId paperId, MemberId updaterId) {
         return new UpdatePaperCommand(
             paperId,
-            userId,
+            updaterId,
             request.title(),
-            request.thumbnailImageUrl(),
+            Image.of(request.thumbnailImageUrl()),
             request.visitedAt(),
-            request.imageUrls(),
+            Images.of(request.imageUrls()),
             request.city(),
             request.store(),
-            request.coordinateX(),
-            request.coordinateY()
+            Coordinate.latitude(request.coordinateX()),
+            Coordinate.longitude(request.coordinateY())
         );
     }
 }

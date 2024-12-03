@@ -32,22 +32,20 @@ class UpdatePaperService implements UnlockPaperUseCase {
     public PaperId updatePaper(UpdatePaperCommand command) {
         Paper paper = getPaperPort.findById(command.paperId());
 
-        if (!paper.getDiary().getMemberInfo().isContains(MemberId.of(command.updateUserId()))) {
+        if (!paper.getDiary().getMemberInfo().isContains(command.updaterId())) {
             throw new ForbiddenException("해당 다이어리의 페이퍼 수정 권한이 없습니다.");
         }
 
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             command.title(),
-            Image.of(command.thumbnailImageUrl()),
+            command.thumbnail(),
             command.store(),
             command.visitedAt()
         );
 
-        Images images = Images.of(command.imageUrls());
-
         Address address = Address.of(command.city(), command.coordinateX(), command.coordinateY());
 
-        PaperDetail paperDetail = PaperDetail.of(images, address);
+        PaperDetail paperDetail = PaperDetail.of(command.images(), address);
 
         paper.changeBasicInfo(paperBasicInfo);
         paper.changeDetail(paperDetail);
