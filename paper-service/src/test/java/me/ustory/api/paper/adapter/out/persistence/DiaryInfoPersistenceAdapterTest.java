@@ -3,6 +3,7 @@ package me.ustory.api.paper.adapter.out.persistence;
 import me.ustory.api.paper.adapter.out.feign.DiaryFeignMapper;
 import me.ustory.api.paper.adapter.out.persistence.config.JpaConfig;
 import me.ustory.api.paper.adapter.out.persistence.entity.DiaryInfoEntity;
+import me.ustory.api.paper.adapter.out.persistence.entity.ImageEntity;
 import me.ustory.api.paper.adapter.out.persistence.entity.MembersInfoEntity;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
@@ -46,9 +47,9 @@ class DiaryInfoPersistenceAdapterTest {
         DiaryInfoEntity diaryInfoEntity = diaryInfoJpaRepository.findById(diaryId).orElseThrow();
 
         assertThat(diaryInfoEntity.getName()).isEqualTo(diaryInfo.getName());
-        assertThat(diaryInfoEntity.getImageUrl()).isEqualTo(diaryInfo.getImage().getUrl());
+        assertThat(diaryInfoEntity.getImage().getUrl()).isEqualTo(diaryInfo.getImage().getUrl());
         assertThat(diaryInfoEntity.getColor()).isEqualTo(diaryInfo.getColor().getValue());
-        assertThat(diaryInfoEntity.getMarkerUrl()).isEqualTo(diaryInfo.getMarker().getUrl());
+        assertThat(diaryInfoEntity.getMarker().getUrl()).isEqualTo(diaryInfo.getMarker().getUrl());
     }
 
     @DisplayName("저장된 Diary인지 확인한다.")
@@ -61,9 +62,9 @@ class DiaryInfoPersistenceAdapterTest {
             diaryId,
             MembersInfoEntity.of(List.of(1L, 2L)),
             "다이어리명",
-            "https://www.example.com/다이어리이미지.png",
+            ImageEntity.of("https://www.example.com/다이어리이미지.png"),
             "#000000",
-            "https://www.example.com/마커이미지.png"
+            ImageEntity.of("https://www.example.com/마커이미지.png")
         );
 
         diaryInfoJpaRepository.save(diaryInfoEntity);
@@ -86,9 +87,9 @@ class DiaryInfoPersistenceAdapterTest {
             diaryId,
             MembersInfoEntity.of(List.of(1L, 2L)),
             "다이어리명",
-            "https://www.example.com/다이어리이미지.png",
-            "#00000",
-            "https://www.example.com/마커이미지.png"
+            ImageEntity.of("https://www.example.com/다이어리이미지.png"),
+            "#000000",
+            ImageEntity.of("https://www.example.com/마커이미지.png")
         );
 
         diaryInfoJpaRepository.save(diaryInfoEntity);
@@ -109,9 +110,9 @@ class DiaryInfoPersistenceAdapterTest {
         DiaryInfoEntity updatedDiaryInfoEntity = diaryInfoJpaRepository.findById(diaryId).orElseThrow();
 
         assertThat(updatedDiaryInfoEntity.getName()).isEqualTo(expectedDiaryInfo.getName());
-        assertThat(updatedDiaryInfoEntity.getImageUrl()).isEqualTo(expectedDiaryInfo.getImage().getUrl());
+        assertThat(updatedDiaryInfoEntity.getImage().getUrl()).isEqualTo(expectedDiaryInfo.getImage().getUrl());
         assertThat(updatedDiaryInfoEntity.getColor()).isEqualTo(expectedDiaryInfo.getColor().getValue());
-        assertThat(updatedDiaryInfoEntity.getMarkerUrl()).isEqualTo(expectedDiaryInfo.getMarker().getUrl());
+        assertThat(updatedDiaryInfoEntity.getMarker().getUrl()).isEqualTo(expectedDiaryInfo.getMarker().getUrl());
     }
 
     private DiaryInfo createDiaryInfo(Long diaryId) {

@@ -1,8 +1,10 @@
 package me.ustory.api.paper.adapter.out.persistence.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,22 +24,24 @@ public class DiaryInfoEntity extends BaseEntity {
 
     private String name;
 
-    private String imageUrl;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ImageEntity image;
 
     private String color;
 
-    private String markerUrl;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ImageEntity marker;
 
-    public static DiaryInfoEntity of(Long id, MembersInfoEntity membersInfo, String name, String imageUrl, String color, String markerUrl) {
-        return new DiaryInfoEntity(id, membersInfo, name, imageUrl, color, markerUrl);
+    public static DiaryInfoEntity of(Long id, MembersInfoEntity membersInfo, String name, ImageEntity image, String color, ImageEntity marker) {
+        return new DiaryInfoEntity(id, membersInfo, name, image, color, marker);
     }
 
-    private DiaryInfoEntity(Long id, MembersInfoEntity memberIds, String name, String imageUrl, String color, String markerUrl) {
+    private DiaryInfoEntity(Long id, MembersInfoEntity memberIds, String name, ImageEntity image, String color, ImageEntity marker) {
         this.id = id;
         this.members = memberIds;
         this.name = name;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.color = color;
-        this.markerUrl = markerUrl;
+        this.marker = marker;
     }
 }

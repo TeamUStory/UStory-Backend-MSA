@@ -1,7 +1,3 @@
-insert into diary_info_entity (id, name, image_url, color, marker_url, created_at, updated_at)
-values (1, '다이어리', 'https://example.com/다이어리이미지.gif', '#000000', 'https://example.com/마크업이미지.png',
-        '2024-11-18 00:00:00', '2024-11-18 00:00:00');
-
 insert into image_entity(id, url, created_at, updated_at)
 values (1, 'https://www.example.com/썸네일이미지.png', '2024-11-18 12:00:00', '2024-11-18 12:00:00');
 insert into image_entity(id, url, created_at, updated_at)
@@ -22,6 +18,14 @@ insert into image_entity (id, url, created_at, updated_at)
 values (9, 'https://www.example.com/이미지6.png', '2024-11-19 18:00:00', '2024-11-19 18:00:00');
 insert into image_entity (id, url, created_at, updated_at)
 values (10, 'https://www.example.com/이미지7.png', '2024-11-19 18:00:00', '2024-11-19 18:00:00');
+insert into image_entity (id, url, created_at, updated_at)
+values (11, 'https://example.com/다이어리이미지.gif', '2024-11-19 18:00:00', '2024-11-19 18:00:00');
+insert into image_entity (id, url, created_at, updated_at)
+values (12, 'https://example.com/마크업이미지.png', '2024-11-19 18:00:00', '2024-11-19 18:00:00');
+
+insert into diary_info_entity (id, name, image_id, color, marker_id, created_at, updated_at)
+values (1, '다이어리', 11, '#000000', 12, '2024-11-18 00:00:00', '2024-11-18 00:00:00');
+
 
 insert into paper_entity (id, writer_id, diary_info_id, title, thumbnail_id, store, visited_at, deleted_at, is_locked,
                           created_at, updated_at)

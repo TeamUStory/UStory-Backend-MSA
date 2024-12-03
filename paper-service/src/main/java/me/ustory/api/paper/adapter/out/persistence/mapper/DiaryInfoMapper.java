@@ -2,6 +2,7 @@ package me.ustory.api.paper.adapter.out.persistence.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import me.ustory.api.common.vo.Color;
 import me.ustory.api.paper.adapter.out.persistence.entity.DiaryInfoEntity;
 import me.ustory.api.paper.adapter.out.persistence.entity.MembersInfoEntity;
 import me.ustory.api.paper.domain.DiaryId;
@@ -19,9 +20,9 @@ public class DiaryInfoMapper {
             diaryInfo.getId().getValue(),
             mapToMembersInfoEntity(diaryInfo.getMembers().getMemberIds()),
             diaryInfo.getName(),
-            diaryInfo.getImage().getUrl(),
+            ImageMapper.mapToJpaEntity(diaryInfo.getImage()),
             diaryInfo.getColor().getValue(),
-            diaryInfo.getMarker().getUrl()
+            ImageMapper.mapToJpaEntity(diaryInfo.getMarker())
         );
     }
 
@@ -30,9 +31,9 @@ public class DiaryInfoMapper {
             DiaryId.of(diaryInfoEntity.getId()),
             mapToMemberIdsDomain(diaryInfoEntity.getMembers()),
             diaryInfoEntity.getName(),
-            diaryInfoEntity.getImageUrl(),
-            diaryInfoEntity.getColor(),
-            diaryInfoEntity.getMarkerUrl()
+            ImageMapper.mapToDomain(diaryInfoEntity.getImage()),
+            Color.of(diaryInfoEntity.getColor()),
+            ImageMapper.mapToDomain(diaryInfoEntity.getMarker())
         );
     }
 
