@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.out.persistence;
+package me.ustory.api.paper.adapter.out.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -11,7 +11,7 @@ import java.util.Objects;
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class AddressEntity {
+public class AddressEntity {
 
     @Column(name = "city", nullable = false, columnDefinition = "varchar(300)")
     private String city;

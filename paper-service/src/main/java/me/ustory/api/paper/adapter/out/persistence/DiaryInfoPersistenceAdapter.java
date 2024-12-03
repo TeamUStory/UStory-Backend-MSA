@@ -2,6 +2,8 @@ package me.ustory.api.paper.adapter.out.persistence;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import me.ustory.api.paper.adapter.out.persistence.entity.DiaryInfoEntity;
+import me.ustory.api.paper.adapter.out.persistence.mapper.DiaryInfoMapper;
 import me.ustory.api.paper.application.port.out.persistence.CreateDiaryPort;
 import me.ustory.api.paper.application.port.out.persistence.GetDiaryPort;
 import me.ustory.api.paper.application.port.out.persistence.UpdateDiaryPort;

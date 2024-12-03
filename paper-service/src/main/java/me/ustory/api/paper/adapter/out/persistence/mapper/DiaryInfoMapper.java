@@ -1,7 +1,9 @@
-package me.ustory.api.paper.adapter.out.persistence;
+package me.ustory.api.paper.adapter.out.persistence.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import me.ustory.api.paper.adapter.out.persistence.entity.DiaryInfoEntity;
+import me.ustory.api.paper.adapter.out.persistence.entity.MembersInfoEntity;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.MemberId;
@@ -10,7 +12,7 @@ import me.ustory.api.paper.domain.Members;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class DiaryInfoMapper {
+public class DiaryInfoMapper {
 
     public static DiaryInfoEntity mapToEntity(DiaryInfo diaryInfo) {
         return DiaryInfoEntity.of(

@@ -2,6 +2,8 @@ package me.ustory.api.paper.adapter.out.persistence;
 
 import me.ustory.api.paper.adapter.out.feign.DiaryFeignMapper;
 import me.ustory.api.paper.adapter.out.persistence.config.JpaConfig;
+import me.ustory.api.paper.adapter.out.persistence.entity.DiaryInfoEntity;
+import me.ustory.api.paper.adapter.out.persistence.entity.MembersInfoEntity;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.paper.domain.MemberId;

@@ -1,12 +1,14 @@
-package me.ustory.api.paper.adapter.out.persistence;
+package me.ustory.api.paper.adapter.out.persistence.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import me.ustory.api.paper.adapter.out.persistence.entity.AddressEntity;
+import me.ustory.api.paper.adapter.out.persistence.entity.PaperDetailEntity;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.PaperDetail;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class PaperDetailMapper {
+public class PaperDetailMapper {
 
     public static PaperDetailEntity mapToJpaEntity(Long paperId, PaperDetail paperDetail) {
         return PaperDetailEntity.builder()
