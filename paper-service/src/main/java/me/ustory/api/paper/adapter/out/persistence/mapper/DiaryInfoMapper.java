@@ -20,9 +20,9 @@ public class DiaryInfoMapper {
             diaryInfo.getId().getValue(),
             mapToMembersInfoEntity(diaryInfo.getMembers().getMemberIds()),
             diaryInfo.getName(),
-            ImageMapper.mapToJpaEntity(diaryInfo.getImage()),
+            diaryInfo.getImage().getUrl(),
             diaryInfo.getColor().getValue(),
-            ImageMapper.mapToJpaEntity(diaryInfo.getMarker())
+            diaryInfo.getMarker().getUrl()
         );
     }
 

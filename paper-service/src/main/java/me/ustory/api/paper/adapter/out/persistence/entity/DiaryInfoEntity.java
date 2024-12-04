@@ -1,6 +1,7 @@
 package me.ustory.api.paper.adapter.out.persistence.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
@@ -24,19 +25,19 @@ public class DiaryInfoEntity extends BaseEntity {
 
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ImageEntity image;
+    @Column(name = "diary_image", nullable = false, columnDefinition = "VARCHAR(1000)")
+    private String image;
 
     private String color;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ImageEntity marker;
+    @Column(name = "marker_image", nullable = false, columnDefinition = "VARCHAR(1000)")
+    private String marker;
 
-    public static DiaryInfoEntity of(Long id, MembersInfoEntity membersInfo, String name, ImageEntity image, String color, ImageEntity marker) {
+    public static DiaryInfoEntity of(Long id, MembersInfoEntity membersInfo, String name, String image, String color, String marker) {
         return new DiaryInfoEntity(id, membersInfo, name, image, color, marker);
     }
 
-    private DiaryInfoEntity(Long id, MembersInfoEntity memberIds, String name, ImageEntity image, String color, ImageEntity marker) {
+    private DiaryInfoEntity(Long id, MembersInfoEntity memberIds, String name, String image, String color, String marker) {
         this.id = id;
         this.members = memberIds;
         this.name = name;

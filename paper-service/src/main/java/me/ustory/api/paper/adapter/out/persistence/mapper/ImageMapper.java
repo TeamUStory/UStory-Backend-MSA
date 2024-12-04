@@ -15,8 +15,8 @@ public class ImageMapper {
         return ImageEntity.of(image.getUrl());
     }
 
-    public static Image mapToDomain(ImageEntity imageEntity) {
-        return Image.of(imageEntity.getUrl());
+    public static Image mapToDomain(String image) {
+        return Image.of(image);
     }
 
     public static List<ImageEntity> mapToJpaEntities(Images images) {

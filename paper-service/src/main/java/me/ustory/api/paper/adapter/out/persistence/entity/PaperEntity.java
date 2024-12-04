@@ -42,8 +42,8 @@ public class PaperEntity extends BaseEntity {
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
     private String title;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private ImageEntity thumbnail;
+    @Column(name = "thumbnail_image", nullable = false, columnDefinition = "VARCHAR(1000)")
+    private String thumbnail;
 
     @Column(name = "store", nullable = false, columnDefinition = "varchar(200)")
     private String store;

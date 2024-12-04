@@ -47,9 +47,9 @@ class DiaryInfoPersistenceAdapterTest {
         DiaryInfoEntity diaryInfoEntity = diaryInfoJpaRepository.findById(diaryId).orElseThrow();
 
         assertThat(diaryInfoEntity.getName()).isEqualTo(diaryInfo.getName());
-        assertThat(diaryInfoEntity.getImage().getUrl()).isEqualTo(diaryInfo.getImage().getUrl());
+        assertThat(diaryInfoEntity.getImage()).isEqualTo(diaryInfo.getImage().getUrl());
         assertThat(diaryInfoEntity.getColor()).isEqualTo(diaryInfo.getColor().getValue());
-        assertThat(diaryInfoEntity.getMarker().getUrl()).isEqualTo(diaryInfo.getMarker().getUrl());
+        assertThat(diaryInfoEntity.getMarker()).isEqualTo(diaryInfo.getMarker().getUrl());
     }
 
     @DisplayName("저장된 Diary인지 확인한다.")
@@ -62,9 +62,9 @@ class DiaryInfoPersistenceAdapterTest {
             diaryId,
             MembersInfoEntity.of(List.of(1L, 2L)),
             "다이어리명",
-            ImageEntity.of("https://www.example.com/다이어리이미지.png"),
+            "https://www.example.com/다이어리이미지.png",
             "#000000",
-            ImageEntity.of("https://www.example.com/마커이미지.png")
+            "https://www.example.com/마커이미지.png"
         );
 
         diaryInfoJpaRepository.save(diaryInfoEntity);
@@ -87,9 +87,9 @@ class DiaryInfoPersistenceAdapterTest {
             diaryId,
             MembersInfoEntity.of(List.of(1L, 2L)),
             "다이어리명",
-            ImageEntity.of("https://www.example.com/다이어리이미지.png"),
+            "https://www.example.com/다이어리이미지.png",
             "#000000",
-            ImageEntity.of("https://www.example.com/마커이미지.png")
+            "https://www.example.com/마커이미지.png"
         );
 
         diaryInfoJpaRepository.save(diaryInfoEntity);
@@ -110,9 +110,9 @@ class DiaryInfoPersistenceAdapterTest {
         DiaryInfoEntity updatedDiaryInfoEntity = diaryInfoJpaRepository.findById(diaryId).orElseThrow();
 
         assertThat(updatedDiaryInfoEntity.getName()).isEqualTo(expectedDiaryInfo.getName());
-        assertThat(updatedDiaryInfoEntity.getImage().getUrl()).isEqualTo(expectedDiaryInfo.getImage().getUrl());
+        assertThat(updatedDiaryInfoEntity.getImage()).isEqualTo(expectedDiaryInfo.getImage().getUrl());
         assertThat(updatedDiaryInfoEntity.getColor()).isEqualTo(expectedDiaryInfo.getColor().getValue());
-        assertThat(updatedDiaryInfoEntity.getMarker().getUrl()).isEqualTo(expectedDiaryInfo.getMarker().getUrl());
+        assertThat(updatedDiaryInfoEntity.getMarker()).isEqualTo(expectedDiaryInfo.getMarker().getUrl());
     }
 
     private DiaryInfo createDiaryInfo(Long diaryId) {
