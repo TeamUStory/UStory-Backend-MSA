@@ -23,7 +23,7 @@ public class ImageMapper {
         return images.getImageUrls().stream().map(ImageEntity::of).toList();
     }
 
-    public static Images mapToImages(List<ImageEntity> imageEntities) {
-        return Images.of(imageEntities.stream().map(ImageEntity::getUrl).toList());
+    public static Images mapToImages(List<String> images) {
+        return Images.of(images);
     }
 }

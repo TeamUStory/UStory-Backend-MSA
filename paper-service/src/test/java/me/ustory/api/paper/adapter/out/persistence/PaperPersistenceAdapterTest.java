@@ -76,7 +76,7 @@ class PaperPersistenceAdapterTest {
         assertThat(savedPaperDetail.getAddress().getCity()).isEqualTo(paperDetail.getAddress().getCity());
         assertThat(savedPaperDetail.getAddress().getCoordinateX()).isEqualTo(paperDetail.getAddress().getCoordinateXValue());
         assertThat(savedPaperDetail.getAddress().getCoordinateY()).isEqualTo(paperDetail.getAddress().getCoordinateYValue());
-        assertThat(savedPaperDetail.getImages().stream().map(ImageEntity::getUrl)).isEqualTo(paperDetail.getImages().getImageUrls());
+        assertThat(savedPaperDetail.getImages()).isEqualTo(paperDetail.getImages().getImageUrls());
     }
 
     @DisplayName("Paper를 불러온다.")
@@ -127,7 +127,7 @@ class PaperPersistenceAdapterTest {
         paper.changeBasicInfo(paperBasicInfo);
 
         PaperDetail paperDetail = PaperDetail.of(
-            Images.of(List.of("https://www.example.com/수정된이미지.png")),
+            Images.of(List.of("https://www.example.com/수정된이미지.png", "https://www.example.com/수정된이미지2.png")),
             Address.of("주소", 32.123, 128.123)
         );
         paper.changeDetail(paperDetail);

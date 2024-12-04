@@ -14,7 +14,7 @@ public class PaperDetailMapper {
         return PaperDetailEntity.builder()
             .id(paperId)
             .address(mapToAddressEntity(paperDetail.getAddress()))
-            .images(ImageMapper.mapToJpaEntities(paperDetail.getImages()))
+            .images(paperDetail.getImages().getImageUrls())
             .build();
     }
 
