@@ -3,7 +3,6 @@ package me.ustory.api.paper.adapter.out.persistence;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.adapter.out.persistence.config.JpaConfig;
 import me.ustory.api.paper.adapter.out.persistence.config.QueryDslConfig;
-import me.ustory.api.paper.adapter.out.persistence.entity.ImageEntity;
 import me.ustory.api.paper.adapter.out.persistence.entity.PaperDetailEntity;
 import me.ustory.api.paper.adapter.out.persistence.entity.PaperEntity;
 import me.ustory.api.paper.adapter.out.persistence.mapper.PaperDetailMapper;
