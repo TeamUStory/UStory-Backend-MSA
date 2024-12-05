@@ -3,9 +3,7 @@ package me.ustory.api.paper.adapter.out.persistence;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.adapter.out.persistence.config.JpaConfig;
 import me.ustory.api.paper.adapter.out.persistence.config.QueryDslConfig;
-import me.ustory.api.paper.adapter.out.persistence.entity.PaperDetailEntity;
 import me.ustory.api.paper.adapter.out.persistence.entity.PaperEntity;
-import me.ustory.api.paper.adapter.out.persistence.mapper.PaperDetailMapper;
 import me.ustory.api.paper.adapter.out.persistence.mapper.PaperMapper;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
@@ -40,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
-@Import({PaperPersistenceAdapter.class, JpaConfig.class, QueryDslConfig.class, PaperMapper.class, PaperDetailMapper.class})
+@Import({PaperPersistenceAdapter.class, JpaConfig.class, QueryDslConfig.class, PaperMapper.class})
 @ActiveProfiles("test")
 class PaperPersistenceAdapterTest {
 
@@ -49,9 +47,6 @@ class PaperPersistenceAdapterTest {
 
     @Autowired
     private PaperJpaRepository paperJpaRepository;
-
-    @Autowired
-    private PaperDetailJpaRepository paperDetailJpaRepository;
 
     @DisplayName("Paper를 저장한다.")
     @Test
@@ -68,14 +63,13 @@ class PaperPersistenceAdapterTest {
         PaperEntity savedPaper = paperJpaRepository.findById(savedPaperId.getId()).orElseThrow();
         assertThat(savedPaper.getTitle()).isEqualTo(paper.getTitle());
         assertThat(savedPaper.getThumbnail()).isEqualTo(paper.getThumbnailUrl());
-        assertThat(savedPaper.getStore()).isEqualTo(paper.getStore());
+        assertThat(savedPaper.getAddress().getStore()).isEqualTo(paper.getStore());
         assertThat(savedPaper.getVisitedAt()).isEqualTo(paper.getVisitedDate());
 
-        PaperDetailEntity savedPaperDetail = paperDetailJpaRepository.findById(savedPaperId.getId()).orElseThrow();
-        assertThat(savedPaperDetail.getAddress().getCity()).isEqualTo(paperDetail.getAddress().getCity());
-        assertThat(savedPaperDetail.getAddress().getCoordinateX()).isEqualTo(paperDetail.getAddress().getCoordinateXValue());
-        assertThat(savedPaperDetail.getAddress().getCoordinateY()).isEqualTo(paperDetail.getAddress().getCoordinateYValue());
-        assertThat(savedPaperDetail.getImages()).isEqualTo(paperDetail.getImages().getImageUrls());
+        assertThat(savedPaper.getAddress().getCity()).isEqualTo(paperDetail.getAddress().getCity());
+        assertThat(savedPaper.getAddress().getCoordinateX()).isEqualTo(paperDetail.getAddress().getCoordinateXValue());
+        assertThat(savedPaper.getAddress().getCoordinateY()).isEqualTo(paperDetail.getAddress().getCoordinateYValue());
+        assertThat(savedPaper.getImages()).isEqualTo(paperDetail.getImages().getImageUrls());
     }
 
     @DisplayName("Paper를 불러온다.")
@@ -87,8 +81,6 @@ class PaperPersistenceAdapterTest {
         Paper paper = getPaper(paperBasicInfo, paperDetail);
 
         PaperEntity savedPaper = paperJpaRepository.save(PaperMapper.mapToJpaEntity(paper));
-        paperDetailJpaRepository.save(PaperDetailMapper.mapToJpaEntity(savedPaper.getId(), paperDetail));
-
 
         PaperId id = PaperId.of(savedPaper.getId());
 

@@ -13,6 +13,9 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AddressEntity {
 
+    @Column(name = "store", nullable = false, columnDefinition = "varchar(200)")
+    private String store;
+
     @Column(name = "city", nullable = false, columnDefinition = "varchar(300)")
     private String city;
 
@@ -22,11 +25,12 @@ public class AddressEntity {
     @Column(name = "coordinate_y", nullable = false, columnDefinition = "decimal(18,15)")
     private Double coordinateY;
 
-    public static AddressEntity of(String city, Double coordinateX, Double coordinateY) {
-        return new AddressEntity(city, coordinateX, coordinateY);
+    public static AddressEntity of(String store, String city, Double coordinateX, Double coordinateY) {
+        return new AddressEntity(store, city, coordinateX, coordinateY);
     }
 
-    private AddressEntity(String city, Double coordinateX, Double coordinateY) {
+    private AddressEntity(String store, String city, Double coordinateX, Double coordinateY) {
+        this.store = store;
         this.city = city;
         this.coordinateX = coordinateX;
         this.coordinateY = coordinateY;
