@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.out.persistence;
+package me.ustory.api.paper.adapter.out.persistence.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners(AuditingEntityListener.class)
-class PaperEntity extends BaseEntity {
+public class PaperEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,8 +40,8 @@ class PaperEntity extends BaseEntity {
     @Column(name = "title", nullable = false, columnDefinition = "VARCHAR(50)")
     private String title;
 
-    @Column(name = "thumbnail_image_url", nullable = false, columnDefinition = "VARCHAR(1000)")
-    private String thumbnailImageUrl;
+    @Column(name = "thumbnail_image", nullable = false, columnDefinition = "VARCHAR(1000)")
+    private String thumbnail;
 
     @Column(name = "store", nullable = false, columnDefinition = "varchar(200)")
     private String store;

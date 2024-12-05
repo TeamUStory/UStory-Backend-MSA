@@ -1,8 +1,8 @@
-package me.ustory.api.paper.adapter.out.persistence;
+package me.ustory.api.paper.adapter.out.persistence.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import me.ustory.api.common.vo.Image;
+import me.ustory.api.paper.adapter.out.persistence.entity.PaperEntity;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
@@ -10,14 +10,14 @@ import me.ustory.api.paper.domain.PaperDetail;
 import me.ustory.api.paper.domain.PaperId;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class PaperMapper {
+public class PaperMapper {
 
     public static PaperEntity mapToJpaEntity(Paper paper) {
         return PaperEntity.builder()
             .title(paper.getTitle())
             .writerId(paper.getWriter().getValue())
             .diaryInfo(DiaryInfoMapper.mapToEntity(paper.getDiary()))
-            .thumbnailImageUrl(paper.getThumbnailUrl())
+            .thumbnail(paper.getThumbnailUrl())
             .store(paper.getStore())
             .visitedAt(paper.getVisitedDate())
             .isLocked(paper.isLocked())
@@ -30,7 +30,7 @@ class PaperMapper {
             .title(paper.getTitle())
             .writerId(paper.getWriter().getValue())
             .diaryInfo(DiaryInfoMapper.mapToEntity(paper.getDiary()))
-            .thumbnailImageUrl(paper.getThumbnailUrl())
+            .thumbnail(paper.getThumbnailUrl())
             .store(paper.getStore())
             .visitedAt(paper.getVisitedDate())
             .isLocked(paper.isLocked())
@@ -40,7 +40,7 @@ class PaperMapper {
     public static Paper mapToDomain(PaperEntity paperEntity) {
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             paperEntity.getTitle(),
-            Image.of(paperEntity.getThumbnailImageUrl()),
+            ImageMapper.mapToDomain(paperEntity.getThumbnail()),
             paperEntity.getStore(),
             paperEntity.getVisitedAt()
         );
@@ -57,7 +57,7 @@ class PaperMapper {
     public static Paper mapToDomain(PaperEntity paperEntity, PaperDetail paperDetail) {
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             paperEntity.getTitle(),
-            Image.of(paperEntity.getThumbnailImageUrl()),
+            ImageMapper.mapToDomain(paperEntity.getThumbnail()),
             paperEntity.getStore(),
             paperEntity.getVisitedAt()
         );

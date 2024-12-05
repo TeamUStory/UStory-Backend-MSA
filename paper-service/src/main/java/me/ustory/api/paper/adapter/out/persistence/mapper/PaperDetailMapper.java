@@ -1,37 +1,28 @@
-package me.ustory.api.paper.adapter.out.persistence;
+package me.ustory.api.paper.adapter.out.persistence.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import me.ustory.api.paper.adapter.out.persistence.entity.AddressEntity;
+import me.ustory.api.paper.adapter.out.persistence.entity.PaperDetailEntity;
 import me.ustory.api.paper.domain.Address;
-import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.PaperDetail;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-class PaperDetailMapper {
+public class PaperDetailMapper {
 
     public static PaperDetailEntity mapToJpaEntity(Long paperId, PaperDetail paperDetail) {
         return PaperDetailEntity.builder()
             .id(paperId)
             .address(mapToAddressEntity(paperDetail.getAddress()))
-            .images(mapToImagesEntity(paperDetail.getImages()))
+            .images(paperDetail.getImages().getImageUrls())
             .build();
     }
 
     public static PaperDetail mapToDomain(PaperDetailEntity paperDetailEntity) {
         return PaperDetail.of(
-            mapToImagesDomain(paperDetailEntity.getImages()),
+            ImageMapper.mapToImages(paperDetailEntity.getImages()),
             mapToAddressDomain(paperDetailEntity.getAddress())
         );
-    }
-
-    private static ImagesEntity mapToImagesEntity(Images images) {
-        return ImagesEntity.of(
-            images.getImageUrls()
-        );
-    }
-
-    private static Images mapToImagesDomain(ImagesEntity imagesEntity) {
-        return Images.of(imagesEntity.getImageUrls());
     }
 
     private static AddressEntity mapToAddressEntity(Address address) {

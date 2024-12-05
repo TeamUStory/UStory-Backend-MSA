@@ -1,14 +1,15 @@
 package me.ustory.api.paper.adapter.out.persistence;
 
-import static me.ustory.api.paper.adapter.out.persistence.QPaperDetailEntity.paperDetailEntity;
-import static me.ustory.api.paper.adapter.out.persistence.QPaperEntity.paperEntity;
-
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
+import me.ustory.api.paper.adapter.out.persistence.entity.PaperDetailEntity;
+import me.ustory.api.paper.adapter.out.persistence.entity.PaperEntity;
+import me.ustory.api.paper.adapter.out.persistence.mapper.PaperDetailMapper;
+import me.ustory.api.paper.adapter.out.persistence.mapper.PaperMapper;
 import me.ustory.api.paper.application.port.out.persistence.CreatePaperPort;
 import me.ustory.api.paper.application.port.out.persistence.GetPaperPort;
 import me.ustory.api.paper.application.port.out.persistence.UpdatePaperPort;
@@ -22,6 +23,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static me.ustory.api.paper.adapter.out.persistence.entity.QPaperDetailEntity.paperDetailEntity;
+import static me.ustory.api.paper.adapter.out.persistence.entity.QPaperEntity.paperEntity;
 
 @Component
 @RequiredArgsConstructor

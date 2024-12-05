@@ -3,6 +3,10 @@ package me.ustory.api.paper.adapter.out.persistence;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.adapter.out.persistence.config.JpaConfig;
 import me.ustory.api.paper.adapter.out.persistence.config.QueryDslConfig;
+import me.ustory.api.paper.adapter.out.persistence.entity.PaperDetailEntity;
+import me.ustory.api.paper.adapter.out.persistence.entity.PaperEntity;
+import me.ustory.api.paper.adapter.out.persistence.mapper.PaperDetailMapper;
+import me.ustory.api.paper.adapter.out.persistence.mapper.PaperMapper;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
@@ -63,7 +67,7 @@ class PaperPersistenceAdapterTest {
         // then
         PaperEntity savedPaper = paperJpaRepository.findById(savedPaperId.getId()).orElseThrow();
         assertThat(savedPaper.getTitle()).isEqualTo(paper.getTitle());
-        assertThat(savedPaper.getThumbnailImageUrl()).isEqualTo(paper.getThumbnailUrl());
+        assertThat(savedPaper.getThumbnail()).isEqualTo(paper.getThumbnailUrl());
         assertThat(savedPaper.getStore()).isEqualTo(paper.getStore());
         assertThat(savedPaper.getVisitedAt()).isEqualTo(paper.getVisitedDate());
 
@@ -71,7 +75,7 @@ class PaperPersistenceAdapterTest {
         assertThat(savedPaperDetail.getAddress().getCity()).isEqualTo(paperDetail.getAddress().getCity());
         assertThat(savedPaperDetail.getAddress().getCoordinateX()).isEqualTo(paperDetail.getAddress().getCoordinateXValue());
         assertThat(savedPaperDetail.getAddress().getCoordinateY()).isEqualTo(paperDetail.getAddress().getCoordinateYValue());
-        assertThat(savedPaperDetail.getImages().getImageUrls()).isEqualTo(paperDetail.getImages().getImageUrls());
+        assertThat(savedPaperDetail.getImages()).isEqualTo(paperDetail.getImages().getImageUrls());
     }
 
     @DisplayName("Paper를 불러온다.")
@@ -122,7 +126,7 @@ class PaperPersistenceAdapterTest {
         paper.changeBasicInfo(paperBasicInfo);
 
         PaperDetail paperDetail = PaperDetail.of(
-            Images.of(List.of("https://www.example.com/수정된이미지.png")),
+            Images.of(List.of("https://www.example.com/수정된이미지.png", "https://www.example.com/수정된이미지2.png")),
             Address.of("주소", 32.123, 128.123)
         );
         paper.changeDetail(paperDetail);

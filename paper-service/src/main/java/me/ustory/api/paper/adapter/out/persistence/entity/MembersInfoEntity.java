@@ -1,4 +1,4 @@
-package me.ustory.api.paper.adapter.out.persistence;
+package me.ustory.api.paper.adapter.out.persistence.entity;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -13,7 +13,7 @@ import java.util.List;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class MembersInfoEntity {
+public class MembersInfoEntity {
 
     @ElementCollection
     @CollectionTable(name = "members_info_entity", joinColumns = @JoinColumn(name = "diary_id"))
