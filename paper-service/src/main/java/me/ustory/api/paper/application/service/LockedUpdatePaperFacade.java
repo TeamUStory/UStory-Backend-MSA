@@ -2,9 +2,9 @@ package me.ustory.api.paper.application.service;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.exception.server.InternalServerException;
-import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
-import me.ustory.api.paper.application.port.in.UpdatePaperUseCase;
-import me.ustory.api.paper.application.port.out.PaperConcurrencyLockPort;
+import me.ustory.api.paper.application.port.in.web.UpdatePaperCommand;
+import me.ustory.api.paper.application.port.in.web.UpdatePaperUseCase;
+import me.ustory.api.paper.application.port.out.lock.PaperConcurrencyLockPort;
 import me.ustory.api.paper.domain.PaperId;
 import org.springframework.stereotype.Service;
 

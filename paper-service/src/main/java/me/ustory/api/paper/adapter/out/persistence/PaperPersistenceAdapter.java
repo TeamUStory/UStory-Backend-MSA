@@ -1,21 +1,18 @@
 package me.ustory.api.paper.adapter.out.persistence;
 
-import static me.ustory.api.paper.adapter.out.persistence.QPaperDetailEntity.paperDetailEntity;
-import static me.ustory.api.paper.adapter.out.persistence.QPaperEntity.paperEntity;
-
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
-import me.ustory.api.paper.application.port.out.CreatePaperPort;
-import me.ustory.api.paper.application.port.out.GetPaperPort;
-import me.ustory.api.paper.application.port.out.UpdatePaperPort;
+import me.ustory.api.paper.adapter.out.persistence.entity.PaperEntity;
+import me.ustory.api.paper.adapter.out.persistence.mapper.PaperMapper;
+import me.ustory.api.paper.application.port.out.persistence.CreatePaperPort;
+import me.ustory.api.paper.application.port.out.persistence.GetPaperPort;
+import me.ustory.api.paper.application.port.out.persistence.UpdatePaperPort;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
-import me.ustory.api.paper.domain.PaperDetail;
 import me.ustory.api.paper.domain.PaperId;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
@@ -23,33 +20,28 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 
+import static me.ustory.api.paper.adapter.out.persistence.entity.QPaperEntity.paperEntity;
+
 @Component
 @RequiredArgsConstructor
 class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePaperPort {
 
     private final JPAQueryFactory queryFactory;
     private final PaperJpaRepository paperJpaRepository;
-    private final PaperDetailJpaRepository paperDetailJpaRepository;
 
     @Override
     @Transactional
     public PaperId createPaper(Paper paper) {
         PaperEntity savedPaper = paperJpaRepository.save(PaperMapper.mapToJpaEntity(paper));
-        Long paperId = savedPaper.getId();
 
-        paperDetailJpaRepository.save(PaperDetailMapper.mapToJpaEntity(paperId, paper.getDetail()));
-
-        return PaperId.of(paperId);
+        return PaperId.of(savedPaper.getId());
     }
 
     @Override
     public Paper findById(PaperId id) {
         PaperEntity paperEntity = paperJpaRepository.findById(id.getId()).orElseThrow();
-        PaperDetailEntity paperDetailEntity = paperDetailJpaRepository.findById(id.getId()).orElseThrow();
 
-        PaperDetail paperDetail = PaperDetailMapper.mapToDomain(paperDetailEntity);
-
-        return PaperMapper.mapToDomain(paperEntity, paperDetail);
+        return PaperMapper.mapToDomainWithDetail(paperEntity);
     }
 
     @Override
@@ -81,10 +73,7 @@ class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePa
 
     @Override
     public List<Paper> findByMemberId(MemberId memberId) {
-        List<Tuple> result = queryFactory.select(paperEntity, paperDetailEntity)
-            .from(paperEntity)
-            .join(paperDetailEntity)
-            .on(paperEntity.id.eq(paperDetailEntity.id))
+        List<PaperEntity> result = queryFactory.selectFrom(paperEntity)
             .where(paperEntity.diaryInfo.members.memberIds.contains(memberId.getValue()),
                 paperEntity.deletedAt.isNull())
             .orderBy(paperEntity.createdAt.desc())
@@ -94,16 +83,7 @@ class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePa
             return List.of();
         }
 
-        return result.stream()
-            .map(tuple -> {
-                PaperEntity tuplePaperEntity = tuple.get(paperEntity);
-                PaperDetailEntity tupleDetailEntity = tuple.get(paperDetailEntity);
-                return PaperMapper.mapToDomain(
-                    tuplePaperEntity,
-                    PaperDetailMapper.mapToDomain(tupleDetailEntity)
-                );
-            })
-            .toList();
+        return result.stream().map(PaperMapper::mapToDomain).toList();
     }
 
     @Override
@@ -129,7 +109,6 @@ class PaperPersistenceAdapter implements CreatePaperPort, GetPaperPort, UpdatePa
     @Transactional
     public PaperId updatePaper(Paper paper) {
         paperJpaRepository.save(PaperMapper.mapToJpaEntityWithId(paper));
-        paperDetailJpaRepository.save(PaperDetailMapper.mapToJpaEntity(paper.getPaperId().getId(), paper.getDetail()));
         return paper.getPaperId();
     }
 

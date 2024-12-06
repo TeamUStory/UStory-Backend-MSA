@@ -14,18 +14,18 @@ import me.ustory.api.paper.adapter.in.web.response.GetPapersCountResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPaperPreviewResponse;
 import me.ustory.api.paper.adapter.in.web.response.GetPaperResponse;
 import me.ustory.api.paper.adapter.in.web.response.UpdatePaperResponse;
-import me.ustory.api.paper.application.port.in.CreatePaperCommand;
-import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
-import me.ustory.api.paper.application.port.in.DeletePaperCommand;
-import me.ustory.api.paper.application.port.in.DeletePaperUseCase;
-import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
-import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
-import me.ustory.api.paper.application.port.in.GetPaperCommand;
-import me.ustory.api.paper.application.port.in.GetPaperUseCase;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
-import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
-import me.ustory.api.paper.application.port.in.UpdatePaperUseCase;
+import me.ustory.api.paper.application.port.in.web.CreatePaperCommand;
+import me.ustory.api.paper.application.port.in.web.CreatePaperUseCase;
+import me.ustory.api.paper.application.port.in.web.DeletePaperCommand;
+import me.ustory.api.paper.application.port.in.web.DeletePaperUseCase;
+import me.ustory.api.paper.application.port.in.web.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetMemberPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetPaperCommand;
+import me.ustory.api.paper.application.port.in.web.GetPaperUseCase;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCountCommand;
+import me.ustory.api.paper.application.port.in.web.UpdatePaperCommand;
+import me.ustory.api.paper.application.port.in.web.UpdatePaperUseCase;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
@@ -89,7 +89,7 @@ public class PaperController {
         @PathVariable Long paperId,
         @Valid @RequestBody UpdatePaperRequest request
     ) {
-        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), userId);
+        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), MemberId.of(userId));
         PaperId updatedPaperId = updatePaperUseCase.updatePaper(command);
 
         return ResponseEntity
@@ -115,7 +115,9 @@ public class PaperController {
     }
 
     @GetMapping("/written/count")
-    public ResponseEntity<ApiResponse<GetPapersCountResponse>> countPapersByUser(@RequestParam(name = "userId") Long userId) {
+    public ResponseEntity<ApiResponse<GetPapersCountResponse>> countPapersByUser(
+        @RequestParam(name = "userId") Long userId
+    ) {
         GetWrittenPapersCountCommand command = new GetWrittenPapersCountCommand(MemberId.of(userId));
         int count = getPaperUseCase.getCountPapersByWriterId(command);
 

@@ -2,15 +2,18 @@ package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
-import me.ustory.api.paper.application.port.in.CreatePaperCommand;
-import me.ustory.api.paper.application.port.out.CreateDiaryPort;
-import me.ustory.api.paper.application.port.out.CreatePaperPort;
-import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
-import me.ustory.api.paper.application.port.out.SendCreatePaperNotificationPort;
+import me.ustory.api.common.vo.Image;
+import me.ustory.api.paper.application.port.in.web.CreatePaperCommand;
+import me.ustory.api.paper.application.port.out.persistence.CreateDiaryPort;
+import me.ustory.api.paper.application.port.out.persistence.CreatePaperPort;
+import me.ustory.api.paper.application.port.out.feign.GetDiaryFeignPort;
+import me.ustory.api.paper.application.port.out.kafka.SendCreatePaperNotificationPort;
+import me.ustory.api.paper.domain.Coordinate;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
+import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
@@ -58,7 +61,7 @@ class CreatePaperServiceTest {
 
         DiaryInfo diaryInfo = createDiaryInfo(diaryId, membersId);
 
-        given(getDiaryFeignPort.getDiaryById(1L)).willReturn(diaryInfo);
+        given(getDiaryFeignPort.getDiaryById(DiaryId.of(1L))).willReturn(diaryInfo);
         given(createDiaryPort.createDiary(any(DiaryInfo.class))).willReturn(diaryInfo);
 
         given(createPaperPort.createPaper(any(Paper.class))).willReturn(PaperId.of(1L));
@@ -67,7 +70,7 @@ class CreatePaperServiceTest {
         createPaperService.createPaper(expectedCommand);
 
         // then
-        verify(getDiaryFeignPort).getDiaryById(diaryId);
+        verify(getDiaryFeignPort).getDiaryById(DiaryId.of(diaryId));
 
         verify(createDiaryPort).createDiary(any(DiaryInfo.class));
         verify(createPaperPort).createPaper(any(Paper.class));
@@ -87,7 +90,7 @@ class CreatePaperServiceTest {
 
         DiaryInfo diaryInfo = createDiaryInfo(diaryId, membersId);
 
-        given(getDiaryFeignPort.getDiaryById(1L)).willReturn(diaryInfo);
+        given(getDiaryFeignPort.getDiaryById(DiaryId.of(1L))).willReturn(diaryInfo);
         given(createDiaryPort.createDiary(any(DiaryInfo.class))).willReturn(diaryInfo);
 
         // when & then
@@ -96,7 +99,7 @@ class CreatePaperServiceTest {
             .hasMessage("해당 다이어리의 페이퍼 작성 권한이 없습니다.");
 
         // then
-        verify(getDiaryFeignPort).getDiaryById(diaryId);
+        verify(getDiaryFeignPort).getDiaryById(DiaryId.of(diaryId));
     }
 
     private CreatePaperCommand createPaperCommand(Long diaryId, Long userId) {
@@ -112,22 +115,22 @@ class CreatePaperServiceTest {
 
         return new CreatePaperCommand(
             title,
-            thumbnailImage,
+            Image.of(thumbnailImage),
             visitedDate,
-            writerId,
-            diaryId,
-            images,
+            MemberId.of(writerId),
+            DiaryId.of(diaryId),
+            Images.of(images),
             city,
             store,
-            coordinateX,
-            coordinateY
+            Coordinate.latitude(coordinateX),
+            Coordinate.longitude(coordinateY)
         );
     }
 
     private DiaryInfo createDiaryInfo(Long diaryId, List<MemberId> membersId) {
         return DiaryInfo.of(
             DiaryId.of(diaryId),
-            MemberInfo.of(membersId),
+            Members.of(membersId),
             "다이어리이름",
             "https://www.다이어리이미지.gif",
             "#000000",

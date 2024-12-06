@@ -1,7 +1,7 @@
 package me.ustory.api.paper.application.service;
 
-import me.ustory.api.paper.application.port.in.DeletePaperCommand;
-import me.ustory.api.paper.application.port.out.UpdatePaperPort;
+import me.ustory.api.paper.application.port.in.web.DeletePaperCommand;
+import me.ustory.api.paper.application.port.out.persistence.UpdatePaperPort;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.PaperId;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)

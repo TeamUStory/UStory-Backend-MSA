@@ -3,16 +3,14 @@ package me.ustory.api.paper.application.service;
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
-import me.ustory.api.paper.application.port.in.CreatePaperCommand;
-import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
-import me.ustory.api.paper.application.port.out.CreateDiaryPort;
-import me.ustory.api.paper.application.port.out.CreatePaperPort;
-import me.ustory.api.paper.application.port.out.GetDiaryFeignPort;
-import me.ustory.api.paper.application.port.out.SendCreatePaperNotificationPort;
+import me.ustory.api.paper.application.port.in.web.CreatePaperCommand;
+import me.ustory.api.paper.application.port.in.web.CreatePaperUseCase;
+import me.ustory.api.paper.application.port.out.persistence.CreateDiaryPort;
+import me.ustory.api.paper.application.port.out.persistence.CreatePaperPort;
+import me.ustory.api.paper.application.port.out.feign.GetDiaryFeignPort;
+import me.ustory.api.paper.application.port.out.kafka.SendCreatePaperNotificationPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryInfo;
-import me.ustory.api.common.vo.Image;
-import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
@@ -38,22 +36,20 @@ class CreatePaperService implements CreatePaperUseCase {
 
         DiaryInfo savedDiaryInfo = createDiaryPort.createDiary(diaryInfo);
 
-        if (!savedDiaryInfo.getMemberInfo().isContains(MemberId.of(command.writerId()))) {
+        if (!savedDiaryInfo.getMembers().isContains(command.writerId())) {
             throw new ForbiddenException("해당 다이어리의 페이퍼 작성 권한이 없습니다.");
         }
 
         PaperBasicInfo paperBasicInfo = PaperBasicInfo.of(
             command.title(),
-            Image.of(command.thumbnailImageUrl()),
+            command.thumbnail(),
             command.store(),
             command.visitedAt()
         );
 
-        Images images = Images.of(command.imageUrls());
-
         Address address = Address.of(command.city(), command.coordinateX(), command.coordinateY());
 
-        PaperDetail paperDetail = PaperDetail.of(images, address);
+        PaperDetail paperDetail = PaperDetail.of(command.imageUrls(), address);
 
         Paper paper = Paper.builder()
             .paperBasicInfo(paperBasicInfo)
@@ -63,7 +59,7 @@ class CreatePaperService implements CreatePaperUseCase {
 
         PaperId savedPaperId = createPaperPort.createPaper(paper);
 
-        List<Long> memberIds = paper.getDiary().getMemberInfo().getMemberIds().stream()
+        List<Long> memberIds = paper.getDiary().getMembers().getMemberIds().stream()
             .map(MemberId::getValue)
             .filter(memberId -> memberId.equals(command.writerId()))
             .toList();

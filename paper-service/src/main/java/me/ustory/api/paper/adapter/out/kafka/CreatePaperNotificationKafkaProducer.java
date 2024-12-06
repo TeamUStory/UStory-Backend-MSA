@@ -2,7 +2,7 @@ package me.ustory.api.paper.adapter.out.kafka;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.kafka.CreatePaperNotificationKafkaDTO;
-import me.ustory.api.paper.application.port.out.SendCreatePaperNotificationPort;
+import me.ustory.api.paper.application.port.out.kafka.SendCreatePaperNotificationPort;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 

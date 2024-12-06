@@ -1,19 +1,19 @@
 package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
-import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
-import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
-import me.ustory.api.paper.application.port.in.GetPaperCommand;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
-import me.ustory.api.paper.application.port.out.GetPaperPort;
+import me.ustory.api.paper.application.port.in.web.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetMemberPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetPaperCommand;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCountCommand;
+import me.ustory.api.paper.application.port.out.persistence.GetPaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -136,7 +136,7 @@ class GetPaperServiceTest {
             .writer(writerId)
             .diary(DiaryInfo.of(
                 diaryId,
-                MemberInfo.of(List.of(MemberId.of(1L))),
+                Members.of(List.of(MemberId.of(1L))),
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",
                 "#000000",
@@ -160,8 +160,8 @@ class GetPaperServiceTest {
         // then
         assertThat(papers).hasSize(2)
             .extracting(Paper::getDiary)
-            .extracting(DiaryInfo::getMemberInfo)
-            .extracting(MemberInfo::getMemberIds)
+            .extracting(DiaryInfo::getMembers)
+            .extracting(Members::getMemberIds)
             .allSatisfy(memberIds ->
                 assertThat(memberIds).contains(memberId)
             );

@@ -2,8 +2,8 @@ package me.ustory.api.paper.adapter.in.kafka;
 
 import lombok.RequiredArgsConstructor;
 import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
-import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
-import me.ustory.api.paper.application.port.in.UnlockPaperUseCase;
+import me.ustory.api.paper.application.port.in.kafka.UnlockPaperCommand;
+import me.ustory.api.paper.application.port.in.kafka.UnlockPaperUseCase;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 

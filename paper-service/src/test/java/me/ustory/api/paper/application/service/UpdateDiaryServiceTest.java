@@ -1,14 +1,14 @@
 package me.ustory.api.paper.application.service;
 
-import me.ustory.api.paper.application.port.in.UpdateDiaryCommand;
-import me.ustory.api.paper.application.port.out.GetDiaryPort;
-import me.ustory.api.paper.application.port.out.UpdateDiaryPort;
+import me.ustory.api.paper.application.port.in.kafka.UpdateDiaryCommand;
+import me.ustory.api.paper.application.port.out.persistence.GetDiaryPort;
+import me.ustory.api.paper.application.port.out.persistence.UpdateDiaryPort;
 import me.ustory.api.common.vo.Color;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,7 @@ class UpdateDiaryServiceTest {
         // given
         UpdateDiaryCommand command = new UpdateDiaryCommand(
             DiaryId.of(1L),
-            MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
+            Members.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
             "Updated Diary",
             Image.of("https://www.example.com/이미지.png"),
             Color.of("#000000"),
@@ -56,7 +56,7 @@ class UpdateDiaryServiceTest {
         // then
         DiaryInfo expectedDiaryInfo = DiaryInfo.of(
             command.diaryId(),
-            command.memberInfo(),
+            command.members(),
             command.name(),
             command.image(),
             command.color(),
@@ -72,7 +72,7 @@ class UpdateDiaryServiceTest {
         // given
         UpdateDiaryCommand command = new UpdateDiaryCommand(
             DiaryId.of(1L),
-            MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
+            Members.of(List.of(MemberId.of(1L), MemberId.of(2L), MemberId.of(3L))),
             "Updated Diary",
             Image.of("https://www.example.com/이미지.png"),
             Color.of("#000000"),

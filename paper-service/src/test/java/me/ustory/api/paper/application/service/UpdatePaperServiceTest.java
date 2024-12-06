@@ -2,20 +2,19 @@ package me.ustory.api.paper.application.service;
 
 import me.ustory.api.common.exception.client.ForbiddenException;
 import me.ustory.api.common.kafka.CreateCommentKafkaDTO;
-import me.ustory.api.common.kafka.UnlockPaperNotificationKafkaDTO;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
-import me.ustory.api.paper.application.port.in.UnlockPaperCommand;
-import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
-import me.ustory.api.paper.application.port.out.GetPaperPort;
-import me.ustory.api.paper.application.port.out.SendUnlockPaperNotificationPort;
-import me.ustory.api.paper.application.port.out.UpdatePaperPort;
+import me.ustory.api.paper.application.port.in.kafka.UnlockPaperCommand;
+import me.ustory.api.paper.application.port.in.web.UpdatePaperCommand;
+import me.ustory.api.paper.application.port.out.persistence.GetPaperPort;
+import me.ustory.api.paper.application.port.out.kafka.SendUnlockPaperNotificationPort;
+import me.ustory.api.paper.application.port.out.persistence.UpdatePaperPort;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -32,6 +31,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -56,8 +56,8 @@ class UpdatePaperServiceTest {
     void updatePaper() {
         // given
         PaperId paperId = PaperId.of(1L);
-        Long userId = 1L;
-        UpdatePaperCommand command = createUpdatePaperCommand(paperId, userId);
+        MemberId updaterId = MemberId.of(1L);
+        UpdatePaperCommand command = createUpdatePaperCommand(paperId, updaterId);
         Paper expectedPaper = getPaper(paperId);
         expectedPaper.changeBasicInfo(PaperBasicInfo.of(
             "제목1",
@@ -87,8 +87,8 @@ class UpdatePaperServiceTest {
     void updatePaperWithNotContainingMember() {
         // given
         PaperId paperId = PaperId.of(1L);
-        Long userId = 3L;
-        UpdatePaperCommand command = createUpdatePaperCommand(paperId, userId);
+        MemberId updaterId = MemberId.of(3L);
+        UpdatePaperCommand command = createUpdatePaperCommand(paperId, updaterId);
         Paper expectedPaper = getPaper(paperId);
         expectedPaper.changeBasicInfo(PaperBasicInfo.of(
             "제목1",
@@ -127,7 +127,7 @@ class UpdatePaperServiceTest {
 
         // then
         verify(updatePaperPort).updatePaper(any(Paper.class));
-        verify(sendUnlockPaperNotificationPort).sendUnlockPaperNotification(any(UnlockPaperNotificationKafkaDTO.class));
+        verify(sendUnlockPaperNotificationPort).sendUnlockPaperNotification(any(PaperId.class), anyList());
     }
 
     @DisplayName("잠금 해제 조건에 해당하지 않으면, 잠금 해제 및 업데이트 로직을 수행하지 않는다.")
@@ -147,7 +147,7 @@ class UpdatePaperServiceTest {
         verify(updatePaperPort, never()).updatePaper(any(Paper.class));
     }
 
-    private UpdatePaperCommand createUpdatePaperCommand(PaperId paperId, Long userId) {
+    private UpdatePaperCommand createUpdatePaperCommand(PaperId paperId, MemberId userId) {
         UpdatePaperRequest request = new UpdatePaperRequest(
             "제목1",
             "https://www.대표이미지1.gif",
@@ -174,7 +174,7 @@ class UpdatePaperServiceTest {
             .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
                 DiaryId.of(1L),
-                MemberInfo.of(List.of(MemberId.of(1L), MemberId.of(2L))),
+                Members.of(List.of(MemberId.of(1L), MemberId.of(2L))),
                 "다이어리이름",
                 "https://www.다이어리이미지.gif",
                 "#000000",

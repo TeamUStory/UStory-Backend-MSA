@@ -11,7 +11,7 @@ public class DiaryInfo {
 
     private final DiaryId id;
 
-    private final MemberInfo memberInfo;
+    private final Members members;
 
     private final String name;
 
@@ -21,25 +21,25 @@ public class DiaryInfo {
 
     private final Image marker;
 
-    public static DiaryInfo of(DiaryId id, MemberInfo memberInfo, String name, String imageUrl, String color, String markerUrl) {
-        return new DiaryInfo(id, memberInfo, name, Image.of(imageUrl), Color.of(color), Image.of(markerUrl));
+    public static DiaryInfo of(DiaryId id, Members members, String name, String imageUrl, String color, String markerUrl) {
+        return new DiaryInfo(id, members, name, Image.of(imageUrl), Color.of(color), Image.of(markerUrl));
     }
 
-    public static DiaryInfo of(DiaryId id, MemberInfo memberInfo, String name, Image imageUrl, Color color, Image markerUrl) {
-        return new DiaryInfo(id, memberInfo, name, imageUrl, color, markerUrl);
+    public static DiaryInfo of(DiaryId id, Members members, String name, Image imageUrl, Color color, Image markerUrl) {
+        return new DiaryInfo(id, members, name, imageUrl, color, markerUrl);
     }
 
     public boolean isIndividualDiary() {
-        return memberInfo.isIndividual();
+        return members.isIndividual();
     }
 
     public boolean isSameMemberCount(int memberCount) {
-        return memberInfo.getMemberIds().size() == memberCount;
+        return members.getMemberIds().size() == memberCount;
     }
 
-    private DiaryInfo(DiaryId id, MemberInfo memberInfo, String name, Image image, Color color, Image marker) {
+    private DiaryInfo(DiaryId id, Members members, String name, Image image, Color color, Image marker) {
         this.id = id;
-        this.memberInfo = memberInfo;
+        this.members = members;
         this.name = name;
         this.image = image;
         this.color = color;
@@ -51,19 +51,19 @@ public class DiaryInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         DiaryInfo diaryInfo = (DiaryInfo) o;
-        return Objects.equals(id, diaryInfo.id) && Objects.equals(memberInfo, diaryInfo.memberInfo) && Objects.equals(name, diaryInfo.name) && Objects.equals(image, diaryInfo.image) && Objects.equals(color, diaryInfo.color) && Objects.equals(marker, diaryInfo.marker);
+        return Objects.equals(id, diaryInfo.id) && Objects.equals(members, diaryInfo.members) && Objects.equals(name, diaryInfo.name) && Objects.equals(image, diaryInfo.image) && Objects.equals(color, diaryInfo.color) && Objects.equals(marker, diaryInfo.marker);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, memberInfo, name, image, color, marker);
+        return Objects.hash(id, members, name, image, color, marker);
     }
 
     @Override
     public String toString() {
         return "DiaryInfo{" +
             "id=" + id +
-            ", memberInfo=" + memberInfo +
+            ", memberInfo=" + members +
             ", name='" + name + '\'' +
             ", image=" + image +
             ", color='" + color + '\'' +

@@ -1,7 +1,7 @@
 package me.ustory.api.paper.adapter.out.lock;
 
 import lombok.RequiredArgsConstructor;
-import me.ustory.api.paper.application.port.out.PaperConcurrencyLockPort;
+import me.ustory.api.paper.application.port.out.lock.PaperConcurrencyLockPort;
 import me.ustory.api.paper.domain.PaperId;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

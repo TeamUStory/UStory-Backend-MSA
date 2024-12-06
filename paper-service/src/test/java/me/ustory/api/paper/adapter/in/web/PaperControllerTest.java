@@ -4,25 +4,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import me.ustory.api.common.controller.reqeust.PaginationRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.CreatePaperRequest;
 import me.ustory.api.paper.adapter.in.web.reqeust.UpdatePaperRequest;
-import me.ustory.api.paper.application.port.in.CreatePaperCommand;
-import me.ustory.api.paper.application.port.in.CreatePaperUseCase;
-import me.ustory.api.paper.application.port.in.DeletePaperCommand;
-import me.ustory.api.paper.application.port.in.DeletePaperUseCase;
-import me.ustory.api.paper.application.port.in.GetDiaryPapersCommand;
-import me.ustory.api.paper.application.port.in.GetMemberPapersCommand;
-import me.ustory.api.paper.application.port.in.GetPaperCommand;
-import me.ustory.api.paper.application.port.in.GetPaperUseCase;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCommand;
-import me.ustory.api.paper.application.port.in.GetWrittenPapersCountCommand;
-import me.ustory.api.paper.application.port.in.UpdatePaperCommand;
-import me.ustory.api.paper.application.port.in.UpdatePaperUseCase;
+import me.ustory.api.paper.application.port.in.web.CreatePaperCommand;
+import me.ustory.api.paper.application.port.in.web.CreatePaperUseCase;
+import me.ustory.api.paper.application.port.in.web.DeletePaperCommand;
+import me.ustory.api.paper.application.port.in.web.DeletePaperUseCase;
+import me.ustory.api.paper.application.port.in.web.GetDiaryPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetMemberPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetPaperCommand;
+import me.ustory.api.paper.application.port.in.web.GetPaperUseCase;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCommand;
+import me.ustory.api.paper.application.port.in.web.GetWrittenPapersCountCommand;
+import me.ustory.api.paper.application.port.in.web.UpdatePaperCommand;
+import me.ustory.api.paper.application.port.in.web.UpdatePaperUseCase;
 import me.ustory.api.paper.domain.Address;
 import me.ustory.api.paper.domain.DiaryId;
 import me.ustory.api.paper.domain.DiaryInfo;
 import me.ustory.api.common.vo.Image;
 import me.ustory.api.paper.domain.Images;
 import me.ustory.api.paper.domain.MemberId;
-import me.ustory.api.paper.domain.MemberInfo;
+import me.ustory.api.paper.domain.Members;
 import me.ustory.api.paper.domain.Paper;
 import me.ustory.api.paper.domain.PaperBasicInfo;
 import me.ustory.api.paper.domain.PaperDetail;
@@ -178,7 +178,7 @@ class PaperControllerTest {
             .coordinateY(coordinateY)
             .build();
 
-        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), userId);
+        UpdatePaperCommand command = UpdatePaperCommand.of(request, PaperId.of(paperId), MemberId.of(userId));
 
         given(updatePaperUseCase.updatePaper(command)).willReturn(PaperId.of(paperId));
 
@@ -347,7 +347,7 @@ class PaperControllerTest {
             .writer(MemberId.of(1L))
             .diary(DiaryInfo.of(
                 DiaryId.of(diaryId),
-                MemberInfo.of(List.of(MemberId.of(1L))),
+                Members.of(List.of(MemberId.of(1L))),
                 "다이어리 이름",
                 "https://www.diary-image.gif",
                 "#FFFFFF",
