@@ -18,7 +18,10 @@ public class Address {
     }
 
     public static Address of(String city, Coordinate coordinateX, Coordinate coordinateY) {
-        // TODO: Coordinate가 X인지 Y인지 검증해야함
+        if (!coordinateX.isLatitude() || !coordinateY.isLongitude()) {
+            throw new IllegalArgumentException("coordinateX and coordinateY must be latitude/longitude");
+        }
+
         return new Address(city, coordinateX, coordinateY);
     }
 

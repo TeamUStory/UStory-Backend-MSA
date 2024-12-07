@@ -8,19 +8,29 @@ import java.util.Objects;
 public class Coordinate {
 
     private final Double value;
+    private final CoordinateStatus status;
 
     public static Coordinate latitude(Double latitude) {
         validateLatitude(latitude);
-        return new Coordinate(latitude);
+        return new Coordinate(latitude, CoordinateStatus.LATITUDE);
     }
 
     public static Coordinate longitude(Double longitude) {
         validateLongitude(longitude);
-        return new Coordinate(longitude);
+        return new Coordinate(longitude, CoordinateStatus.LONGITUDE);
     }
 
-    private Coordinate(Double value) {
+    public boolean isLatitude() {
+        return status.isLatitude();
+    }
+
+    public boolean isLongitude() {
+        return status.isLongitude();
+    }
+
+    private Coordinate(Double value, CoordinateStatus status) {
         this.value = value;
+        this.status = status;
     }
 
     private static void validateLatitude(Double value) {
